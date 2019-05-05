@@ -15,13 +15,24 @@ namespace ABF_browser_app
 {
     public partial class formRequestGenerator : Form
     {
+
+        public AbfBrowser.LoggingTraceListener debugListener; 
+
         public formRequestGenerator()
         {
             InitializeComponent();
+
+            debugListener = new AbfBrowser.LoggingTraceListener();
+            System.Diagnostics.Debug.Listeners.Add(debugListener);
+
             tbRequest.Clear();
             tbResponse.Clear();
+            tbDebugLog.Clear();
             cbAction.Items.AddRange(AbfBrowser.ActionTools.GetActionNames());
             cbAction.SelectedItem = cbAction.Items[0];
+        }
+        private void FormRequestGenerator_Load(object sender, EventArgs e)
+        {
         }
 
         #region GUI bindings
@@ -54,12 +65,22 @@ namespace ABF_browser_app
 
         public void BuildRequest()
         {
-            Console.WriteLine("building request...");
+            // restart the benchmark timer
+            debugListener.Clear();
+            debugListener.RestartStopwatch();
 
-            AbfBrowser.Action action = (AbfBrowser.Action)cbAction.SelectedIndex;
+            // build the action
+            AbfBrowser.RequestAction action = (AbfBrowser.RequestAction)cbAction.SelectedIndex;
             AbfBrowser.Request request = new AbfBrowser.Request(action, tbPath.Text, tbIdentifier.Text, tbValue.Text);
             tbRequest.Text = request.GetJson();
-        }
 
+            // give the action to the interactor, execute it, and collect the response
+            AbfBrowser.Interactor interactor = new AbfBrowser.Interactor(request);
+            AbfBrowser.Response response = interactor.Execute();
+            
+            // display the results
+            tbResponse.Text = response.GetJson();
+            tbDebugLog.Text = debugListener.GetLogAsString();
+        }
     }
 }

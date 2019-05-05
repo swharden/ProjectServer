@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AbfBrowser
 {
-    public enum Action
+    public enum RequestAction
     {
         doNothing,
         scanFolderFast,
@@ -22,18 +22,18 @@ namespace AbfBrowser
     {
         public static string[] GetActionNames()
         {
-            return Enum.GetNames(typeof(Action));
+            return Enum.GetNames(typeof(RequestAction));
         }
 
-        public static Action GetActionByName(string actionName)
+        public static RequestAction GetActionByName(string actionName)
         {
-            string[] enumNames = Enum.GetNames(typeof(Action));
+            string[] enumNames = Enum.GetNames(typeof(RequestAction));
             for (int i = 0; i < enumNames.Length; i++)
             {
                 if (actionName == enumNames[i])
-                    return (Action)i;
+                    return (RequestAction)i;
             }
-            return Action.error;
+            return RequestAction.error;
         }
     }
 

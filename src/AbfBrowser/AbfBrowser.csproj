@@ -42,9 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Json.cs" />
-    <Compile Include="Request.cs" />
-    <Compile Include="Enums.cs" />
+    <Compile Include="core\Interactor.cs" />
+    <Compile Include="core\Response.cs" />
+    <Compile Include="tools\Json.cs" />
+    <Compile Include="tools\LoggingTraceListener.cs" />
+    <Compile Include="core\Request.cs" />
+    <Compile Include="core\Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
