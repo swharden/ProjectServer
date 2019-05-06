@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.tbDebugLog = new System.Windows.Forms.TextBox();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.timerUpdateLogs = new System.Windows.Forms.Timer(this.components);
             this.tbServerLog = new System.Windows.Forms.TextBox();
             this.btnLaunch = new System.Windows.Forms.Button();
             this.lblServingOn = new System.Windows.Forms.Label();
@@ -51,10 +51,10 @@
             this.tbDebugLog.Text = "debug log";
             this.tbDebugLog.WordWrap = false;
             // 
-            // timer1
+            // timerUpdateLogs
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            this.timerUpdateLogs.Enabled = true;
+            this.timerUpdateLogs.Tick += new System.EventHandler(this.TimerUpdateLogs_Tick);
             // 
             // tbServerLog
             // 
@@ -109,7 +109,7 @@
         #endregion
 
         private System.Windows.Forms.TextBox tbDebugLog;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timerUpdateLogs;
         private System.Windows.Forms.TextBox tbServerLog;
         private System.Windows.Forms.Button btnLaunch;
         private System.Windows.Forms.Label lblServingOn;

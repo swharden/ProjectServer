@@ -20,20 +20,19 @@ namespace AbfBrowser
             this.request = request;
         }
 
-        public Display Execute()
+        public Display Execute(string displayHint = null)
         {
             Debug.WriteLine($"beginning execution of {request.action} Request");
             response = new MessageResponse(request);
+
             switch (request.action)
             {
                 case (RequestAction.doNothing):
                     Debug.WriteLine($"Doing nothing...");
-                    displayer = new DisplayHome(response);
                     break;
                 case (RequestAction.scanFolderFast):
                     Debug.WriteLine($"Scanning ABF folder (filenames only)...");
                     response.AbfFolder = new AbfFolder(request.path);
-                    displayer = new DisplayMenu(response);
                     break;
                 case (RequestAction.scanFolderFull):
                     Debug.WriteLine($"Scanning ABF folder (and text files)...");
@@ -53,10 +52,28 @@ namespace AbfBrowser
                 default:
                     throw new Exception($"Unimplimented action: {request.action}");
             }
-            if (displayer == null)
-                displayer = new DisplayError(response);
-            Debug.WriteLine($"displayer selected: {displayer}");
 
+            Debug.WriteLine($"Display hint: {displayHint}");
+            switch (displayHint)
+            {
+                case "home":
+                    displayer = new DisplayHome(response);
+                    break;
+                case "frames":
+                    displayer = new DisplayFrames(response);
+                    break;
+                case "menu":
+                    displayer = new DisplayMenu(response);
+                    break;
+                case "cell":
+                    displayer = new DisplayCell(response);
+                    break;
+                default:
+                    displayer = new DisplayError(response);
+                    break;
+            }
+
+            Debug.WriteLine($"using displayer: {displayer}");
             response.StopwatchStop();
             Debug.WriteLine($"execution completed in {response.elapsedMillisecString} ms");
             return displayer;

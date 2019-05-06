@@ -16,20 +16,7 @@ namespace AbfBrowser
 
         public override string GetHTML()
         {
-            List<string> queries = new List<string>();
-
-            queries.Add(@"/");
-            queries.Add(@"?action=scanFolderFast&path=D:\demoData\abfs-2019");
-            queries.Add(@"?action=scanFolderFast");
-            queries.Add(@"?action=alsdjfahksdhfkajshdf");
-
-            string html = "";
-            html += "<html><body>";
-            html += "<h1>HOME</h1>";
-            foreach (string query in queries)
-                html += $"<li><a href='{query}'>{query}</a></li>";
-            html += "</body></html>";
-            html = Html.Prettify(html);
+            string html = Properties.Resources.home;
             return html;
         }
 

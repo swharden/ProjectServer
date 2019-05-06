@@ -9,6 +9,15 @@ namespace AbfBrowser
 {
     public static class Html
     {
+        public static string BuildPage(string bodyHtml, string title = "ABF Browser")
+        {
+            string topHtml = Properties.Resources.top;
+            topHtml = topHtml.Replace("~TITLE~", title);
+            topHtml = topHtml.Replace("~CSS~", Properties.Resources.style);
+            string bottomHtml = Properties.Resources.bot;
+            return topHtml + bodyHtml + bottomHtml;
+        }
+
         public static string Prettify(string html, int indentCount = 2, char indentChar = ' ')
         {
             int originalSize = html.Length;

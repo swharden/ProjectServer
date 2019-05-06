@@ -16,12 +16,8 @@ namespace AbfBrowser
 
         public override string GetHTML()
         {
-            string html = "";
-            html += "<html><body>";
-            html += "<h1>ERROR</h1>";
-            html += "</body></html>";
-            html = Html.Prettify(html);
-            return html;
+            string html = "<h1>ERROR</h1>";
+            return Html.BuildPage(html);
         }
 
         public override string GetText()

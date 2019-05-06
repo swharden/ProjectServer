@@ -10,67 +10,13 @@ using System.Net;
 
 namespace AbfBrowser
 {
-    public class SimpleServerManager
-    {
-        readonly Server server;
-        public string url {get { return server.url; } }
-
-        public SimpleServerManager(bool launch = false)
-        {
-            server = new Server(HttpRequestHandler);
-            if (launch)
-                Launch();
-        }
-
-        public void Launch()
-        {
-            System.Diagnostics.Process.Start(server.url);
-        }
-
-        public static string HttpRequestHandler(HttpListenerRequest httpRequest)
-        {
-            string queryString = httpRequest.RawUrl;
-
-            if (queryString=="/favicon.ico")
-                return "";
-
-            if (queryString.StartsWith("/?"))
-                queryString = queryString.Substring(2);
-
-            // if a file is requested, serve the file
-            string[] fileExtensions = new string[] { ".ico", ".png", ".jpg" };
-            foreach (string extension in fileExtensions)
-            {
-                if (queryString.EndsWith(extension))
-                {
-                    Debug.WriteLine($"SERVE FILE: {queryString}");
-                    return "FILE";
-                }
-            }
-
-            // build the request, load it, execute it, and return HTML
-            Debug.WriteLine("Debug_Clear");
-            MessageRequest request = new MessageRequest(queryString);
-            Interactor interactor = new AbfBrowser.Interactor(request);
-            Display displayer = interactor.Execute();
-            string html = displayer.GetHTML();
-
-            return html;
-        }
-
-        public string GetLog(bool clear = false)
-        {
-            return server.GetLog(clear);
-        }
-    }
-
-    class Server
+    class WebServer
     {
         private readonly HttpListener listener = new HttpListener();
         private readonly Func<HttpListenerRequest, string> requestHandler;
         public readonly string url;
 
-        public Server(Func<HttpListenerRequest, string> requestHandler, string url = "http://localhost:8080/")
+        public WebServer(Func<HttpListenerRequest, string> requestHandler, string url = "http://localhost:8080/")
         {
             this.url = url;
             this.requestHandler = requestHandler;

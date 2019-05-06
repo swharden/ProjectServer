@@ -34,6 +34,7 @@ namespace AbfBrowser
 
             string[] fileNamesAbf = GetFileNamesEndingWith(".abf");
             string[] fileNamesNonAbf = GetFileNamesNotEndingWith(".abf");
+            parentsAndChildren = new Dictionary<string, string[]>();
 
             // if a non-ABF file starts with the same basename of an ABF, that ABF is a parent.
             List<string> parentAbfList = new List<string>();
@@ -55,7 +56,6 @@ namespace AbfBrowser
                 family[currentParent] = family[currentParent] + "\n" + fileNameChild;
             }
 
-            parentsAndChildren = new Dictionary<string, string[]>();
             foreach (string parent in family.Keys)
             {
                 string[] children = family[parent].Trim().Split('\n');

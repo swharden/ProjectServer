@@ -12,7 +12,7 @@ namespace ABF_browser_app
 {
     public partial class FormServer : Form
     {
-        public AbfBrowser.SimpleServerManager server;
+        public AbfBrowser.WebServerManager server;
         public AbfBrowser.LoggingTraceListener debugListener;
 
         public FormServer()
@@ -20,29 +20,38 @@ namespace ABF_browser_app
             InitializeComponent();
             debugListener = new AbfBrowser.LoggingTraceListener();
             System.Diagnostics.Debug.Listeners.Add(debugListener);
-            server = new AbfBrowser.SimpleServerManager();
+            server = new AbfBrowser.WebServerManager();
             lblServingOn.Text = $"Serving on: {server.url}";
+            tbDebugLog.Clear();
         }
 
         private void FormServer_Load(object sender, EventArgs e)
         {
-            tbDebugLog.Clear();
-        }
-
-        private void Timer1_Tick(object sender, EventArgs e)
-        {
-            tbDebugLog.Text = debugListener.GetLogAsString();
-            tbDebugLog.SelectionStart = tbDebugLog.Text.Length;
-            tbDebugLog.ScrollToCaret();
-
-            tbServerLog.Text = server.GetLog();
-            tbServerLog.SelectionStart = tbServerLog.Text.Length;
-            tbServerLog.ScrollToCaret();
+            BtnLaunch_Click(null, null);
         }
 
         private void BtnLaunch_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(server.url);
+        }
+
+        private void TimerUpdateLogs_Tick(object sender, EventArgs e)
+        {
+            string debugLog = debugListener.GetLogAsString();
+            if (debugLog.Length != tbDebugLog.Text.Length)
+            {
+                tbDebugLog.Text = debugLog;
+                tbDebugLog.SelectionStart = tbDebugLog.Text.Length;
+                tbDebugLog.ScrollToCaret();
+            }
+
+            string serverLog = server.GetLog();
+            if (serverLog.Length != tbServerLog.Text.Length)
+            {
+                tbServerLog.Text = serverLog;
+                tbServerLog.SelectionStart = tbServerLog.Text.Length;
+                tbServerLog.ScrollToCaret();
+            }
         }
     }
 }

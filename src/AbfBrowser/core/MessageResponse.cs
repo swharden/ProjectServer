@@ -10,7 +10,7 @@ namespace AbfBrowser
 
     public class MessageResponse : Message
     {
-        private readonly MessageRequest request;
+        public readonly MessageRequest request;
         public AbfFolder AbfFolder;
 
         public MessageResponse(MessageRequest request)

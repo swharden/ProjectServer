@@ -9,6 +9,16 @@ using System.Web.Script.Serialization;
 
 namespace AbfBrowser
 {
+    public enum RequestAction
+    {
+        doNothing,
+        scanFolderFast,
+        scanFolderFull,
+        modifyCell,
+        modifyExperiment,
+        analyzeAbf,
+        analyzeTif,
+    };
 
     public class MessageRequest : Message
     {
@@ -32,6 +42,7 @@ namespace AbfBrowser
 
             System.Collections.Specialized.NameValueCollection queries = System.Web.HttpUtility.ParseQueryString(queryString);
 
+            // set actions based on action key
             foreach(string key in queries.Keys)
             {
                 string value = queries.Get(key);
@@ -59,6 +70,28 @@ namespace AbfBrowser
                         Debug.WriteLine($"unsure how to handle query: {key}={value}");
                         break;
                 }
+            }
+
+            // set or override actions based on display key
+            string display = queries.Get("display");
+            switch (display)
+            {
+                case "frames":
+                    action = RequestAction.doNothing;
+                    Debug.WriteLine($"Action updated to {action} based on display {display}");
+                    break;
+                case "home":
+                    action = RequestAction.doNothing;
+                    Debug.WriteLine($"Action updated to {action} based on display {display}");
+                    break;
+                case "menu":
+                    action = RequestAction.scanFolderFast;
+                    Debug.WriteLine($"Action updated to {action} based on display {display}");
+                    break;
+                case "cell":
+                    action = RequestAction.scanFolderFull;
+                    Debug.WriteLine($"Action updated to {action} based on display {display}");
+                    break;
             }
         }
     }
