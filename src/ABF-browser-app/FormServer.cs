@@ -27,12 +27,12 @@ namespace ABF_browser_app
 
         private void FormServer_Load(object sender, EventArgs e)
         {
-            BtnLaunch_Click(null, null);
+            //BtnLaunch_Click(null, null);
         }
 
         private void BtnLaunch_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(server.url);
+            System.Diagnostics.Process.Start($"{server.url}?display=frames&path={tbPath.Text}");
         }
 
         private void TimerUpdateLogs_Tick(object sender, EventArgs e)

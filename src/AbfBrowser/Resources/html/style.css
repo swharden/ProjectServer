@@ -1,3 +1,49 @@
 ﻿body {
-	background-color: #EEE;
+    font-family: "Open Sans", calibri, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: blue;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.logMessage {
+    font-family: consolas, courier;
+    color: #999;
+}
+
+.result {
+    font-family: consolas, courier;
+    padding: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-left: 5px solid #CCC;
+    background-color: #EEE;
+}
+
+.errorBlock {
+    padding: 10px 10px 1px 10px;
+    background-color: red;
+    font-family: consolas, courier;
+}
+
+.errorTitle {
+    padding: 10px;
+    color: white;
+    font-size: 150%;
+}
+
+.errorDetails {
+    padding: 10px;
+    background-color: rgb(255, 42, 42);
+    color: white;
 }

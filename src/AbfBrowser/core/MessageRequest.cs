@@ -89,7 +89,7 @@ namespace AbfBrowser
                     Debug.WriteLine($"Action updated to {action} based on display {display}");
                     break;
                 case "cell":
-                    action = RequestAction.scanFolderFull;
+                    action = RequestAction.scanFolderFast;
                     Debug.WriteLine($"Action updated to {action} based on display {display}");
                     break;
             }

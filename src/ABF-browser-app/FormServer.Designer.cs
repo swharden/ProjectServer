@@ -34,6 +34,7 @@
             this.tbServerLog = new System.Windows.Forms.TextBox();
             this.btnLaunch = new System.Windows.Forms.Button();
             this.lblServingOn = new System.Windows.Forms.Label();
+            this.tbPath = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbDebugLog
@@ -89,11 +90,22 @@
             this.lblServingOn.Text = "Serving on: ?";
             this.lblServingOn.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // tbPath
+            // 
+            this.tbPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbPath.Location = new System.Drawing.Point(275, 11);
+            this.tbPath.Name = "tbPath";
+            this.tbPath.Size = new System.Drawing.Size(632, 20);
+            this.tbPath.TabIndex = 4;
+            this.tbPath.Text = "X:\\Data\\SD\\Piriform Oxytocin\\00 pilot experiments\\2018-01-25 sine pyr oxt";
+            // 
             // FormServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(919, 467);
+            this.Controls.Add(this.tbPath);
             this.Controls.Add(this.lblServingOn);
             this.Controls.Add(this.btnLaunch);
             this.Controls.Add(this.tbServerLog);
@@ -113,5 +125,6 @@
         private System.Windows.Forms.TextBox tbServerLog;
         private System.Windows.Forms.Button btnLaunch;
         private System.Windows.Forms.Label lblServingOn;
+        private System.Windows.Forms.TextBox tbPath;
     }
 }

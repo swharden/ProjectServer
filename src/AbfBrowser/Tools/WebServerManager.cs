@@ -35,14 +35,10 @@ namespace AbfBrowser
                 queryString = queryString.Substring(2);
 
             // if a file is requested, serve the file
-            string[] fileExtensions = new string[] { ".ico", ".png", ".jpg" };
-            foreach (string extension in fileExtensions)
+            if (httpRequest.RawUrl.StartsWith($"/{Configuration.dataRootPathWebAlias}/"))
             {
-                if (queryString.EndsWith(extension))
-                {
-                    Debug.WriteLine($"SERVE FILE: {queryString}");
-                    return "FILE";
-                }
+                string filePath = httpRequest.RawUrl.Replace($"/{Configuration.dataRootPathWebAlias}", Configuration.dataRootPath);
+                return $"SERVING FILE: {filePath}";
             }
 
             // determine display hint from display query value

@@ -25,6 +25,7 @@ namespace AbfBrowser
             Debug.WriteLine($"beginning execution of {request.action} Request");
             response = new MessageResponse(request);
 
+            // absent actions are added messageRequest sometimes
             switch (request.action)
             {
                 case (RequestAction.doNothing):
