@@ -1,20 +1,76 @@
 ﻿using System;
-using System.Net;
-using System.Threading;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Diagnostics;
+using System.Threading.Tasks;
 
-namespace ABF_browser_app
+using System.Threading;
+using System.Diagnostics;
+using System.Net;
+
+namespace AbfBrowser
 {
-    // modified from https://codehosting.net/blog/BlogEngine/post/Simple-C-Web-Server
-    public class WebServer
+    public class SimpleServerManager
+    {
+        readonly Server server;
+        public string url {get { return server.url; } }
+
+        public SimpleServerManager(bool launch = false)
+        {
+            server = new Server(HttpRequestHandler);
+            if (launch)
+                Launch();
+        }
+
+        public void Launch()
+        {
+            System.Diagnostics.Process.Start(server.url);
+        }
+
+        public static string HttpRequestHandler(HttpListenerRequest httpRequest)
+        {
+            string queryString = httpRequest.RawUrl;
+
+            if (queryString=="/favicon.ico")
+                return "";
+
+            if (queryString.StartsWith("/?"))
+                queryString = queryString.Substring(2);
+
+            // if a file is requested, serve the file
+            string[] fileExtensions = new string[] { ".ico", ".png", ".jpg" };
+            foreach (string extension in fileExtensions)
+            {
+                if (queryString.EndsWith(extension))
+                {
+                    Debug.WriteLine($"SERVE FILE: {queryString}");
+                    return "FILE";
+                }
+            }
+
+            // build the request, load it, execute it, and return HTML
+            Debug.WriteLine("Debug_Clear");
+            MessageRequest request = new MessageRequest(queryString);
+            Interactor interactor = new AbfBrowser.Interactor(request);
+            Display displayer = interactor.Execute();
+            string html = displayer.GetHTML();
+
+            return html;
+        }
+
+        public string GetLog(bool clear = false)
+        {
+            return server.GetLog(clear);
+        }
+    }
+
+    class Server
     {
         private readonly HttpListener listener = new HttpListener();
         private readonly Func<HttpListenerRequest, string> requestHandler;
         public readonly string url;
 
-        public WebServer(string url, Func<HttpListenerRequest, string> requestHandler)
+        public Server(Func<HttpListenerRequest, string> requestHandler, string url = "http://localhost:8080/")
         {
             this.url = url;
             this.requestHandler = requestHandler;
@@ -72,11 +128,24 @@ namespace ABF_browser_app
             }
         }
 
+        private List<string> logLines = new List<string>();
+
+        public string GetLog(bool clear = false)
+        {
+            if (clear)
+                LogClear();
+            return String.Join("\r\n", logLines);
+        }
+
         public void Log(string message)
         {
+            if (message.EndsWith("favicon.ico"))
+                return;
             string timestamp = DateTime.Now.ToString("yyyy'-'MM'-'dd' 'HH':'mm':'ss.fff");
-            Console.WriteLine($"WebServer [{timestamp}] {message}");
+            string logLine = $"WebServer [{timestamp}] {message}";
+            logLines.Add(logLine);
         }
+
         public void Log(Exception exception)
         {
             if (exception.Message.Contains("thread exit or an application request"))
@@ -91,6 +160,11 @@ namespace ABF_browser_app
                 string callerName = frame.GetMethod().Name;
                 Log($"EXCEPTION thrown by {callerName}:\n   {exception.ToString()}");
             }
+        }
+
+        public void LogClear()
+        {
+            logLines.Clear();
         }
     }
 }

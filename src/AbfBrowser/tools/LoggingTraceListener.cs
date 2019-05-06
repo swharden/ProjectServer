@@ -39,10 +39,17 @@ namespace AbfBrowser
         public override void WriteLine(string message)
         {
             message = message.Trim();
-            double elapsedMsec = stopwatch.ElapsedTicks * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
-            string elapsedMsecString = string.Format("{0:000.000}", elapsedMsec);
-            string calledFrom = new StackTrace().GetFrame(3).GetMethod().ReflectedType.Name;
-            Log.Add($"{elapsedMsecString} ms | {calledFrom}: {message}");
+            if (message == "Debug_RestartStopwatch")
+                RestartStopwatch();
+            else if (message == "Debug_Clear")
+                Clear();
+            else
+            {
+                double elapsedMsec = stopwatch.ElapsedTicks * 1000.0 / System.Diagnostics.Stopwatch.Frequency;
+                string elapsedMsecString = string.Format("{0:000.000}", elapsedMsec);
+                string calledFrom = new StackTrace().GetFrame(3).GetMethod().ReflectedType.Name;
+                Log.Add($"{elapsedMsecString} ms | {calledFrom}: {message}");
+            }
         }
 
         public string[] GetLogAsArray()

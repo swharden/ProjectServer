@@ -16,7 +16,7 @@ namespace ABF_browser_app
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new formRequestGenerator());
+            Application.Run(new FormServer());
         }
     }
 }
