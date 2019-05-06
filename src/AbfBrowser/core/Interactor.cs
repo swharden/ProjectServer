@@ -10,38 +10,30 @@ namespace AbfBrowser
 {
     public class Interactor
     {
-        MessageRequest request;
+        public readonly MessageRequest request;
+        public Display displayer;
+        public MessageResponse response;
 
-        public Interactor(string requestJson)
+        public Interactor(MessageRequest request)
         {
             Debug.WriteLine("starting Interactor from a MessageRequest object");
-            request = new MessageRequest();
-            request.FromJson(requestJson);
+            this.request = request;
         }
 
-        public MessageResponse Execute()
+        public Display Execute()
         {
-            Debug.WriteLine($"beginning execution of {request.Get("messageType")} message");
-
-            MessageResponse response = new MessageResponse(request);
-
-            string requestActionString = request.Get("action");
-            RequestAction requestAction;
-            if (!Enum.TryParse(requestActionString, true, out requestAction))
-                throw new Exception($"invalid action: {requestActionString}");
-            else
-                Debug.WriteLine($"switching on requestedAction: {requestActionString}");
-
-            switch (requestAction)
+            Debug.WriteLine($"beginning execution of {request.action} Request");
+            response = new MessageResponse(request);
+            switch (request.action)
             {
                 case (RequestAction.doNothing):
                     Debug.WriteLine($"Doing nothing...");
+                    displayer = new DisplayHome(response);
                     break;
                 case (RequestAction.scanFolderFast):
                     Debug.WriteLine($"Scanning ABF folder (filenames only)...");
-                    Debug.Assert(request.Contains("path"));
-                    AbfFolder abfFolder = new AbfFolder(request.Get("path"));
-                    response.Set("AbfFolder", abfFolder.GetJson());
+                    response.AbfFolder = new AbfFolder(request.path);
+                    displayer = new DisplayMenu(response);
                     break;
                 case (RequestAction.scanFolderFull):
                     Debug.WriteLine($"Scanning ABF folder (and text files)...");
@@ -59,12 +51,15 @@ namespace AbfBrowser
                     Debug.WriteLine($"analyzing TIF(s)");
                     break;
                 default:
-                    throw new Exception($"Unimplimented action: {requestAction}");
+                    throw new Exception($"Unimplimented action: {request.action}");
             }
+            if (displayer == null)
+                displayer = new DisplayError(response);
+            Debug.WriteLine($"displayer selected: {displayer}");
 
             response.StopwatchStop();
-            Debug.WriteLine($"execution completed in {response.StopwatchTimeMsecString()} ms");
-            return response;
+            Debug.WriteLine($"execution completed in {response.elapsedMillisecString} ms");
+            return displayer;
         }
     }
 }

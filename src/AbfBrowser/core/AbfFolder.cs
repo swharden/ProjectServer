@@ -16,6 +16,8 @@ namespace AbfBrowser
         
         public AbfFolder(string path) : base(path)
         {
+            if (path == null)
+                path = "./";
             pathAnalysis = System.IO.Path.Combine(path, Configuration.analysisFolderName);
             analysisFolder = new Tools.Folder(pathAnalysis);
             DetermineAbfParents();
@@ -23,10 +25,7 @@ namespace AbfBrowser
 
         public string GetJson()
         {
-            Dto dto = new Dto();
-            foreach(string parent in parentsAndChildren.Keys)
-                dto.Set(parent, parentsAndChildren[parent]);
-            return dto.GetJson();
+            return Json.JsonFromObject(this);
         }
 
         private void DetermineAbfParents()

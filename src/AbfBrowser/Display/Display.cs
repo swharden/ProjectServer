@@ -14,49 +14,18 @@ namespace AbfBrowser
         string GetText();
     }
 
-    public abstract class Display
+    public abstract class Display : IDisplay
     {
-        public Dictionary<string, string> items;
+        public readonly MessageResponse response;
 
-        public Display(string json)
+        public Display(MessageResponse response)
         {
-            items = Json.JsonToKeyedDictionary(json);
+            this.response = response;
         }
 
+        public abstract string GetHTML();
+
+        public abstract string GetText();
     }
 
-    public class DisplayMenu : Display, IDisplay
-    {
-        public DisplayMenu(string responseJson) : base(responseJson)
-        {
-            Debug.WriteLine($"Creating menu display from ({responseJson.Length} bytes JSON)");
-            Dto dto = new Dto();
-            dto.FromJson(responseJson);
-        }
-
-        public string GetMenuHtml()
-        {
-            string html = "<div><b>MENU</b></div>";
-
-            Dto dtoAbfFolder = new Dto(items["AbfFolder"]);
-            html += dtoAbfFolder.GetHtml();
-
-            return html;
-        }
-
-        public string GetHTML()
-        {
-            string html = "";
-            html += "<html><body>";
-            html += GetMenuHtml();
-            html += "</body></html>";
-            html = Html.Prettify(html);
-            return html;
-        }
-
-        public string GetText()
-        {
-            return "menu text";
-        }
-    }
 }

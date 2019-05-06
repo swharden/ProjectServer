@@ -15,6 +15,8 @@ namespace AbfBrowser.Tools
 
         public Folder(string path)
         {
+            if (path == null)
+                path = "./";
             this.path = System.IO.Path.GetFullPath(path);
             Rescan();
         }

@@ -10,27 +10,56 @@ using System.Web.Script.Serialization;
 namespace AbfBrowser
 {
 
-    public class MessageRequest : Dto
+    public class MessageRequest : Message
     {
+        public RequestAction action;
+        public string path;
+        public string identifier;
+        public string value;
+
         public MessageRequest(RequestAction action = RequestAction.doNothing, string path = null, string identifier = null, string value = null)
         {
-            Debug.WriteLine($"building request for action: {action}");
-            Set("messageType", "request");
-            Set("action", action.ToString());
-            Set("path", path);
-            Set("identifier", identifier);
-            Set("value", value);
+            Debug.WriteLine($"Constructing request for action {action}");
+            this.action = action;
+            this.path = path;
+            this.identifier = identifier;
+            this.value = value;
         }
 
-        public MessageRequest()
+        public MessageRequest(string queryString)
         {
-            Debug.WriteLine($"paramaterless constructor");
-        }
+            Debug.WriteLine($"Creating MessageRequest from query string: {queryString}");
 
-        public MessageRequest(string json)
-        {
-            Debug.WriteLine($"populating items from JSON");
-            FromJson(json);
+            System.Collections.Specialized.NameValueCollection queries = System.Web.HttpUtility.ParseQueryString(queryString);
+
+            foreach(string key in queries.Keys)
+            {
+                string value = queries.Get(key);
+                switch (key)
+                {
+                    case "action":
+                        if (Enum.TryParse(value, true, out action))
+                            Debug.WriteLine($"action set: {value}");
+                        else
+                            Debug.WriteLine($"invalid action: {value}");
+                        break;
+                    case "path":
+                        path = value;
+                        Debug.WriteLine($"path set: {value}");
+                        break;
+                    case "identifier":
+                        identifier = value;
+                        Debug.WriteLine($"identifier set: {value}");
+                        break;
+                    case "value":
+                        this.value = value;
+                        Debug.WriteLine($"value set value: {value}");
+                        break;
+                    default:
+                        Debug.WriteLine($"unsure how to handle query: {key}={value}");
+                        break;
+                }
+            }
         }
     }
 }

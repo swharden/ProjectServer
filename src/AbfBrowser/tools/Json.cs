@@ -29,7 +29,45 @@ namespace AbfBrowser
             Debug.WriteLine($"Condensed {json.Length} bytes of JSON (now {json2.Length} bytes)");
             return json2;
         }
+        
+        public static string JsonFromKeyedDictionary(Dictionary<string, string> items)
+        {
+            // order keys by: simple, arrays, sections
+            List<string> keys = new List<string>();
+            List<string> keysForSections = new List<string>();
+            List<string> keysForArrays = new List<string>();
+            foreach (KeyValuePair<string, string> pair in items)
+            {
+                if (pair.Value.StartsWith("{") && pair.Value.EndsWith("}"))
+                    keysForSections.Add(pair.Key);
+                else if (pair.Value.StartsWith("[") && pair.Value.EndsWith("]"))
+                    keysForArrays.Add(pair.Key);
+                else
+                    keys.Add(pair.Key);
+            }
+            keys.Sort();
+            keysForSections.Sort();
+            keysForArrays.Sort();
+            keys.AddRange(keysForArrays);
+            keys.AddRange(keysForSections);
 
+            // create a mostly-condensed JSON string
+            string json = "";
+            foreach (string key in keys)
+            {
+                string value = items[key].Trim();
+                if (value.StartsWith("{") && value.EndsWith("}"))
+                    json += $"\"{key}\":{value},";
+                else if (value.StartsWith("[") && value.EndsWith("]"))
+                    json += $"\"{key}\":{value},";
+                else
+                    json += $"\"{key}\":\"{value}\",";
+            }
+            json = json.TrimEnd(',');
+            json = "{" + json + "}";
+            json = Json.Prettify(json);
+            return json;
+        }
 
         public static Dictionary<string, string> JsonToKeyedDictionary(string json)
         {

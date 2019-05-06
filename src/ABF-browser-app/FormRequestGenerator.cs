@@ -34,7 +34,7 @@ namespace ABF_browser_app
 
         private void FormRequestGenerator_Load(object sender, EventArgs e)
         {
-
+            var server = new AbfBrowser.WebServer.ServerManager();
         }
 
         #region GUI bindings
@@ -70,22 +70,16 @@ namespace ABF_browser_app
             // restart the benchmark timer
             debugListener.Clear();
 
-            // build the request
+            // build the request, execute it, and collect the HTML
             AbfBrowser.RequestAction action = (AbfBrowser.RequestAction)cbAction.SelectedIndex;
             AbfBrowser.MessageRequest request = new AbfBrowser.MessageRequest(action, tbPath.Text, tbIdentifier.Text, tbValue.Text);
-            string requestJson = request.GetJson();
-
-            // give the action to the interactor, execute it, and obtain the response
-            AbfBrowser.Interactor interactor = new AbfBrowser.Interactor(requestJson);
-            AbfBrowser.MessageResponse response = interactor.Execute();
-            string responseJson = response.GetJson();
-
-            // create a HTML page using the JSON as the only input
-            string html = new AbfBrowser.DisplayMenu(responseJson).GetHTML();
+            AbfBrowser.Interactor interactor = new AbfBrowser.Interactor(request);
+            AbfBrowser.Display displayer = interactor.Execute();
+            string html = displayer.GetHTML();
 
             // update the GUI
-            tbRequest.Text = requestJson;
-            tbResponse.Text = responseJson;
+            tbRequest.Text = request.GetJson();
+            tbResponse.Text = interactor.response.GetJson();
             tbDebugLog.Text = debugListener.GetLogAsString();
             tbHtml.Text = html;
         }

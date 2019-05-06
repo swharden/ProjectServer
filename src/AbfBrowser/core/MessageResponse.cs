@@ -8,13 +8,20 @@ using System.Diagnostics;
 namespace AbfBrowser
 {
 
-    public class MessageResponse : Dto
+    public class MessageResponse : Message
     {
-        public MessageRequest request;
+        private readonly MessageRequest request;
+        public AbfFolder AbfFolder;
+
         public MessageResponse(MessageRequest request)
         {
             Debug.WriteLine($"Constructing response with request {request}");
             this.request = request;
+        }
+
+        public IDisplay GetDisplay()
+        {
+            return new DisplayMenu(this);
         }
     }
 }
