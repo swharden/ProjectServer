@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formRequestGenerator));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cbAction = new System.Windows.Forms.ComboBox();
             this.gbPath = new System.Windows.Forms.GroupBox();
@@ -41,10 +40,12 @@
             this.tbValue = new System.Windows.Forms.TextBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.tbResponse = new System.Windows.Forms.TextBox();
-            this.btnExecute = new System.Windows.Forms.Button();
             this.lblExecutionTime = new System.Windows.Forms.Label();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tbDebugLog = new System.Windows.Forms.TextBox();
+            this.btnExecute = new System.Windows.Forms.Button();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.tbHtml = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.gbPath.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -52,6 +53,7 @@
             this.groupBox2.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox5.SuspendLayout();
+            this.groupBox6.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox1
@@ -92,7 +94,7 @@
             this.tbPath.Name = "tbPath";
             this.tbPath.Size = new System.Drawing.Size(184, 20);
             this.tbPath.TabIndex = 0;
-            this.tbPath.Text = "D:\\demoData\\abfs-real";
+            this.tbPath.Text = "D:\\demoData\\abfs-2019";
             this.tbPath.TextChanged += new System.EventHandler(this.TbPath_TextChanged);
             // 
             // groupBox3
@@ -115,7 +117,7 @@
             this.tbRequest.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbRequest.Size = new System.Drawing.Size(382, 213);
             this.tbRequest.TabIndex = 0;
-            this.tbRequest.Text = resources.GetString("tbRequest.Text");
+            this.tbRequest.Text = "JSON";
             this.tbRequest.WordWrap = false;
             // 
             // groupBox4
@@ -165,7 +167,7 @@
             this.groupBox7.Controls.Add(this.tbResponse);
             this.groupBox7.Location = new System.Drawing.Point(208, 250);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(388, 236);
+            this.groupBox7.Size = new System.Drawing.Size(388, 460);
             this.groupBox7.TabIndex = 8;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Response";
@@ -178,28 +180,17 @@
             this.tbResponse.Multiline = true;
             this.tbResponse.Name = "tbResponse";
             this.tbResponse.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbResponse.Size = new System.Drawing.Size(382, 217);
+            this.tbResponse.Size = new System.Drawing.Size(382, 441);
             this.tbResponse.TabIndex = 1;
-            this.tbResponse.Text = resources.GetString("tbResponse.Text");
+            this.tbResponse.Text = "JSON";
             this.tbResponse.WordWrap = false;
-            // 
-            // btnExecute
-            // 
-            this.btnExecute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnExecute.Location = new System.Drawing.Point(12, 463);
-            this.btnExecute.Name = "btnExecute";
-            this.btnExecute.Size = new System.Drawing.Size(75, 23);
-            this.btnExecute.TabIndex = 9;
-            this.btnExecute.Text = "EXECUTE";
-            this.btnExecute.UseVisualStyleBackColor = true;
-            this.btnExecute.Click += new System.EventHandler(this.BtnExecute_Click);
             // 
             // lblExecutionTime
             // 
             this.lblExecutionTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblExecutionTime.AutoSize = true;
             this.lblExecutionTime.Enabled = false;
-            this.lblExecutionTime.Location = new System.Drawing.Point(93, 468);
+            this.lblExecutionTime.Location = new System.Drawing.Point(93, 692);
             this.lblExecutionTime.Name = "lblExecutionTime";
             this.lblExecutionTime.Size = new System.Drawing.Size(56, 13);
             this.lblExecutionTime.TabIndex = 10;
@@ -207,13 +198,12 @@
             // 
             // groupBox5
             // 
-            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.groupBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox5.Controls.Add(this.tbDebugLog);
             this.groupBox5.Location = new System.Drawing.Point(602, 12);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(778, 474);
+            this.groupBox5.Size = new System.Drawing.Size(773, 232);
             this.groupBox5.TabIndex = 11;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debug Log";
@@ -226,19 +216,57 @@
             this.tbDebugLog.Multiline = true;
             this.tbDebugLog.Name = "tbDebugLog";
             this.tbDebugLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbDebugLog.Size = new System.Drawing.Size(772, 455);
+            this.tbDebugLog.Size = new System.Drawing.Size(767, 213);
             this.tbDebugLog.TabIndex = 0;
-            this.tbDebugLog.Text = resources.GetString("tbDebugLog.Text");
+            this.tbDebugLog.Text = "console";
             this.tbDebugLog.WordWrap = false;
+            // 
+            // btnExecute
+            // 
+            this.btnExecute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnExecute.Location = new System.Drawing.Point(12, 687);
+            this.btnExecute.Name = "btnExecute";
+            this.btnExecute.Size = new System.Drawing.Size(75, 23);
+            this.btnExecute.TabIndex = 12;
+            this.btnExecute.Text = "Execute";
+            this.btnExecute.UseVisualStyleBackColor = true;
+            this.btnExecute.Click += new System.EventHandler(this.BtnExecute_Click);
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox6.Controls.Add(this.tbHtml);
+            this.groupBox6.Location = new System.Drawing.Point(602, 250);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(773, 460);
+            this.groupBox6.TabIndex = 13;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "HTML";
+            // 
+            // tbHtml
+            // 
+            this.tbHtml.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbHtml.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbHtml.Location = new System.Drawing.Point(3, 16);
+            this.tbHtml.Multiline = true;
+            this.tbHtml.Name = "tbHtml";
+            this.tbHtml.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbHtml.Size = new System.Drawing.Size(767, 441);
+            this.tbHtml.TabIndex = 0;
+            this.tbHtml.Text = "HTML";
+            this.tbHtml.WordWrap = false;
             // 
             // formRequestGenerator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1392, 498);
+            this.ClientSize = new System.Drawing.Size(1387, 722);
+            this.Controls.Add(this.groupBox6);
+            this.Controls.Add(this.btnExecute);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.lblExecutionTime);
-            this.Controls.Add(this.btnExecute);
             this.Controls.Add(this.groupBox7);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox4);
@@ -261,6 +289,8 @@
             this.groupBox7.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox6.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -277,12 +307,14 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox tbValue;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.Button btnExecute;
         private System.Windows.Forms.TextBox tbRequest;
         private System.Windows.Forms.TextBox tbResponse;
         private System.Windows.Forms.Label lblExecutionTime;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.TextBox tbDebugLog;
+        private System.Windows.Forms.Button btnExecute;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.TextBox tbHtml;
     }
 }
 

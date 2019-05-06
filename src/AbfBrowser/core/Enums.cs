@@ -15,7 +15,6 @@ namespace AbfBrowser
         modifyExperiment,
         analyzeAbf,
         analyzeTif,
-        error,
     };
 
     public class ActionTools
@@ -33,7 +32,7 @@ namespace AbfBrowser
                 if (actionName == enumNames[i])
                     return (RequestAction)i;
             }
-            return RequestAction.error;
+            throw new Exception($"{actionName} is not a valid RequestAction");
         }
     }
 

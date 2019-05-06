@@ -29,58 +29,66 @@ namespace ABF_browser_app
             tbResponse.Clear();
             tbDebugLog.Clear();
             cbAction.Items.AddRange(AbfBrowser.ActionTools.GetActionNames());
-            cbAction.SelectedItem = cbAction.Items[0];
+            cbAction.SelectedItem = cbAction.Items[1];
         }
+
         private void FormRequestGenerator_Load(object sender, EventArgs e)
         {
+
         }
 
         #region GUI bindings
         private void CbAction_SelectedIndexChanged(object sender, EventArgs e)
         {
-            BuildRequest();
+            BuildAndExecuteRequestUsingGuiValues();
         }
 
         private void TbPath_TextChanged(object sender, EventArgs e)
         {
-            BuildRequest();
+            BuildAndExecuteRequestUsingGuiValues();
         }
 
         private void TbIdentifier_TextChanged(object sender, EventArgs e)
         {
-            BuildRequest();
+            BuildAndExecuteRequestUsingGuiValues();
         }
 
         private void TbValue_TextChanged(object sender, EventArgs e)
         {
-            BuildRequest();
+            BuildAndExecuteRequestUsingGuiValues();
         }
 
         private void BtnExecute_Click(object sender, EventArgs e)
         {
-            BuildRequest();
+            BuildAndExecuteRequestUsingGuiValues();
         }
 
         #endregion
 
-        public void BuildRequest()
+        public void BuildAndExecuteRequestUsingGuiValues()
         {
             // restart the benchmark timer
             debugListener.Clear();
-            debugListener.RestartStopwatch();
 
-            // build the action
+            // build the request
             AbfBrowser.RequestAction action = (AbfBrowser.RequestAction)cbAction.SelectedIndex;
-            AbfBrowser.Request request = new AbfBrowser.Request(action, tbPath.Text, tbIdentifier.Text, tbValue.Text);
-            tbRequest.Text = request.GetJson();
+            AbfBrowser.MessageRequest request = new AbfBrowser.MessageRequest(action, tbPath.Text, tbIdentifier.Text, tbValue.Text);
+            string requestJson = request.GetJson();
 
-            // give the action to the interactor, execute it, and collect the response
-            AbfBrowser.Interactor interactor = new AbfBrowser.Interactor(request);
-            AbfBrowser.Response response = interactor.Execute();
-            
-            // display the results
-            tbResponse.Text = response.GetJson();
+            // give the action to the interactor, execute it, and obtain the response
+            AbfBrowser.Interactor interactor = new AbfBrowser.Interactor(requestJson);
+            AbfBrowser.MessageResponse response = interactor.Execute();
+            string responseJson = response.GetJson();
+
+            // create a HTML page using the JSON as the only input
+            string html = new AbfBrowser.DisplayMenu(responseJson).GetHTML();
+
+            // update the GUI
+            tbRequest.Text = requestJson;
+            tbResponse.Text = responseJson;
             tbDebugLog.Text = debugListener.GetLogAsString();
+            tbHtml.Text = html;
         }
+
     }
 }

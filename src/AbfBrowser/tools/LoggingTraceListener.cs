@@ -23,6 +23,7 @@ namespace AbfBrowser
         {
             this.Flush();
             Log.Clear();
+            RestartStopwatch();
         }
 
         public void RestartStopwatch()
