@@ -61,18 +61,75 @@ namespace AbfBrowser
             string colorHex = response.AbfFolder.abfNotes.GetColorHex(parentID);
             string colorHexTransparent = Html.ColorHexToRgba(colorHex);
 
-            html += $"<div style='background-color: {colorHex}; padding: 0px 10px 10px 10px;'>";
+            // title area start
+            html += $"<div style='background-color: {colorHex}; padding: 0px 10px 10px 10px;'>"; // color
             html += $"<div class='title'>{parentID}</div>";
-            html += $"<div class='subtitle'>{comment}</div>";
+            html += $"<form style='margin: 0px;'>";
+
+            // comment
+            html += $"<div style='display:inline-block; padding-right: 5px;'>";
+            html += $"<span class='cellCommentLabel'>comment:</span>";
+            html += $"<input class='inputComment' type='text' name='comment' value='burst, resonant 5x' placeholder='write comment' />";
             html += $"</div>";
 
+            // color
+            html += $"<div style='display:inline-block; padding-right: 5px;'>";
+            html += $"<span class='cellCommentLabel'>color:</span>";
+            html += $"<select class='selectColor'>";
+            foreach (string thisColorCode in Configuration.ColorsByCode.Keys)
+            {
+                string thisColorHex = Configuration.ColorsByCode[thisColorCode];
+                string thisColorName = thisColorCode;
+                if (thisColorName == "")
+                    thisColorName = "none";
+                html += $"<option value='{thisColorHex}' style='background-color: {thisColorHex};'>{thisColorName}</option>";
+            }
+            html += $"</select>";
+            html += $"</div>";
+
+            // group
+            html += $"<div style='display:inline-block; padding-right: 5px;'>";
+            html += $"<span class='cellCommentLabel'>group:</span>";
+            string[] groups = new string[] { "ungrouped", "Pyramidal", "Interneuron" };
+            html += $"<select class='selectColor'>";
+            foreach (string group in groups)
+            {
+                html += $"<option value='{group}'>{group}</option>";
+            }
+            html += $"</select>";
+            html += $"</div>";
+
+            // save
+            html += $"<div style='display:inline-block; padding-right: 5px;'>";
+            html += $"<input class='btnCommentSave' type='submit' value='save'/>";
+            html += $"</div>";
+
+            // title area end
+            html += $"</form>";
+            html += $"</div>"; // color
+            html += $"";
+
+            // children
             html += $"<div style='background-color: {colorHexTransparent}; padding: 10px;'>";
+            Random rand = new Random();
             foreach (string child in children)
             {
+                string protocol = Configuration.GetRandomKnownProtocol(rand);
+                double randomFileSize = Math.Round(rand.NextDouble() * 100, 2);
+                string fileSizeString = $"{randomFileSize} MB";
+                string commentsString = "";
+                if (rand.NextDouble() > .8)
+                    commentsString = "\"+DNQX\" @ 5:43; \"+AP5\" @ 6:32";
+
                 html += $"<div>";
                 html += $"<span style=''>{child}</span> ";
                 html += $"<button class='btnSmall'>copy</button> ";
                 html += $"<button class='btnSmall'>setpath</button> ";
+                html += $"<span class='abfLineInfo'>";
+                html += $"{protocol}, ";
+                html += $"{fileSizeString}, ";
+                html += $"{commentsString}";
+                html += $"</span>";
                 html += $"</div>";
             }
             html += $"</div>";

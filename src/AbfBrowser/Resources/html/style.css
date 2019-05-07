@@ -12,6 +12,9 @@ a:hover {
     text-decoration: underline;
 }
 
+
+/* CONSERVED PAGE STYLING */
+
 .title {
     font-size: 2em;
     font-weight: bold;
@@ -27,33 +30,9 @@ a:hover {
     font-style: italic;
 }
 
-.menuBody{
-	background-color: #E6E6E6;
-	height: 100%;
-	padding-left: 10px;
-}
-
-.menuParent{
-	padding-left: 3px;
-	padding-right: 3px;
-	font-family: "consolas";
-}
-
-.menuComment{
-	color: #888;
-	font-family: "arial narrow";
-}
-
 .contentBody{
 	height: 100%;
 	padding-left: 10px;
-}
-
-.imgThumbnail{
-  box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
-  width: 300px;
-  margin: 10px;
-  border: 1px solid black;
 }
 
 .bottomMessage{
@@ -62,21 +41,114 @@ a:hover {
 	padding: 10px;
 }
 
-.btnSmall{
-	background-color: rgba(0,0,0,.05);
-	border: 1px solid rgba(0,0,0,.1);
-	color: rgba(0,0,0,.3);
-	font-size: .75em;
-	margin-left: 3px;
-	box-shadow: none;
+.imgThumbnail{
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
+  width: 250px;
+  margin: 10px;
+  border: 1px solid black;
 }
 
-.btnSmall:hover{
-	color: black;
-	background-color: rgba(0,0,0,.1);
-}
 
-.btnSmall:active{
-	color: white;
-	background-color: rgba(0,0,0,.5);
-}
+
+/* MENU-SPECIFIC STYLING */
+
+	.menuBody{
+		background-color: #E6E6E6;
+		height: 100%;
+		padding-left: 10px;
+	}
+
+	.menuParent{
+		padding-left: 3px;
+		padding-right: 3px;
+		font-family: "consolas";
+	}
+
+	.menuComment{
+		color: #888;
+		font-family: "arial narrow";
+	}
+
+
+
+/* ABF CLIPBOARD BUTTONS */
+
+	.btnSmall{
+		background-color: rgba(0,0,0,.05);
+		border: 1px solid rgba(0,0,0,.1);
+		color: rgba(0,0,0,.3);
+		font-size: .75em;
+		margin-left: 3px;
+		box-shadow: none;
+	}
+
+	.btnSmall:hover{
+		color: black;
+		background-color: rgba(0,0,0,.1);
+	}
+
+	.btnSmall:active{
+		color: white;
+		background-color: rgba(0,0,0,.5);
+	}
+
+	.abfLineInfo{
+		color:  rgba(0,0,0,.4);
+		font-size: .85em;
+	}
+
+
+
+/* CELL COMMENT INPUT */
+
+	.inputComment{
+		padding-left: 4px;
+		width: 300px;
+		font-size: 1.25em;
+		font-style: italic;
+		background-color: transparent;
+		border: 1px solid rgba(0,0,0,.1);
+	}
+
+	.inputComment:focus{
+		background-color: rgba(255,255,255,.5);
+		border: 1px solid rgba(0,0,0,.2);
+	}
+	
+	.cellCommentLabel {
+		display: block;
+		color: rgba(0,0,0,.4);
+	}
+
+
+
+/* CELL COLOR SELECT */
+
+	.selectColor{
+		font-size: 1.25em;
+		background-color: transparent;
+		border: 1px solid rgba(0,0,0,.1);
+	}
+
+
+
+/* CELL SAVE BUTTON */
+
+	.btnCommentSave{
+		font-size: 1.25em;
+		background-color: transparent;
+		border: 1px solid rgba(0,0,0,.1);
+		color: rgba(0,0,0,.3);
+		box-shadow: none;
+	}
+
+	.btnCommentSave:hover{
+		color: black;
+		background-color: rgba(0,0,0,.1);
+		border: 1px solid rgba(0,0,0,.1);
+	}
+
+	.btnCommentSave:active{
+		color: white;
+		background-color: rgba(0,0,0,.5);
+	}

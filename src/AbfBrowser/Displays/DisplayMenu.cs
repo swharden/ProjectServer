@@ -68,11 +68,22 @@ namespace AbfBrowser
             return html;
         }
 
+        public string HtmlMenuTitle()
+        {
+            const string url = "http://github.com/swharden/ABF-browser";
+            string html = "";
+            html += "<div>";
+            html += "<span class='title'>ABF Browser</span> ";
+            html += $"<span class='menuComment'><a href='{url}' target='_blank' style='color: #666;'>v1.2</a></span>";
+            html += "</div>";
+            return html;
+        }
+
         public override string GetHTML()
         {
             string html = "";
             html += $"<div class='menuBody'>";
-            html += "<div class='title'>ABF Browser</div>";
+            html += HtmlMenuTitle();
             html += HtmlNavigationCurrentFolder();
             html += HtmlNavigationSubFolders();
             html += HtmlForAbfList();

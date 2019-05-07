@@ -23,6 +23,7 @@ namespace ABF_browser_app
             server = new AbfBrowser.WebServerManager();
             lblServingOn.Text = $"Serving on: {server.url}";
             tbDebugLog.Clear();
+            lblVersion.Text = $"ABF Browser Version {AbfBrowser.Configuration.version}";
             SetLaunchFolderToSomewhereThatExists();
         }
 
