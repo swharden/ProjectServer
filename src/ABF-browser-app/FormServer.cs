@@ -23,6 +23,26 @@ namespace ABF_browser_app
             server = new AbfBrowser.WebServerManager();
             lblServingOn.Text = $"Serving on: {server.url}";
             tbDebugLog.Clear();
+            SetLaunchFolderToSomewhereThatExists();
+        }
+
+        private void SetLaunchFolderToSomewhereThatExists()
+        {
+            string[] suggestedFolders =
+            {
+                @"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2018-01-25 sine pyr oxt",
+                @"D:\demoData\abfs-2019",
+                @"X:\data",
+                @"C:",
+            };
+            foreach(string folder in suggestedFolders)
+            {
+                if (System.IO.Directory.Exists(folder))
+                {
+                    tbPath.Text = folder;
+                    return;
+                }
+            }
         }
 
         private void FormServer_Load(object sender, EventArgs e)
@@ -42,6 +62,7 @@ namespace ABF_browser_app
             {
                 tbDebugLog.Text = debugLog;
                 tbDebugLog.SelectionStart = tbDebugLog.Text.Length;
+                tbDebugLog.SelectionStart = tbDebugLog.GetFirstCharIndexOfCurrentLine();
                 tbDebugLog.ScrollToCaret();
             }
 
@@ -50,6 +71,7 @@ namespace ABF_browser_app
             {
                 tbServerLog.Text = serverLog;
                 tbServerLog.SelectionStart = tbServerLog.Text.Length;
+                tbServerLog.SelectionStart = tbServerLog.GetFirstCharIndexOfCurrentLine();
                 tbServerLog.ScrollToCaret();
             }
         }

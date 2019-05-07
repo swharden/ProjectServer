@@ -10,10 +10,12 @@ namespace AbfBrowser
     public class WebServerManager
     {
         readonly WebServer server;
+        readonly Configuration configuration;
         public string url { get { return server.url; } }
 
         public WebServerManager(bool launch = false)
         {
+            configuration = new Configuration();
             server = new WebServer(HttpRequestHandler);
             if (launch)
                 Launch();
@@ -33,13 +35,6 @@ namespace AbfBrowser
 
             if (queryString.StartsWith("/?"))
                 queryString = queryString.Substring(2);
-
-            // if a file is requested, serve the file
-            if (httpRequest.RawUrl.StartsWith($"/{Configuration.dataRootPathWebAlias}/"))
-            {
-                string filePath = httpRequest.RawUrl.Replace($"/{Configuration.dataRootPathWebAlias}", Configuration.dataRootPath);
-                return $"SERVING FILE: {filePath}";
-            }
 
             // determine display hint from display query value
             var queries = System.Web.HttpUtility.ParseQueryString(queryString);

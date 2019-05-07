@@ -61,6 +61,7 @@
     <Compile Include="Displays\DisplayMenu.cs" />
     <Compile Include="Tools\Folder.cs" />
     <Compile Include="Tools\Html.cs" />
+    <Compile Include="Tools\Ini.cs" />
     <Compile Include="Tools\Json.cs" />
     <Compile Include="Tools\LoggingTraceListener.cs" />
     <Compile Include="core\MessageRequest.cs" />

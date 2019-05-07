@@ -39,7 +39,6 @@ namespace AbfBrowser
         public MessageRequest(string queryString)
         {
             Debug.WriteLine($"Creating MessageRequest from query string: {queryString}");
-
             System.Collections.Specialized.NameValueCollection queries = System.Web.HttpUtility.ParseQueryString(queryString);
 
             // set actions based on action key

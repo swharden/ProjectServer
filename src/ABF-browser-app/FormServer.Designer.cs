@@ -47,7 +47,7 @@
             this.tbDebugLog.Multiline = true;
             this.tbDebugLog.Name = "tbDebugLog";
             this.tbDebugLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbDebugLog.Size = new System.Drawing.Size(895, 252);
+            this.tbDebugLog.Size = new System.Drawing.Size(895, 289);
             this.tbDebugLog.TabIndex = 0;
             this.tbDebugLog.Text = "debug log";
             this.tbDebugLog.WordWrap = false;
@@ -62,11 +62,11 @@
             this.tbServerLog.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbServerLog.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbServerLog.Location = new System.Drawing.Point(12, 296);
+            this.tbServerLog.Location = new System.Drawing.Point(12, 333);
             this.tbServerLog.Multiline = true;
             this.tbServerLog.Name = "tbServerLog";
             this.tbServerLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbServerLog.Size = new System.Drawing.Size(895, 159);
+            this.tbServerLog.Size = new System.Drawing.Size(895, 335);
             this.tbServerLog.TabIndex = 1;
             this.tbServerLog.Text = "server log";
             this.tbServerLog.WordWrap = false;
@@ -98,13 +98,13 @@
             this.tbPath.Name = "tbPath";
             this.tbPath.Size = new System.Drawing.Size(632, 20);
             this.tbPath.TabIndex = 4;
-            this.tbPath.Text = "X:\\Data\\SD\\Piriform Oxytocin\\00 pilot experiments\\2018-01-25 sine pyr oxt";
+            this.tbPath.Text = "C:/somewhere/cool/";
             // 
             // FormServer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(919, 467);
+            this.ClientSize = new System.Drawing.Size(919, 680);
             this.Controls.Add(this.tbPath);
             this.Controls.Add(this.lblServingOn);
             this.Controls.Add(this.btnLaunch);

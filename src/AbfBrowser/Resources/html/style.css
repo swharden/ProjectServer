@@ -1,5 +1,12 @@
 ﻿body {
     font-family: "Open Sans", calibri, sans-serif;
+	margin: 0px;
+}
+
+.bodyMenu{
+	background-color: #E6E6E6;
+	height: 100%;
+	padding-left: 10px;
 }
 
 a {

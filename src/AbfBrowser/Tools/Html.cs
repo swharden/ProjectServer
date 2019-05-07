@@ -18,6 +18,27 @@ namespace AbfBrowser
             return topHtml + bodyHtml + bottomHtml;
         }
 
+        public static string[] GetFolderPathsAndNamesBrokenUp(string inputPath)
+        {
+            string driveLetter = System.IO.Path.GetPathRoot(inputPath).TrimEnd(new char[] { '/', '\\' });
+            List<string> paths = new List<string>();
+            List<string> names = new List<string>();
+            while (inputPath != null)
+            {
+                paths.Add(inputPath);
+                names.Add(System.IO.Path.GetFileName(inputPath));
+                inputPath = System.IO.Path.GetDirectoryName(inputPath);
+            }
+            paths.Reverse();
+            names.Reverse();
+            names[0] = driveLetter;
+
+            string[] folderLinks = new string[paths.Count];
+            for (int i = 0; i < paths.Count; i++)
+                folderLinks[i] = $"{names[i]},{paths[i]}";
+            return folderLinks;
+        }
+
         public static string Prettify(string html, int indentCount = 2, char indentChar = ' ')
         {
             int originalSize = html.Length;

@@ -63,19 +63,19 @@ namespace AbfBrowser
             // otherwise try to process it using the request/action/display process
             try
             {
-                if (query.StartsWith($"{Configuration.dataRootPathWebAlias}/"))
+                if (query.StartsWith("/fs/"))
                 {
                     string filePath = Uri.UnescapeDataString(query);
-                    filePath = filePath.Replace($"{Configuration.dataRootPathWebAlias}", Configuration.dataRootPath);
-                    Debug.WriteLine($"SERVING FILE: {filePath}");
+                    filePath = query.Replace("/fs/", "");
 
                     if (System.IO.File.Exists(filePath))
                     {
-                        System.IO.Stream input = new System.IO.FileStream(filePath, System.IO.FileMode.Open);
+                        System.IO.Stream fileStream = new System.IO.FileStream(filePath, System.IO.FileMode.Open);
                         byte[] buffer = new byte[1024 * 32];
                         int nbytes;
-                        while ((nbytes = input.Read(buffer, 0, buffer.Length)) > 0)
+                        while ((nbytes = fileStream.Read(buffer, 0, buffer.Length)) > 0)
                             context.Response.OutputStream.Write(buffer, 0, nbytes);
+                        fileStream.Close();
                     }
                     else
                     {
@@ -133,7 +133,9 @@ namespace AbfBrowser
                 int callerIndex = 1;
                 StackFrame frame = trace.GetFrame(callerIndex);
                 string callerName = frame.GetMethod().Name;
-                Log($"EXCEPTION thrown by {callerName}:\n   {exception.ToString()}");
+                string message = $"EXCEPTION thrown by {callerName}:\r\n{exception.ToString()}";
+                Debug.WriteLine(message);
+                Log("EXCEPTION thrown by web server (traceback in debug log)");
             }
         }
 
