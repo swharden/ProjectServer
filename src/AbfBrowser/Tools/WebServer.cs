@@ -56,11 +56,11 @@ namespace AbfBrowser
 
         private void HandleContext(Object receivedContext)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
             HttpListenerContext context = (HttpListenerContext)receivedContext;
             string query = context.Request.RawUrl;
             Log($"{context.Request.HttpMethod} {context.Request.Url.PathAndQuery}");
 
-            // otherwise try to process it using the request/action/display process
             try
             {
                 if (query.StartsWith("/fs/"))
@@ -85,7 +85,10 @@ namespace AbfBrowser
                 }
                 else
                 {
-                    byte[] buffer = Encoding.UTF8.GetBytes(requestHandler(context.Request));
+                    string html = requestHandler(context.Request);
+                    string elapsedMsecStr = string.Format("{0:0.000}", stopwatch.ElapsedTicks * 1000.0 / Stopwatch.Frequency);
+                    html = html.Replace("~SERVER_NOTES~", $"Webpage served in {elapsedMsecStr} ms.");
+                    byte[] buffer = Encoding.UTF8.GetBytes(html);
                     context.Response.ContentLength64 = buffer.Length;
                     context.Response.OutputStream.Write(buffer, 0, buffer.Length);
                 }

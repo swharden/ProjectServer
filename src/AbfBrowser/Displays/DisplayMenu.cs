@@ -14,9 +14,10 @@ namespace AbfBrowser
             Debug.WriteLine($"Creating menu display from {response}");
         }
 
-        private string HtmlForFolderMenu()
+        private string HtmlNavigationCurrentFolder()
         {
-            string html = "<h2>Current Folder:</h2>";
+            string html = "";
+            html += "<div class='title2' style='margin-top: 20px;'>Current Folder</div>";
             string[] infoByFolder = Html.GetFolderPathsAndNamesBrokenUp(response.request.path);
             foreach (string line in infoByFolder)
             {
@@ -25,17 +26,20 @@ namespace AbfBrowser
                 string path = nameAndPath[1];
                 string url = $"?display=menu&path={path}";
                 html += $"<a href='{url}' target='menu'>{name}</a>/";
-                Console.WriteLine(nameAndPath);
             }
+            return html;
+        }
 
-            html += "<h2>Sub-Folders:</h2>";
+        private string HtmlNavigationSubFolders()
+        {
+            string html = "";
             foreach (string folderName in response.AbfFolder.GetFolderNames())
             {
+                if (Configuration.analysisFolderNames.Contains(folderName))
+                    continue;
                 string url = $"?display=menu&path={response.request.path}/{folderName}";
-                html += $"<div><a href='{url}' target='menu'>{folderName}</a></div>";
+                html += $"<div style='margin-left: 10px;'><a href='{url}' target='menu'>{folderName}</a></div>";
             }
-
-            html = $"<div style='margin-bottom: 20px;'>{html}</div>";
             return html;
         }
 
@@ -47,12 +51,18 @@ namespace AbfBrowser
             }
 
             string html = "";
-            html += "<h2>ABF Parents:</h2>";
+            html += "<div class='title2' style='margin-top: 20px;'>Parent ABFs</div>";
             foreach (string parent in response.AbfFolder.parentsAndChildren.Keys)
             {
                 string parentID = System.IO.Path.GetFileNameWithoutExtension(parent);
                 string url = $"?display=cell&path={response.request.path}&identifier={parent}";
-                html += $"<div><a href='{url}' target='content'>{parentID}</a></div>";
+                string comment = response.AbfFolder.abfNotes.GetComment(parentID);
+                string colorHex = response.AbfFolder.abfNotes.GetColorHex(parentID);
+                html += $"<div>";
+                html += $"<a class='menuParent' href='{url}' target='content' style='background-color: {colorHex}'>{parentID}</a> ";
+                html += $"</span>";
+                html += $"<span class='menuComment'>{comment}</style>";
+                html += $"</div>";
             }
 
             return html;
@@ -61,11 +71,12 @@ namespace AbfBrowser
         public override string GetHTML()
         {
             string html = "";
-            html += "<h1>MENU</h1>";
-            html += HtmlForFolderMenu();
+            html += $"<div class='menuBody'>";
+            html += "<div class='title'>ABF Browser</div>";
+            html += HtmlNavigationCurrentFolder();
+            html += HtmlNavigationSubFolders();
             html += HtmlForAbfList();
-
-            html = $"<div class='bodyMenu'>{html}</div>";
+            html += "</div>";
             return Html.BuildPage(html);
         }
 

@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="core\AbfInfo.cs" />
+    <Compile Include="core\AbfNotes.cs" />
     <Compile Include="core\Configuration.cs" />
     <Compile Include="core\Message.cs" />
     <Compile Include="core\Interactor.cs" />
@@ -55,7 +57,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tools\AbfFolder.cs" />
+    <Compile Include="core\AbfFolder.cs" />
     <Compile Include="Displays\DisplayError.cs" />
     <Compile Include="Displays\DisplayHome.cs" />
     <Compile Include="Displays\DisplayMenu.cs" />

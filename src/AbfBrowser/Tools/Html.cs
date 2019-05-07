@@ -9,12 +9,28 @@ namespace AbfBrowser
 {
     public static class Html
     {
-        public static string BuildPage(string bodyHtml, string title = "ABF Browser")
+        public static string ColorHexToRgba(string hex, double alpha = 0.25)
+        {
+            hex = hex.Replace("#", "");
+            if (hex.Length == 3)
+                hex = hex + hex;
+            if (hex.Length != 6)
+                throw new Exception("hex color code must be 6 characters");
+            int rgb = Convert.ToInt32(hex, 16);
+            byte r = (byte)(rgb >> 16);
+            byte g = (byte)(rgb >> 8);
+            byte b = (byte)(rgb >> 0);
+            return $"rgba({r}, {g}, {b}, {alpha})";
+        }
+
+        public static string BuildPage(string bodyHtml, string bottomMessage = "", string title = "ABF Browser")
         {
             string topHtml = Properties.Resources.top;
             topHtml = topHtml.Replace("~TITLE~", title);
             topHtml = topHtml.Replace("~CSS~", Properties.Resources.style);
             string bottomHtml = Properties.Resources.bot;
+            if (bottomMessage.Length > 0)
+                bottomHtml = $"<div class='bottomMessage'>{bottomMessage} ~SERVER_NOTES~</div>{bottomHtml}";
             return topHtml + bodyHtml + bottomHtml;
         }
 

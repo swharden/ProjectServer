@@ -10,22 +10,44 @@ namespace AbfBrowser
     public class AbfFolder : Tools.Folder
     {
         public Dictionary<string, string[]> parentsAndChildren;
-        public string pathAnalysis;
-
         public Tools.Folder analysisFolder;
-        
+        public AbfNotes abfNotes = new AbfNotes();
+
         public AbfFolder(string path) : base(path)
         {
             if (path == null)
                 path = "./";
-            pathAnalysis = System.IO.Path.Combine(path, Configuration.analysisFolderName);
-            analysisFolder = new Tools.Folder(pathAnalysis);
+            IdentifyAnalysisFolder();
             DetermineAbfParents();
+            IdentifyAndLoadNotesFiles();
         }
 
-        public string GetJson()
+        public void IdentifyAndLoadNotesFiles()
         {
-            return Json.JsonFromObject(this);
+            string jsonFilePath = System.IO.Path.Combine(path, Configuration.folderInfoFileName);
+            string cellsFilePath = System.IO.Path.Combine(path, Configuration.legacy_cellsFileName);
+            if (System.IO.File.Exists(jsonFilePath))
+                abfNotes.LoadCellsFile(jsonFilePath);
+            else if (System.IO.File.Exists(cellsFilePath))
+                abfNotes.LoadCellsFile(cellsFilePath);
+        }
+
+        public void IdentifyAnalysisFolder()
+        {
+            foreach (string analysisFolderName in Configuration.analysisFolderNames)
+            {
+                string possibleFolderPath = System.IO.Path.Combine(path, analysisFolderName);
+                if (System.IO.Directory.Exists(possibleFolderPath))
+                {
+                    analysisFolder = new Tools.Folder(possibleFolderPath);
+                    break;
+                }
+            }
+
+            if (analysisFolder != null)
+                Debug.WriteLine($"analysis folder: [{analysisFolder.path}]");
+            else
+                Debug.WriteLine($"no analysis folder found");
         }
 
         private void DetermineAbfParents()

@@ -52,5 +52,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AbfBrowser\AbfBrowser.csproj">
+      <Project>{7ef39121-d1e0-487c-b4d5-1bcb842a8dad}</Project>
+      <Name>AbfBrowser</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

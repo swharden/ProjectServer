@@ -3,12 +3,6 @@
 	margin: 0px;
 }
 
-.bodyMenu{
-	background-color: #E6E6E6;
-	height: 100%;
-	padding-left: 10px;
-}
-
 a {
     text-decoration: none;
     color: blue;
@@ -23,34 +17,66 @@ a:hover {
     font-weight: bold;
 }
 
-.logMessage {
-    font-family: consolas, courier;
-    color: #999;
+.title2 {
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
-.result {
-    font-family: consolas, courier;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    border-left: 5px solid #CCC;
-    background-color: #EEE;
+.subtitle{
+    font-size: 1.5em;
+    font-style: italic;
 }
 
-.errorBlock {
-    padding: 10px 10px 1px 10px;
-    background-color: red;
-    font-family: consolas, courier;
+.menuBody{
+	background-color: #E6E6E6;
+	height: 100%;
+	padding-left: 10px;
 }
 
-.errorTitle {
-    padding: 10px;
-    color: white;
-    font-size: 150%;
+.menuParent{
+	padding-left: 3px;
+	padding-right: 3px;
+	font-family: "consolas";
 }
 
-.errorDetails {
-    padding: 10px;
-    background-color: rgb(255, 42, 42);
-    color: white;
+.menuComment{
+	color: #888;
+	font-family: "arial narrow";
+}
+
+.contentBody{
+	height: 100%;
+	padding-left: 10px;
+}
+
+.imgThumbnail{
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, .2);
+  width: 300px;
+  margin: 10px;
+  border: 1px solid black;
+}
+
+.bottomMessage{
+	color: #CCC;
+	margin-top: 50px;
+	padding: 10px;
+}
+
+.btnSmall{
+	background-color: rgba(0,0,0,.05);
+	border: 1px solid rgba(0,0,0,.1);
+	color: rgba(0,0,0,.3);
+	font-size: .75em;
+	margin-left: 3px;
+	box-shadow: none;
+}
+
+.btnSmall:hover{
+	color: black;
+	background-color: rgba(0,0,0,.1);
+}
+
+.btnSmall:active{
+	color: white;
+	background-color: rgba(0,0,0,.5);
 }

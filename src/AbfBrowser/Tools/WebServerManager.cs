@@ -48,7 +48,6 @@ namespace AbfBrowser
             Interactor interactor = new AbfBrowser.Interactor(request);
             Display displayer = interactor.Execute(displayHint);
             string html = displayer.GetHTML();
-
             return html;
         }
 

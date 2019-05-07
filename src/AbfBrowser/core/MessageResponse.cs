@@ -23,5 +23,14 @@ namespace AbfBrowser
         {
             return new DisplayMenu(this);
         }
+
+        public string GetStatus()
+        {
+            string txt = "";
+            txt += $"Request ({request.action}) was built in {request.elapsedMillisecString} ms. ";
+            txt += $"Execution formed a Response in {elapsedMillisecString} ms. ";
+            txt += $"Display mechanism ({this.GetDisplay()}) was used. ";
+            return txt;
+        }
     }
 }
