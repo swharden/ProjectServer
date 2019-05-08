@@ -9,6 +9,51 @@ namespace AbfBrowser
 {
     public static class Html
     {
+        public static Dictionary<string, string> GetPercentEncodingCodes()
+        {
+            Dictionary<string, string> codes = new Dictionary<string, string>
+            {
+                [" "] = "%20",
+                ["\""] = "%22",
+                ["%"] = "%25",
+                ["-"] = "%2D",
+                ["."] = "%2E",
+                ["<"] = "%3C",
+                [">"] = "%3E",
+                ["\\"] = "%5C",
+                ["^"] = "%5E",
+                ["_"] = "%5F",
+                ["`"] = "%60",
+                ["{"] = "%7B",
+                ["|"] = "%7C",
+                ["}"] = "%7D",
+                ["~"] = "%7E"
+            };
+            return codes;
+        }
+
+        public static string UrlDecode(string url)
+        {
+            Dictionary<string, string> codes = GetPercentEncodingCodes();
+            foreach (string symbol in codes.Keys)
+            {
+                string code = codes[symbol];
+                url = url.Replace(code, symbol);
+            }
+            return url;
+        }
+
+        public static string UrlEncode(string url)
+        {
+            Dictionary<string, string> codes = GetPercentEncodingCodes();
+            foreach (string symbol in codes.Keys)
+            {
+                string code = codes[symbol];
+                url = url.Replace(symbol, code);
+            }
+            return url;
+        }
+
         public static string ColorHexToRgba(string hex, double alpha = 0.25)
         {
             hex = hex.Replace("#", "");

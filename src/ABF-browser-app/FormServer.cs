@@ -32,7 +32,7 @@ namespace ABF_browser_app
             string[] suggestedFolders =
             {
                 @"X:\Data\SD\Piriform Oxytocin\00 pilot experiments\2018-01-25 sine pyr oxt",
-                @"D:\demoData\abfs-2019",
+                @"D:\demoData\abfs 2019",
                 @"X:\data",
                 @"C:",
             };

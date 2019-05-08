@@ -58,15 +58,14 @@ namespace AbfBrowser
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
             HttpListenerContext context = (HttpListenerContext)receivedContext;
-            string query = context.Request.RawUrl;
             Log($"{context.Request.HttpMethod} {context.Request.Url.PathAndQuery}");
 
             try
             {
-                if (query.StartsWith("/fs/"))
+                if (context.Request.RawUrl.StartsWith("/fs/"))
                 {
-                    string filePath = Uri.UnescapeDataString(query);
-                    filePath = query.Replace("/fs/", "");
+                    string filePath = Html.UrlDecode(context.Request.RawUrl);
+                    filePath = filePath.Replace("/fs/", "");
 
                     if (System.IO.File.Exists(filePath))
                     {
