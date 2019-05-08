@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AbfBrowser", "AbfBrowser\Ab
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sandbox", "Sandbox\Sandbox.csproj", "{452019FB-C0D5-4EB8-9FA5-9CF2C19E7845}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "vsABF", "..\..\vsABF\src\vsABF\vsABF.csproj", "{7DE71FFF-88B5-4E6D-A09B-ADB4C89A249D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{452019FB-C0D5-4EB8-9FA5-9CF2C19E7845}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{452019FB-C0D5-4EB8-9FA5-9CF2C19E7845}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{452019FB-C0D5-4EB8-9FA5-9CF2C19E7845}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DE71FFF-88B5-4E6D-A09B-ADB4C89A249D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DE71FFF-88B5-4E6D-A09B-ADB4C89A249D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DE71FFF-88B5-4E6D-A09B-ADB4C89A249D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DE71FFF-88B5-4E6D-A09B-ADB4C89A249D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

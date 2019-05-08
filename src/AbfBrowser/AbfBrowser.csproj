@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="core\AbfInfo.cs" />
     <Compile Include="core\AbfNotes.cs" />
+    <Compile Include="core\AbfReader.cs" />
     <Compile Include="core\Configuration.cs" />
     <Compile Include="core\Message.cs" />
     <Compile Include="core\Interactor.cs" />
@@ -87,6 +88,12 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\vsABF\src\vsABF\vsABF.csproj">
+      <Project>{7de71fff-88b5-4e6d-a09b-adb4c89a249d}</Project>
+      <Name>vsABF</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

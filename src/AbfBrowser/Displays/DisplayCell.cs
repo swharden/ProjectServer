@@ -41,15 +41,23 @@ namespace AbfBrowser
                 html += $"</div>";
 
                 html += $"<div style='padding: 5px; background-color: {colorHexTransparent};'>";
-                foreach (string child in children)
-                    html += $"<div>{child}</div>";
+                foreach (string childFileName in children)
+                {
+                    string childAbfFilePath = System.IO.Path.Combine(response.AbfFolder.path, childFileName);
+                    string details = "?";
+                    using (AbfReader abf = new AbfReader(childAbfFilePath))
+                    {
+                        details = abf.GetOneLineSummary();
+                    }
+                    html += $"<div><span class=''>{childFileName}</span> <span class='abfLineInfo'>{details}</span></div>";
+                }
                 html += "</div>";
 
                 html += $"</div>";
             }
             return html;
         }
-        
+
         private string HtmlParentSummaryTopper()
         {
             string html = "";
@@ -112,24 +120,20 @@ namespace AbfBrowser
             // children
             html += $"<div style='background-color: {colorHexTransparent}; padding: 10px;'>";
             Random rand = new Random();
-            foreach (string child in children)
+            foreach (string childFileName in children)
             {
-                string protocol = Configuration.GetRandomKnownProtocol(rand);
-                double randomFileSize = Math.Round(rand.NextDouble() * 100, 2);
-                string fileSizeString = $"{randomFileSize} MB";
-                string commentsString = "";
-                if (rand.NextDouble() > .8)
-                    commentsString = "\"+DNQX\" @ 5:43; \"+AP5\" @ 6:32";
+                string childAbfFilePath = System.IO.Path.Combine(response.AbfFolder.path, childFileName);
+                string details = "?";
+                using (AbfReader abf = new AbfReader(childAbfFilePath))
+                {
+                    details = abf.GetOneLineSummary();
+                }
 
                 html += $"<div>";
-                html += $"<span style=''>{child}</span> ";
+                html += $"<span style=''>{childFileName}</span> ";
                 html += $"<button class='btnSmall'>copy</button> ";
                 html += $"<button class='btnSmall'>setpath</button> ";
-                html += $"<span class='abfLineInfo'>";
-                html += $"{protocol}, ";
-                html += $"{fileSizeString}, ";
-                html += $"{commentsString}";
-                html += $"</span>";
+                html += $"<span class='abfLineInfo'>{details}</span>";
                 html += $"</div>";
             }
             html += $"</div>";
