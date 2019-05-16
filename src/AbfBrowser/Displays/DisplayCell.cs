@@ -109,7 +109,8 @@ namespace AbfBrowser
 
             // save
             html += $"<div style='display:inline-block; padding-right: 5px;'>";
-            html += $"<input class='btnCommentSave' type='submit' value='save'/>";
+            //html += $"<input class='btnCommentSave' type='submit' value='save'/>";
+            html += $"<input class='btnCommentSave' type='button' value='save disabled'/>";
             html += $"</div>";
 
             // title area end

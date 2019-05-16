@@ -69,6 +69,27 @@ namespace AbfBrowser
             return html;
         }
 
+        private string HtmlMenuLinkForAbf(AbfInfo info)
+        {
+            string url = $"?display=cell&path={response.request.path}&identifier={info.abfID}.abf";
+            string comment = response.AbfFolder.abfNotes.GetComment(info.abfID);
+            string colorHex = response.AbfFolder.abfNotes.GetColorHex(info.abfID);
+            string html = "";
+            html += $"<div>";
+            html += $"<a class='menuParent' href='{url}' target='content' style='background-color: {colorHex}'>{info.abfID}</a> ";
+            html += $"<span class='menuComment'>{comment}</span>";
+            html += $"</div>";
+            return html;
+        }
+        private string HtmlMenuLinkForGroup(AbfInfo info)
+        {
+            string html = "";
+            html += $"<div style='font-weight: bold;'><br>";
+            html += $"{info.group}";
+            html += $"</div>";
+            return html;
+        }
+
         private string HtmlForAbfList()
         {
             if (response.AbfFolder.parentsAndChildren.Count == 0)
@@ -79,34 +100,30 @@ namespace AbfBrowser
 
             string html = "";
             html += "<div class='title2' style='margin-top: 20px;'>Parent ABFs</div>";
+
+            List<string> abfIdsDisplayed = new List<string>();
             foreach (AbfInfo info in response.AbfFolder.abfNotes.GetAbfInfo())
             {
                 if (info.abfID == "---")
-                {
-                    // group heading
-                    html += $"<div style='font-weight: bold;'><br>";
-                    html += $"{info.group}";
-                    html += $"</div>";
-                }
+                    html += HtmlMenuLinkForGroup(info);
                 else
-                {
-                    // cell
-                    //string parentID = System.IO.Path.GetFileNameWithoutExtension(info.abfID);
-                    string url = $"?display=cell&path={response.request.path}&identifier={info.abfID}.abf";
-                    string comment = response.AbfFolder.abfNotes.GetComment(info.abfID);
-                    string colorHex = response.AbfFolder.abfNotes.GetColorHex(info.abfID);
-                    html += $"<div>";
-                    html += $"<a class='menuParent' href='{url}' target='content' style='background-color: {colorHex}'>{info.abfID}</a> ";
-                    html += $"<span class='menuComment'>{comment}</span>";
-                    html += $"</div>";
-                }
+                    html += HtmlMenuLinkForAbf(info);
+                abfIdsDisplayed.Add(info.abfID);
             }
 
-            /*
+            List<string> ungroupedAbfs = new List<string>();
             foreach (string parent in response.AbfFolder.parentsAndChildren.Keys)
+                if (!abfIdsDisplayed.Contains(System.IO.Path.GetFileNameWithoutExtension(parent)))
+                    ungroupedAbfs.Add(parent);
+
+            if (ungroupedAbfs.Count() > 0)
             {
+                html += HtmlMenuLinkForGroup(new AbfInfo());
+                foreach (string parent in response.AbfFolder.parentsAndChildren.Keys)
+                    if (!abfIdsDisplayed.Contains(parent))
+                        html += HtmlMenuLinkForAbf(new AbfInfo(parent));
             }
-            */
+
 
             return html;
         }
