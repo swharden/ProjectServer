@@ -71,5 +71,10 @@ namespace AbfBrowser
                 throw new ArgumentException($"abf folder info file does not exist: [{cellsFilePath}]");
             }
         }
+
+        public List<AbfInfo> GetAbfInfo()
+        {
+            return abfInfos;
+        }
     }
 }

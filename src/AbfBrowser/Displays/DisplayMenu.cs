@@ -43,9 +43,10 @@ namespace AbfBrowser
             return html;
         }
 
-        private string HtmlForAbfList()
+        private string HtmlForAbfList_ignoreCellsFile()
         {
-            if (response.AbfFolder.parentsAndChildren.Count == 0) {
+            if (response.AbfFolder.parentsAndChildren.Count == 0)
+            {
                 Debug.WriteLine("no parents/children found so not showing ABFs in menu");
                 return "";
             }
@@ -64,6 +65,48 @@ namespace AbfBrowser
                 html += $"<span class='menuComment'>{comment}</style>";
                 html += $"</div>";
             }
+
+            return html;
+        }
+
+        private string HtmlForAbfList()
+        {
+            if (response.AbfFolder.parentsAndChildren.Count == 0)
+            {
+                Debug.WriteLine("no parents/children found so not showing ABFs in menu");
+                return "";
+            }
+
+            string html = "";
+            html += "<div class='title2' style='margin-top: 20px;'>Parent ABFs</div>";
+            foreach (AbfInfo info in response.AbfFolder.abfNotes.GetAbfInfo())
+            {
+                if (info.abfID == "---")
+                {
+                    // group heading
+                    html += $"<div style='font-weight: bold;'><br>";
+                    html += $"{info.group}";
+                    html += $"</div>";
+                }
+                else
+                {
+                    // cell
+                    //string parentID = System.IO.Path.GetFileNameWithoutExtension(info.abfID);
+                    string url = $"?display=cell&path={response.request.path}&identifier={info.abfID}.abf";
+                    string comment = response.AbfFolder.abfNotes.GetComment(info.abfID);
+                    string colorHex = response.AbfFolder.abfNotes.GetColorHex(info.abfID);
+                    html += $"<div>";
+                    html += $"<a class='menuParent' href='{url}' target='content' style='background-color: {colorHex}'>{info.abfID}</a> ";
+                    html += $"<span class='menuComment'>{comment}</span>";
+                    html += $"</div>";
+                }
+            }
+
+            /*
+            foreach (string parent in response.AbfFolder.parentsAndChildren.Keys)
+            {
+            }
+            */
 
             return html;
         }

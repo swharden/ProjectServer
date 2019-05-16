@@ -37,19 +37,29 @@ namespace AbfBrowser
         {
             cellsLine = cellsLine.Trim();
 
-            if (cellsLine.StartsWith("#") || cellsLine.StartsWith("---") || cellsLine.Length == 0 || !cellsLine.Contains(' '))
+            if (cellsLine.StartsWith("#") || cellsLine.Length == 0)
                 return;
 
-            string[] parts = cellsLine.Split(new char[] { ' ' }, 3);
-            if (parts.Length != 3)
-                return;
-
-            abfID = parts[0];
-            colorCode = parts[1];
-            comment = parts[2].Trim();
-
-            if (comment == "?")
-                comment = "";
+            if (cellsLine.StartsWith("---"))
+            {
+                // this line is ---[groupHeader]
+                abfID = "---";
+                comment = cellsLine.Replace("---","").Trim();
+            }
+            else
+            {
+                // this line is [parentID] [colorCode] [comments]
+                if (!cellsLine.Contains(' '))
+                    return;
+                string[] parts = cellsLine.Split(new char[] { ' ' }, 3);
+                if (parts.Length != 3)
+                    return;
+                abfID = parts[0];
+                colorCode = parts[1];
+                comment = parts[2].Trim();
+                if (comment == "?")
+                    comment = "";
+            }
         }
 
         public string GetCellsFileLine()
