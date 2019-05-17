@@ -48,7 +48,10 @@ namespace AbfBrowser
                     Debug.WriteLine($"Analyzing ABF(s)...");
                     break;
                 case (RequestAction.analyzeTif):
-                    Debug.WriteLine($"analyzing TIF(s)");
+                    Debug.WriteLine($"analyzing TIF(s)...");
+                    break;
+                case (RequestAction.labtalk):
+                    Debug.WriteLine($"executing labtalk...");
                     break;
                 default:
                     throw new Exception($"Unimplimented action: {request.action}");
@@ -68,6 +71,9 @@ namespace AbfBrowser
                     break;
                 case "cell":
                     displayer = new DisplayCell(response);
+                    break;
+                case "labtalk":
+                    displayer = new DisplayLabtalk(response);
                     break;
                 default:
                     displayer = new DisplayError(response);

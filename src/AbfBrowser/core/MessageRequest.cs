@@ -18,6 +18,7 @@ namespace AbfBrowser
         modifyExperiment,
         analyzeAbf,
         analyzeTif,
+        labtalk,
     };
 
     public class MessageRequest : Message
@@ -89,6 +90,10 @@ namespace AbfBrowser
                     break;
                 case "cell":
                     action = RequestAction.scanFolderFast;
+                    Debug.WriteLine($"Action updated to {action} based on display {display}");
+                    break;
+                case "labtalk":
+                    action = RequestAction.labtalk;
                     Debug.WriteLine($"Action updated to {action} based on display {display}");
                     break;
             }

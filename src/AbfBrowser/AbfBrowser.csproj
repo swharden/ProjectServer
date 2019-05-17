@@ -53,6 +53,7 @@
     <Compile Include="Displays\Display.cs" />
     <Compile Include="Displays\DisplayCell.cs" />
     <Compile Include="Displays\DisplayFrames.cs" />
+    <Compile Include="Displays\DisplayLabtalk.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

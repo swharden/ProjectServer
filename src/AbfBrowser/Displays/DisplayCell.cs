@@ -130,10 +130,13 @@ namespace AbfBrowser
                     details = abf.GetOneLineSummary();
                 }
 
+                string ltSetpath = $"setpath \"{childAbfFilePath}\"; ";
+                ltSetpath = Html.UrlEncode(ltSetpath);
+
                 html += $"<div>";
                 html += $"<span style=''>{childFileName}</span> ";
                 html += $"<button class='btnSmall'>copy</button> ";
-                html += $"<button class='btnSmall'>setpath</button> ";
+                html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value={ltSetpath}');\">setpath</button> ";
                 html += $"<span class='abfLineInfo'>{details}</span>";
                 html += $"</div>";
             }

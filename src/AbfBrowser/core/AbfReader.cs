@@ -18,7 +18,8 @@ namespace AbfBrowser
         public string GetOneLineSummary()
         {
             //string msg = $"{abf.channelCount}-channel ABF with {abf.sweepCount} sweeps ({abf.sweepIntervalSec} seconds long)";
-            string msg = $"[{abf.protocol}] with {abf.sweepCount} sweeps ({abf.sweepIntervalSec} sec/sweep)";
+            //string msg = $"[{abf.protocol}] with {abf.sweepCount} sweeps ({abf.sweepIntervalSec} sec/sweep)";
+            string msg = "UPDATE VSABF TO GET THIS!";
             return msg;
         }
 
