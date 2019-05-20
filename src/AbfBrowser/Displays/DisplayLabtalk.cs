@@ -22,7 +22,7 @@ namespace AbfBrowser
 
             Debug.WriteLine($"focusing and maximizing OriginLab...");
             origin.Visible = Origin.MAINWND_VISIBLE.MAINWND_SHOW_BRING_TO_FRONT;
-            origin.Visible = Origin.MAINWND_VISIBLE.MAINWND_SHOWMAXIMIZED;
+            //origin.Visible = Origin.MAINWND_VISIBLE.MAINWND_SHOWMAXIMIZED;
 
             Debug.WriteLine($"Executing labtalk command [{ltCommand}]...");
             origin.Execute(ltCommand);

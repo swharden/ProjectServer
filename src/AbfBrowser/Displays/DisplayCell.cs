@@ -49,7 +49,9 @@ namespace AbfBrowser
                     {
                         details = abf.GetOneLineSummary();
                     }
-                    html += $"<div><span class=''>{childFileName}</span> <span class='abfLineInfo'>{details}</span></div>";
+                    html += $"<div><span class=''>{childFileName}</span> ";
+                    html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value=" + Html.UrlEncode($"setpath \"{childAbfFilePath}\";") + "');\">setpath</button> ";
+                    html += $"<span class='abfLineInfo'>{details}</span></div>";
                 }
                 html += "</div>";
 
@@ -130,13 +132,21 @@ namespace AbfBrowser
                     details = abf.GetOneLineSummary();
                 }
 
-                string ltSetpath = $"setpath \"{childAbfFilePath}\"; ";
-                ltSetpath = Html.UrlEncode(ltSetpath);
-
                 html += $"<div>";
                 html += $"<span style=''>{childFileName}</span> ";
-                html += $"<button class='btnSmall'>copy</button> ";
-                html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value={ltSetpath}');\">setpath</button> ";
+                //html += $"<button class='btnSmall'>copy</button> ";
+
+                html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value=" + Html.UrlEncode($"setpath \"{childAbfFilePath}\";") + "');\">setpath</button> ";
+
+                if (details.Contains("0201"))
+                    html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value=" + Html.UrlEncode($"setpath \"{childAbfFilePath}\"; memtest;") + "');\">Memtest</button> ";
+
+                if (details.Contains("0111"))
+                    html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value=" + Html.UrlEncode($"setpath \"{childAbfFilePath}\"; cjfmini;") + "');\">1st AP</button> ";
+
+                if (details.Contains("0112") || details.Contains("0113") || details.Contains("0114"))
+                    html += $"<button class='btnSmall' onClick=\"window.open('?display=labtalk&value=" + Html.UrlEncode($"setpath \"{childAbfFilePath}\"; cjfmini;") + "');\">AP Gain</button> ";
+
                 html += $"<span class='abfLineInfo'>{details}</span>";
                 html += $"</div>";
             }
