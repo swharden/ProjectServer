@@ -1,9 +1,9 @@
-import AbfList from "./Components/AbfList";
+import AbfParentList from "./Components/AbfParentList";
 
 function App() {
   return (
     <div className="container my-5">
-      <AbfList />
+      <AbfParentList />
     </div>
   );
 }
