@@ -1,0 +1,29 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛒 Checkout
+        uses: actions/checkout@v3
+
+      - name: ✨ Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: 📦 Get Packages
+        run: npm ci
+        working-directory: abfjs
+
+      - name: 🛠️ Build Project
+        run: npm run build --if-present
+        working-directory: abfjs
+
+      - name: 🧪 Run Tests
+        run: npm test
+        working-directory: abfjs
