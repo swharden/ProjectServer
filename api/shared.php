@@ -93,3 +93,20 @@ function GetAbfsByParent(array $filenames)
 
     return $abfs;
 }
+
+function GetMenuItems(string $abfFolderPath)
+{
+    $parents = [];
+
+    $fileNames = array_slice(scandir($abfFolderPath), 2);
+    $abfsByParent = GetAbfsByParent($fileNames);
+    foreach (array_keys($abfsByParent) as $parentID) {
+        $parents[$parentID] = array(
+            "childCount" => count($abfsByParent[$parentID]),
+            "color" => "#00FF00",
+            "comment" => "pyramidal",
+        );
+    }
+
+    return $parents;
+}
