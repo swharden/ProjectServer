@@ -1,9 +1,9 @@
-import ParentListFolder from "./Components/ParentListFolder";
+import ParentListFolders from "./Components/ParentListFolders";
 
 function App() {
   return (
     <div className="container my-5">
-      <ParentListFolder />
+      <ParentListFolders />
     </div>
   );
 }
