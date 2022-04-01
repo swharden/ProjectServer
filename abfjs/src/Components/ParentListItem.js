@@ -16,11 +16,11 @@ class ParentListItem extends React.Component {
         const childCount = this.props.parentInfo[1]["child-count"];
         const color = this.props.parentInfo[1]["color"];
         const comment = this.props.parentInfo[1]["comment"];
-        const group = this.props.parentInfo[1]["group"];
+        //const group = this.props.parentInfo[1]["group"];
 
-        const comment2 = comment == "?" ? null : comment;
+        const comment2 = comment === "?" ? null : comment;
 
-        if (childCount == 0)
+        if (childCount === 0)
             return null;
 
         return (

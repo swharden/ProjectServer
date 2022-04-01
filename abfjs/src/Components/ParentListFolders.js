@@ -34,7 +34,7 @@ class ParentListFolders extends React.Component {
 
     render() {
 
-        if (this.state.parentInfos.length == 0)
+        if (this.state.parentInfos.length === 0)
             return <div>Loading...</div>
 
         const allGroups = Object.entries(this.state.parentInfos).map(([k, v]) => v["group"]);

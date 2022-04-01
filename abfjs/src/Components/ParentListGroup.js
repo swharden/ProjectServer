@@ -12,14 +12,14 @@ class ParentListGroup extends React.Component {
     }
 
     render() {
-        if (this.props.group == "not set yet")
+        if (this.props.group === "not set yet")
             return <div>ERROR: group must be defined</div>;
 
-        if (this.props.allParentInfos == "not set yet")
+        if (this.props.allParentInfos === "not set yet")
             return <div>ERROR: allParentInfos must be defined</div>;
 
         const matchingParentInfos = Object.entries(this.props.allParentInfos)
-            .filter(x => x[1]["group"] == this.props.group)
+            .filter(x => x[1]["group"] === this.props.group)
             .sort()
 
         return (
