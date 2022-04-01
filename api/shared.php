@@ -73,6 +73,50 @@ function GetSupportFiles(array $filenames, string $abfFilename)
     return $matchingFiles;
 }
 
+function GetParentInfos(array $filenames, string $cellsTxt)
+{
+    $cellInfos = [];
+
+    // initiate all parents using the ABF list
+    $abfsByParent = GetAbfsByParent($filenames);
+    foreach (array_keys($abfsByParent) as $parentID) {
+        $cellInfos[$parentID] = array(
+            "child-count" => count($abfsByParent[$parentID]),
+            "color" => null,
+            "comment" => null,
+            "group" => null,
+        );
+    }
+
+    // populate details for parents found in the cells file
+    $currentGroup = null;
+    foreach (explode("\n", $cellsTxt) as $rawLine) {
+        $line = trim($rawLine);
+
+        if (StartsWith($line, "---")) {
+            $currentGroup = substr($line, 4);
+            continue;
+        }
+
+        $line = explode(" ", $line, 3);
+        $lineAbfID = $line[0];
+
+        // skip parents defined in the text file not in the actual file list
+        if (!array_key_exists($lineAbfID, $cellInfos))
+            continue;
+
+        $cellInfos[$lineAbfID]["group"] =  $currentGroup;
+
+        if (count($line) >= 2)
+            $cellInfos[$lineAbfID]["color"] =  ColorCodeToHex($line[1]);
+
+        if (count($line) >= 3)
+            $cellInfos[$lineAbfID]["comment"] =  $line[2];
+    }
+
+    return $cellInfos;
+}
+
 /* given a file list return a keyed array with abfIDs and filenames */
 function GetAbfsByParent(array $filenames)
 {
@@ -109,4 +153,31 @@ function GetMenuItems(string $abfFolderPath)
     }
 
     return $parents;
+}
+
+function ColorCodeToHex(string $code)
+{
+    if (StartsWith($code, "#"))
+        return $code;
+
+    $colorCodes = array(
+        "" => "#FFFFFF",
+        "?" => "#EEEEEE",
+        "g" => "#00FF00",
+        "g1" => "#00CC00",
+        "g2" => "#009900",
+        "b" => "#FF9999",
+        "i" => "#CCCCCC",
+        "s" => "#CCCCFF",
+        "s1" => "#9999DD",
+        "s2" => "#6666BB",
+        "s3" => "#333399",
+        "w" => "#FFFF00"
+    );
+
+    if (array_key_exists($code, $colorCodes)) {
+        return $colorCodes[$code];
+    } else {
+        return null;
+    }
 }
