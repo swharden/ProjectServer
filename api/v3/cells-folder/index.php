@@ -21,10 +21,16 @@ $abfFolderPath = LocalPathFromX($abfFolderPathX);
 if (!is_dir($abfFolderPath))
     errorAndDie(500, "Server Error", "folder does not exist: $abfFolderPath");
 
-$fileNames = array_slice(scandir($abfFolderPath), 2);
+$abfFilePaths = array_slice(scandir($abfFolderPath), 2);
+for ($i=0; $i<count($abfFilePaths); $i++){
+    $abfFilePaths[$i] = $abfFolderPath . DIRECTORY_SEPARATOR . $abfFilePaths[$i];
+}
 
 $analysisFolderPath = $abfFolderPath . DIRECTORY_SEPARATOR . "_autoanalysis";
-$analysisFileNames = is_dir($analysisFolderPath) ? array_slice(scandir($analysisFolderPath), 2) : [];
+$analysisFilePaths = is_dir($analysisFolderPath) ? array_slice(scandir($analysisFolderPath), 2) : [];
+for ($i=0; $i<count($analysisFilePaths); $i++){
+    $analysisFilePaths[$i] = $analysisFolderPath . DIRECTORY_SEPARATOR . $analysisFilePaths[$i];
+}
 
 $experimentTextFilePath = $abfFolderPath . DIRECTORY_SEPARATOR . "experiment.txt";
 $experimentFileContents = is_file($experimentTextFilePath) ? file_get_contents($experimentTextFilePath) : null;
@@ -32,14 +38,17 @@ $experimentFileContents = is_file($experimentTextFilePath) ? file_get_contents($
 $cellsTextFilePath = $abfFolderPath . DIRECTORY_SEPARATOR . "cells.txt";
 $cellsFileContents = is_file($cellsTextFilePath) ? file_get_contents($cellsTextFilePath) : "";
 
-$parentInfos = GetParentInfos($fileNames, $cellsFileContents);
+$parentInfos = GetParentInfos($abfFilePaths, $analysisFilePaths, $cellsFileContents);
+
+$end_time = microtime(true);
 
 $response = array(
-    "epoch-time" => time(),
-    "execution-time-ms" => (microtime(true) - $start_time) * 1000,
-    "folder-local" => $abfFolderPath,
-    "folder-network" => $abfFolderPathX,
-    "parentInfos" => $parentInfos,
+    "timeStarted" => $start_time,
+    "timeFinished" => $end_time,
+    "elapsedMilliseconds" => ($end_time - $start_time) * 1000,
+    "folderPathLocal" => $abfFolderPath,
+    "folderPathNetwork" => $abfFolderPathX,
+    "cells" => $parentInfos,
 );
 
 header('Content-Type: application/json');

@@ -8,17 +8,17 @@ class ParentListGroup extends React.Component {
 
     static defaultProps = {
         group: "not set yet",
-        allParentInfos: "not set yet",
+        cells: "not set yet",
     }
 
     render() {
         if (this.props.group === "not set yet")
             return <div>ERROR: group must be defined</div>;
 
-        if (this.props.allParentInfos === "not set yet")
-            return <div>ERROR: allParentInfos must be defined</div>;
+        if (this.props.cells === "not set yet")
+            return <div>ERROR: cells must be defined</div>;
 
-        const matchingParentInfos = Object.entries(this.props.allParentInfos)
+        const matchingCells = Object.entries(this.props.cells)
             .filter(x => x[1]["group"] === this.props.group)
             .sort()
 
@@ -26,7 +26,7 @@ class ParentListGroup extends React.Component {
             <>
                 <h3 className='mt-4'>{this.props.group ?? "No Group Defined"}</h3>
                 {
-                    matchingParentInfos.map(x => <ParentListItem key={x[0]} parentInfo={x} />)
+                    matchingCells.map(([k, v]) => <ParentListItem key={k} cell={v} />)
                 }
             </>
         )

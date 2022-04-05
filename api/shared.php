@@ -35,6 +35,14 @@ function LocalPathToX(string $path): string
     return $path;
 }
 
+function LocalPathToUrl(string $path): string
+{
+    $path = LocalPathToX($path);
+    $path = str_replace('x:/', 'http://192.168.1.9/X/', $path);
+    $path = str_replace('X:/', 'http://192.168.1.9/X/', $path);
+    return $path;
+}
+
 function StartsWith($haystack, $needle)
 {
     $length = strlen($needle);
@@ -73,18 +81,47 @@ function GetSupportFiles(array $filenames, string $abfFilename)
     return $matchingFiles;
 }
 
-function GetParentInfos(array $filenames, string $cellsTxt)
+function GetParentInfos(array $abfFilePaths, array $analysisFilePaths, string $cellsTxt)
 {
+    $abfFolderPath = dirname($abfFilePaths[0]);
+
+    // this is the object we will build and return
     $cellInfos = [];
 
+    // pre-process analysis file list to isolate images
+    $analysisImagePaths = [];
+    foreach ($analysisFilePaths as $analysisFilePath) {
+        if (EndsWith($analysisFilePath, ".png") || EndsWith($analysisFilePath, ".jpg"))
+            $analysisImagePaths[] = $analysisFilePath;
+    }
+
     // initiate all parents using the ABF list
-    $abfsByParent = GetAbfsByParent($filenames);
+    $abfsByParent = GetAbfsByParent($abfFilePaths);
     foreach (array_keys($abfsByParent) as $parentID) {
+
+        $abfAnalysisImages = [];
+        foreach ($abfsByParent[$parentID] as $abfPath) {
+            $abfFilename = basename($abfPath);
+            $abfID = substr($abfFilename, 0, strlen($abfFilename) - 4);
+            foreach ($analysisImagePaths as $analysisImagePath) {
+                $analysisImageBasename = basename($analysisImagePath);
+                if (StartsWith($analysisImageBasename, $abfID)) {
+                    $abfAnalysisImages[] = LocalPathToUrl($analysisImagePath);
+                }
+            }
+        }
+
+        $childAbfPaths = [];
+        foreach ($abfsByParent[$parentID] as $abfPath)
+            $childAbfPaths[] = LocalPathToX($abfFolderPath . DIRECTORY_SEPARATOR . $abfPath);
+
         $cellInfos[$parentID] = array(
-            "child-count" => count($abfsByParent[$parentID]),
+            "parentID" => $parentID,
             "color" => null,
             "comment" => null,
             "group" => null,
+            "abfPaths" => $childAbfPaths,
+            "analysisImages" => $abfAnalysisImages,
         );
     }
 
@@ -118,8 +155,12 @@ function GetParentInfos(array $filenames, string $cellsTxt)
 }
 
 /* given a file list return a keyed array with abfIDs and filenames */
-function GetAbfsByParent(array $filenames)
+function GetAbfsByParent(array $abfFilePaths)
 {
+    $filenames = [];
+    foreach ($abfFilePaths as $abfFilePath)
+        $filenames[] = basename($abfFilePath);
+
     $parent = "orphan";
     $abfs[$parent] = [];
 

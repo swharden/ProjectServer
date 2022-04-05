@@ -5,18 +5,15 @@ import React from 'react';
  */
 class ParentListItem extends React.Component {
 
-    static defaultProps = {
-        parentInfo: "undefined",
-    }
-
     render() {
 
-        // note: JSON element names depend on PHP API
-        const parentID = String(this.props.parentInfo[0]);
-        const childCount = this.props.parentInfo[1]["child-count"];
-        const color = this.props.parentInfo[1]["color"];
-        const comment = this.props.parentInfo[1]["comment"];
-        //const group = this.props.parentInfo[1]["group"];
+        if (this.props.cell == null)
+            return <div>no cell</div>
+
+        const parentID = this.props.cell["parentID"];
+        const childCount = this.props.cell["abfPaths"].length;
+        const color = this.props.cell["color"];
+        const comment = this.props.cell["comment"];
 
         const comment2 = comment === "?" ? null : comment;
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import ParentListGroup from "./ParentListGroup";
+import ParentSummary from "./ParentSummary";
 
 /**
  * Shows all groups of parents combining across multiple folders
@@ -14,7 +15,7 @@ class ParentListFolders extends React.Component {
 
     state = {
         folders: [],
-        parentInfos: {},
+        cells: {},
     };
 
     addFolderParents(folderPath) {
@@ -22,37 +23,60 @@ class ParentListFolders extends React.Component {
         fetch(url)
             .then(response => response.json())
             .then(json => {
-                const newParentInfos = this.state.parentInfos;
-                const newFolders = this.state.folders.concat(json["folder-network"]).sort();
-                Object.entries(json["parentInfos"])
+                const newCells = this.state.cells;
+                const newFolders = this.state.folders.concat(json["folderPathNetwork"]).sort();
+                Object.entries(json["cells"])
                     .forEach(([k, v]) => {
-                        newParentInfos[k] = v;
+                        newCells[k] = v;
                     });
-                this.setState({ parentInfos: newParentInfos, folders: newFolders });
+                this.setState({ cells: newCells, folders: newFolders });
             });
     }
 
     render() {
 
-        if (this.state.parentInfos.length === 0)
+        if (this.state.cells.length === 0)
             return <div>Loading...</div>
 
-        const allGroups = Object.entries(this.state.parentInfos).map(([k, v]) => v["group"]);
+        const allGroups = Object.entries(this.state.cells).map(([k, v]) => v["group"]);
         const uniqueGroups = [...new Set(allGroups)].sort();
 
-        console.log(this.state.folders);
+        const parentID = "2022_01_04_0014";
+        const selectedCell = this.state.cells[parentID];
 
         return <>
-            <div className="alert alert-primary" role="alert">
-                <h4 className="alert-heading">Multi-Folder ABF List</h4>
-                <ul>
-                    {this.state.folders.map(x => <li>{x}</li>)}
-                </ul>
+            <div className='row'>
+                <div className="text-light p-3 mb-3" style={{ backgroundColor: '#003366' }}>
+                    <h4>Multi-Folder ABF List</h4>
+                    <ul>
+                        {this.state.folders.map(x => <li key={x}>{x}</li>)}
+                    </ul>
+                    <div>
+                        <input className='w-50' value={'X:/Data/SD/practice/Scott/2022/some-other-folder/'} />
+                        <button className='ms-2'>Add Folder</button>
+                    </div>
+                </div>
             </div>
 
-            {
-                uniqueGroups.map(group => <ParentListGroup key={group} group={group} allParentInfos={this.state.parentInfos} />)
-            }
+            <div className='row'>
+                <div className='col-3 border bg-light rounded'>
+                    <div className='mt-3'>
+                        <strong>Electrophysiology Project</strong>
+                    </div>
+                    <div>
+                        ABFs combined across {this.state.folders.length} folders
+                    </div>
+                    <hr />
+                    {
+                        uniqueGroups.map(group =>
+                            <ParentListGroup key={group} group={group} cells={this.state.cells} />
+                        )
+                    }
+                </div>
+                <div className='col'>
+                    <ParentSummary cell={selectedCell} />
+                </div>
+            </div>
         </>
     }
 }
