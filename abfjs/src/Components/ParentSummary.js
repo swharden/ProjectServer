@@ -1,4 +1,5 @@
 import React from 'react';
+import AbfInfo from "./AbfInfo";
 
 /**
  * Shows a parent, its comments, child ABFs, and all their analysis images
@@ -30,7 +31,9 @@ class ParentSummary extends React.Component {
                             <button className='ms-1 btn btn-primary btn-sm'>Copy Path</button>
                             <button className='ms-1 btn btn-success btn-sm'>SetPath</button>
                             <button className='ms-1 btn btn-danger btn-sm'>Ignore</button>
-                            <span className='ms-1 text-muted'>Loading details...</span>
+                            <div className='ps-1 d-inline'>
+                                <AbfInfo abfPath={x} />
+                            </div>
                         </div>
                     )
                 }
