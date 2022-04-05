@@ -1,9 +1,9 @@
-import ParentListFolders from "./Components/ParentListFolders";
+import MultiFolderProject from "./Components/MultiFolderProject";
 
 function App() {
   return (
     <div className="container-fluid">
-      <ParentListFolders />
+      <MultiFolderProject />
     </div>
   );
 }

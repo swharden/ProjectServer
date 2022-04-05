@@ -3,8 +3,8 @@
 /*  This API gives information about cells from a single folder:
     List of parents abfIDs each with child count, color, comment, and group.
     
-    http://192.168.1.9/abf-browser/api/v3/folder-info/?folder=X:/Data/SD/practice/Scott/2022/2022-01-04-AON
-    http://192.168.1.9/abf-browser/api/v3/folder-info/?folder=X:/Data/2P01/2008/03-2008/3-25-08-BN
+    http://192.168.1.9/abf-browser/api/v3/cells-folder/?folder=X:/Data/SD/practice/Scott/2022/2022-01-04-AON
+    http://192.168.1.9/abf-browser/api/v3/cells-folder/?folder=X:/Data/2P01/2008/03-2008/3-25-08-BN
   
  */
 

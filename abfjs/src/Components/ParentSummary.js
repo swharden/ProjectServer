@@ -20,7 +20,7 @@ class ParentSummary extends React.Component {
         return <>
             <div className='p-2 border border-dark' style={{ backgroundColor: this.props.cell.color }}>
                 <h1>{this.props.cell["parentID"]}</h1>
-                <div class='font-monospace mb-2' style={{ opacity: .2 }}>{this.props.cell.abfPaths[0]}</div>
+                <div className='font-monospace mb-2' style={{ opacity: .2 }}>{this.props.cell.abfPaths[0]}</div>
                 <input value={this.props.cell["comment"]} className="w-50" readOnly />
                 <button className='ms-2'>Submit</button>
             </div>
