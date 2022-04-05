@@ -16,6 +16,7 @@ class MultiFolderProject extends React.Component {
     state = {
         folders: [],
         cells: {},
+        selectedParentID: null,
     };
 
     addFolderParents(folderPath) {
@@ -41,7 +42,10 @@ class MultiFolderProject extends React.Component {
             <div key={group}>
                 <h3 className='mt-4'>{group ?? "No Group Defined"}</h3>
                 {
-                    matchingCells.map(([k, v]) => <ParentListItem key={k} cell={v} />)
+                    matchingCells.map(([k, v]) =>
+                        <ParentListItem key={k} cell={v}
+                            onClick={() => this.setState({ selectedParentID: k })} />
+                    )
                 }
             </div>
         );
@@ -67,8 +71,7 @@ class MultiFolderProject extends React.Component {
         const allGroups = Object.entries(this.state.cells).map(([k, v]) => v["group"]);
         const uniqueGroups = [...new Set(allGroups)].sort();
 
-        const parentID = "2022_01_04_0014";
-        const selectedCell = this.state.cells[parentID];
+        const selectedCell = this.state.cells[this.state.selectedParentID];
 
         return <>
             <div className='col-3 border bg-light rounded'>
