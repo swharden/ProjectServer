@@ -16,7 +16,9 @@ function errorAndDie(int $code, string $error, string $message): void
     );
 
     http_response_code($code);
-    echo json_encode($responseItems);
+    header('Content-Type: application/json');
+    header("Access-Control-Allow-Origin: *");
+    echo json_encode($responseItems, JSON_PRETTY_PRINT);
     die();
 }
 

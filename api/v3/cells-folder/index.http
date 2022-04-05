@@ -1,7 +1,0 @@
-### standard folder
-GET http://192.168.1.9/abf-browser/api/v3/cells-folder/?folder=X:/Data/SD/practice/Scott/2022/2022-01-04-AON
-content-type: application/json  HTTP/1.1
-
-### folder with orphans and no cells file
-GET http://192.168.1.9/abf-browser/api/v3/cells-folder/?folder=X:/Data/2P01/2008/03-2008/3-25-08-BN
-content-type: application/json  HTTP/1.1

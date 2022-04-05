@@ -1,26 +1,35 @@
 <?php
+
+/* This API gives information about a specific ABF 
+
+    Success:
+    http://192.168.1.9/abf-browser/api/v3/abf-info/?path=X:\Data\SD\practice\Scott\2022\2022-01-04-AON\2022_01_04_0013.abf
+
+    Fail:
+    http://192.168.1.9/abf-browser/api/v3/abf-info/
+    http://192.168.1.9/abf-browser/api/v3/abf-info/?path=X:\Data\does\not\exist.abf
+    http://192.168.1.9/abf-browser/api/v3/abf-info/?path=X:\Data\SD\practice\Scott\2022\2022-01-04-AON\2022_01_04_0020.tif
+*/
+
 require_once("../../shared.php");
 require_once("../../phpABF/ABF.php");
 
-if ($_SERVER["REQUEST_METHOD"] != "POST")
-    errorAndDie(400, "bad request type", "POST expected");
+if (!isset($_GET["path"]))
+    errorAndDie(400, "URL Error", "'path' is required");
 
-$postString = file_get_contents('php://input');
-if (strpos($postString, '\\'))
-    errorAndDie(400, "JSON Error", "do not use backslashes (only forward slashes)");
+$localPath = LocalPathFromX($_GET["path"]);
 
-$post = json_decode($postString, true);
+if (!file_exists($localPath)) {
+    errorAndDie(500, "ABF Error", "file not found");
+}
 
-if (json_last_error() != JSON_ERROR_NONE)
-    errorAndDie(400, "JSON Error", "json_last_error() returned " . json_last_error());
+try {
+    $abf = new ABF($localPath);
+    $abf->path = LocalPathToX($abf->path);
+} catch (Exception $ex) {
+    errorAndDie(500, "ABF Error", $ex->getMessage());
+}
 
-if (!array_key_exists("abf-path", $post))
-    errorAndDie(400, "JSON Error", "abf-path is required");
-
-$abfPath = $post["abf-path"];
-$abfPath = LocalPathFromX($abfPath);
-if (!file_exists($abfPath))
-    errorAndDie(500, "Server Error", "ABF file not found");
-
-$abf = new ABF($abfPath);
-echo json_encode($abf);
+header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: *");
+echo json_encode($abf, JSON_PRETTY_PRINT);
