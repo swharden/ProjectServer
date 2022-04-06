@@ -4,7 +4,7 @@ import React from 'react';
  * Shows a single parents (with color/comments)
  */
 class ParentListItem extends React.Component {
-    
+
     render() {
 
         if (this.props.cell == null)
@@ -24,7 +24,8 @@ class ParentListItem extends React.Component {
             <div key={parentID} style={{ fontFamily: 'monospace', fontSize: '.8em', }}>
 
                 <span className='px-1' style={{ backgroundColor: color }}>
-                    <a className='text-dark text-decoration-none' onClick={() => this.props.onClick()}>{parentID}</a>
+                    <a className='text-dark text-decoration-none' style={{ cursor: 'pointer' }}
+                        onClick={() => this.props.onClick()}>{parentID}</a>
                 </span>
 
                 <div style={{ display: 'inline-block' }}>

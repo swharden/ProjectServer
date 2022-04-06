@@ -2,13 +2,14 @@ import React from 'react';
 import ParentListItem from "./ParentListItem";
 import ParentSummary from "./ParentSummary";
 
-/**
- * Shows all groups of parents combining across multiple folders
- */
+// TODO: left menu should scroll
+// TODO: indicate selected parent in menu
+
 class MultiFolderProject extends React.Component {
 
     state = {
-        project: null,
+        project: null, // TODO: put project viewer/editor into its own component
+        projectEditable: false,
         folders: [],
         cells: {},
         selectedParentID: null,
@@ -21,7 +22,7 @@ class MultiFolderProject extends React.Component {
             .then(response => response.json())
             .then(json => {
                 this.setState({ project: json });
-                this.addFolders(json["abfFolders"]);
+                this.addFolders(json["abfFoldersScanned"]);
             });
     }
 
@@ -67,26 +68,21 @@ class MultiFolderProject extends React.Component {
         );
     }
 
-    getFolderListEditor() {
+    getHeader() {
 
         const title = this.state.project ? this.state.project.title : "Multi-Folder Loaded";
         const subtitle = this.state.project ? this.state.project.subtitle : "No Project Loaded";
-        const projPath = this.state.project ? this.state.project.path : "No Project Loaded";
 
         return (
-            <div className="text-light p-3 mb-3" style={{ backgroundColor: '#003366' }}>
-                <h2>{title}</h2>
-                <div>{subtitle}</div>
-                <div><code className='text-muted'>{projPath}</code></div>
-                <ul>
-                    {this.state.folders.map(x => <li key={x}>{x}</li>)}
-                </ul>
+            <div className="text-light p-3" style={{ backgroundColor: '#003366' }}>
                 <div>
-                    <button className='ms-2'>Add Folder(s)</button>
-                    <button className='ms-2'>Edit Title/Description</button>
-                    <button className='ms-2'>Edit Notes</button>
+                    <a href='#' className='text-light text-decoration-none fs-3'
+                        onClick={() => this.setState({ selectedParentID: null })}>{title}</a>
                 </div>
-            </div>
+                <div className='' style={{ opacity: .5 }}>
+                    <a href='#' className='text-light text-decoration-none'>{subtitle}</a>
+                </div>
+            </div >
         );
     }
 
@@ -98,20 +94,116 @@ class MultiFolderProject extends React.Component {
         const selectedCell = this.state.cells[this.state.selectedParentID];
 
         return <>
-            <div className='col-3 border bg-light rounded'>
-                <div className='mt-3'>
-                    <strong>Electrophysiology Project</strong>
-                </div>
-                <div>
-                    ABFs combined across {this.state.folders.length} folders
-                </div>
-                <hr />
-                {uniqueGroups.map(group => this.getGroupWithABFs(group))}
-            </div>
-            <div className='col'>
-                <ParentSummary key={selectedCell} cell={selectedCell} />
-            </div>
+            {uniqueGroups.map(group => this.getGroupWithABFs(group))}
         </>
+    }
+
+    getProjectDetailsEditable() {
+
+        const project = this.state.project;
+
+        if (project == null)
+            return <>no projected loaded...</>
+
+        return <form>
+            <div className='p-3'>
+                <h1 className='mb-0'>Project Editor</h1>
+                <div className='mb-3'>
+                    <code>{project.path}</code>
+                </div>
+                <div className='my-2'>
+                    <div className='form-label'>Title</div>
+                    <input className='form-control'
+                        defaultValue={project.title} />
+                </div>
+                <div className='my-2'>
+                    <div className='form-label'>Subtitle</div>
+                    <input className='form-control'
+                        defaultValue={project.subtitle} />
+                </div>
+                <div className='my-2'>
+                    <div className='form-label'>Notes</div>
+                    <textarea className='form-control' rows='7'
+                        defaultValue={project.notes} />
+                </div>
+                <div className='my-2'>
+                    <div className='form-label'>Paths</div>
+                    <textarea className='form-control' rows='7'
+                        defaultValue={project.abfFolders.join("\n")} />
+                </div>
+                <div className='text-end my-4'>
+                    <input type="reset" className="btn btn-outline-secondary ms-3" value="Reset" />
+                    <button type="submit" className="btn btn-outline-secondary ms-3"
+                        onClick={() => this.setState({ projectEditable: false })}>Cancel</button>
+                    <button type="submit" className="btn btn-primary ms-3"
+                        onClick={() => this.setState({ projectEditable: false })}>Save</button>
+                </div>
+            </div>
+        </form>
+    }
+
+    getProjectDetailsReadonly() {
+
+        const project = this.state.project;
+
+        if (project == null)
+            return <>no projected loaded...</>
+
+        return (
+            <>
+                <form>
+                    <div className='p-3'>
+                        <h1 className='mb-0'>{project.title}</h1>
+                        <div className='fs-4'>{project.subtitle}</div>
+
+                        <div className='mt-4'>Notes:</div>
+                        <div className='ms-3'>
+                            {project.notes}
+                        </div>
+
+                        <div className='mt-4'>Paths:</div>
+                        <div className='ms-3'>
+                            {project.abfFolders.map((x) => <div key={x}><code>{x}</code></div>)}
+                        </div>
+
+                        <div className='text-end my-4'>
+                            <button type="submit" className="btn btn-primary ms-3"
+                                onClick={() => this.setState({ projectEditable: true })}>Edit</button>
+                        </div>
+                    </div>
+                </form>
+            </>
+        )
+    }
+
+    getSelectedCell() {
+        const selectedCell = this.state.cells[this.state.selectedParentID];
+
+        if (selectedCell == null)
+            return this.state.projectEditable
+                ? this.getProjectDetailsEditable()
+                : this.getProjectDetailsReadonly();
+
+        return <>
+            <ParentSummary key={selectedCell} cell={selectedCell} />
+        </>
+    }
+
+    getFooter() {
+        const folders = this.state.project ? this.state.project.abfFolders : [];
+        const abfProjectPath = this.state.project ? this.state.project.path : "not loaded...";
+
+        return <div className='bg-dark text-muted text-light mt-5 p-4'>
+            <div>ABF Project File:</div>
+            <ul>
+                <li>{abfProjectPath}</li>
+            </ul>
+            <div>Folders represented:</div>
+            <ul>
+                {folders.map(x => <li key={x}>{x}</li>)}
+            </ul>
+            <div>Abf Browser API: <a href='http://192.168.1.9/abf-browser/api/v3/'>Version 3</a></div>
+        </div >
     }
 
     render() {
@@ -121,10 +213,18 @@ class MultiFolderProject extends React.Component {
 
         return <>
             <div className='row'>
-                {this.getFolderListEditor()}
+                {this.getHeader()}
             </div>
             <div className='row'>
-                {this.getMenu()}
+                <div className='col-3 border bg-light rounded'>
+                    {this.getMenu()}
+                </div>
+                <div className='col'>
+                    {this.getSelectedCell()}
+                </div>
+            </div>
+            <div className='row'>
+                {this.getFooter()}
             </div>
         </>
     }
