@@ -17,6 +17,7 @@
     "test": "react-scripts test --watchAll --testMatch **/*.test.js",
     "eject": "react-scripts eject"
   },
+  "homepage": "http://192.168.1.9/abf-browser/",
   "eslintConfig": {
     "extends": [
       "react-app",
