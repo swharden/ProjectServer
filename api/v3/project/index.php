@@ -21,17 +21,20 @@ if (!is_file($pathLocal))
 
 $end_time = microtime(true);
 
+$abfFolders = [
+    "X:/Data/SD/DSI/CA1/Coronal",
+    "X:/Data/SD/practice/Jordan",
+    "X:/Data/SD/practice/Scott/2022/2022-01-04-AON",
+    "X:/Data/DIC2/2013/05-2013/*",
+];
+
 $response = array(
     "title" => "Important Project",
     "subtitle" => "Looking into the things that matter",
     "notes" => "blah blah blah",
     "path" => LocalPathToX($pathX),
-    "abfFolders" => [
-        "X:/Data/SD/DSI/CA1/Coronal",
-        "X:/Data/SD/practice/Jordan",
-        "X:/Data/SD/practice/Scott/2022/2022-01-04-AON",
-        "X:/Data/DIC2/2013/05-2013/*",
-    ],
+    "abfFolders" => $abfFolders,
+    "abfFoldersScanned" => getValidFolderPaths($abfFolders),
 );
 
 header('Content-Type: application/json');

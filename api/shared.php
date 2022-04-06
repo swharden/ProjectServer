@@ -181,6 +181,33 @@ function GetAbfsByParent(array $abfFilePaths)
     return $abfs;
 }
 
+/* Given a list of folder paths (with optional trailing wildcards),
+   return a list of all valid existing paths 
+*/
+function getValidFolderPaths(array $abfFolders, string $wildcard = '*'): array
+{
+    $validFolderPaths = [];
+    foreach ($abfFolders as $abfFolder) {
+        $localFolder = LocalPathFromX($abfFolder);
+        if (basename($localFolder) == $wildcard) {
+            $localFolder = dirname($localFolder);
+            if (is_dir($localFolder)) {
+                $subFolderNames = array_slice(scandir($localFolder), 2);
+                foreach ($subFolderNames as $subFolderName) {
+                    $subFolderPath = $localFolder . DIRECTORY_SEPARATOR . $subFolderName;
+                    if (is_dir($subFolderPath))
+                        $validFolderPaths[] = LocalPathToX($subFolderPath);
+                }
+            }
+        } else {
+            if (is_dir($localFolder)) {
+                $validFolderPaths[] = LocalPathToX($localFolder);
+            }
+        }
+    }
+    return $validFolderPaths;
+}
+
 function GetMenuItems(string $abfFolderPath)
 {
     $parents = [];
