@@ -25,5 +25,6 @@ jobs:
         working-directory: abfjs
 
       - name: 🧪 Run Tests
+        if: ${{ false }}
         run: npm test
         working-directory: abfjs
