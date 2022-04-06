@@ -28,10 +28,11 @@ class ParentSummary extends React.Component {
                 {
                     this.props.cell.abfPaths.map(x =>
                         <div className='my-2 px-1' key={x}>{this.getFilenameWithoutExtension(x)}
-                            <button className='ms-1 btn btn-primary btn-sm'>Copy Path</button>
-                            <button className='ms-1 btn btn-success btn-sm'>SetPath</button>
-                            <button className='ms-1 btn btn-danger btn-sm'>Ignore</button>
-                            <div className='ps-1 d-inline'>
+                            <button className='ms-1 btn btn-primary btn-sm' style={{ fontSize: '.7em' }}>Copy</button>
+                            <button className='ms-1 btn btn-success btn-sm' style={{ fontSize: '.7em' }}>SetPath</button>
+                            <button className='ms-1 btn btn-danger btn-sm' style={{ fontSize: '.7em' }}>Ignore</button>
+                            <div className='ps-1 d-inline'
+                                style={{ fontSize: '.8em', fontFamily: 'arial narrow' }}>
                                 <AbfInfo abfPath={x} />
                             </div>
                         </div>

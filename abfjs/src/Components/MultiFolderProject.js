@@ -4,6 +4,7 @@ import ParentSummary from "./ParentSummary";
 
 // TODO: left menu should scroll
 // TODO: indicate selected parent in menu
+// TODO: challenging folder http://192.168.1.9/jsABF/src/AbfView.php?path=X:\Data\SD\DSI\CA1\ABFs
 
 class MultiFolderProject extends React.Component {
 
@@ -57,7 +58,7 @@ class MultiFolderProject extends React.Component {
             .sort()
         return (
             <div key={group}>
-                <h3 className='mt-4'>{group ?? "No Group Defined"}</h3>
+                <div className='mt-4 fs-5'>{group ?? "No Group Defined"}</div>
                 {
                     matchingCells.map(([k, v]) =>
                         <ParentListItem key={k} cell={v}
@@ -156,14 +157,24 @@ class MultiFolderProject extends React.Component {
                         <h1 className='mb-0'>{project.title}</h1>
                         <div className='fs-4'>{project.subtitle}</div>
 
+                        <div className='mt-4'>Project File:</div>
+                        <div className='ms-3'>
+                            <code>{project.path}</code>
+                        </div>
+
                         <div className='mt-4'>Notes:</div>
                         <div className='ms-3'>
                             {project.notes}
                         </div>
 
-                        <div className='mt-4'>Paths:</div>
+                        <div className='mt-4'>Paths Searched:</div>
                         <div className='ms-3'>
                             {project.abfFolders.map((x) => <div key={x}><code>{x}</code></div>)}
+                        </div>
+
+                        <div className='mt-4'>Paths Included:</div>
+                        <div className='ms-3'>
+                            {this.state.folders.map((x) => <div key={x}><code>{x}</code></div>)}
                         </div>
 
                         <div className='text-end my-4'>
@@ -200,7 +211,7 @@ class MultiFolderProject extends React.Component {
             </ul>
             <div>Folders represented:</div>
             <ul>
-                {folders.map(x => <li key={x}>{x}</li>)}
+                {this.state.folders.map(x => <li key={x}>{x}</li>)}
             </ul>
             <div>Abf Browser API: <a href='http://192.168.1.9/abf-browser/api/v3/'>Version 3</a></div>
         </div >

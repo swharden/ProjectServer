@@ -29,12 +29,20 @@ class AbfInfo extends React.Component {
         const totalLengthSec = sweepLengthSec * this.state.abfInfo.sweepCount;
         const totalLengthMin = Math.round(totalLengthSec / 6) / 10;
 
-        let response = `${protocol}, ${sweepCount} sweeps, ${sweepLengthSec} sec each, ${totalLengthMin} min`;
-        if (this.state.abfInfo.tagStrings) {
-            response += `, ${this.state.abfInfo.tagStrings}`
-        }
+        const infoWithoutComment = `${protocol}, ${sweepCount} sweeps, ${sweepLengthSec} sec each, ${totalLengthMin} min`;
 
-        return response;
+        const comment = this.state.abfInfo.tagStrings
+            ? (<span className='fw-bold bg-warning mx-1 p-1'>{this.state.abfInfo.tagStrings}</span>)
+            : <></>
+
+        return (
+            <>
+                <span style={{ opacity: .5 }}>
+                    {infoWithoutComment}
+                </span>
+                {comment}
+            </>
+        );
     }
 }
 

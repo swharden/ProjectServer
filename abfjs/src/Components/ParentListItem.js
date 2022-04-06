@@ -21,18 +21,18 @@ class ParentListItem extends React.Component {
             return null;
 
         return (
-            <div key={parentID} style={{ fontFamily: 'monospace', fontSize: '.8em', }}>
+            <div key={parentID} className='my-0' style={{ fontSize: '.8em' }}>
 
-                <span className='px-1' style={{ backgroundColor: color }}>
+                <span className='px-1 font-monospace' style={{ backgroundColor: color, padding: '3px' }}>
                     <a className='text-dark text-decoration-none' style={{ cursor: 'pointer' }}
                         onClick={() => this.props.onClick()}>{parentID}</a>
                 </span>
 
-                <div style={{ display: 'inline-block' }}>
+                <div style={{ display: 'inline-block', opacity: .5 }}>
                     &nbsp;({childCount})&nbsp;
                 </div>
 
-                <div style={{ display: 'inline-block' }}>
+                <div style={{ display: 'inline-block', fontFamily: 'arial narrow', opacity: .5 }}>
                     {comment2}
                 </div>
 
