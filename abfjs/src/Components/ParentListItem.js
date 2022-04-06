@@ -24,8 +24,7 @@ class ParentListItem extends React.Component {
             <div key={parentID} className='my-0' style={{ fontSize: '.8em' }}>
 
                 <span className='px-1 font-monospace' style={{ backgroundColor: color, padding: '3px' }}>
-                    <a className='text-dark text-decoration-none' style={{ cursor: 'pointer' }}
-                        onClick={() => this.props.onClick()}>{parentID}</a>
+                    <span style={{ cursor: 'pointer' }} onClick={() => this.props.onClick()}>{parentID}</span>
                 </span>
 
                 <div style={{ display: 'inline-block', opacity: .5 }}>

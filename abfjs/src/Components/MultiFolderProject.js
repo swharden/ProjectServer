@@ -77,22 +77,19 @@ class MultiFolderProject extends React.Component {
         return (
             <div className="text-light p-3" style={{ backgroundColor: '#003366' }}>
                 <div>
-                    <a href='#' className='text-light text-decoration-none fs-3'
-                        onClick={() => this.setState({ selectedParentID: null })}>{title}</a>
+                    <span className='text-light text-decoration-none fs-3'
+                        onClick={() => this.setState({ selectedParentID: null })}>{title}</span>
                 </div>
                 <div className='' style={{ opacity: .5 }}>
-                    <a href='#' className='text-light text-decoration-none'>{subtitle}</a>
+                    <span className='text-light text-decoration-none'>{subtitle}</span>
                 </div>
             </div >
         );
     }
 
     getMenu() {
-
         const allGroups = Object.entries(this.state.cells).map(([k, v]) => v["group"]);
         const uniqueGroups = [...new Set(allGroups)].sort();
-
-        const selectedCell = this.state.cells[this.state.selectedParentID];
 
         return <>
             {uniqueGroups.map(group => this.getGroupWithABFs(group))}
@@ -201,13 +198,10 @@ class MultiFolderProject extends React.Component {
     }
 
     getFooter() {
-        const folders = this.state.project ? this.state.project.abfFolders : [];
-        const abfProjectPath = this.state.project ? this.state.project.path : "not loaded...";
-
         return <div className='bg-dark text-muted text-light mt-5 p-4'>
             <div>ABF Project File:</div>
             <ul>
-                <li>{abfProjectPath}</li>
+                <li>{this.state.project ? this.state.project.path : "not loaded..."}</li>
             </ul>
             <div>Folders represented:</div>
             <ul>

@@ -9,7 +9,7 @@ class ParentSummary extends React.Component {
     // TODO: use HTTP to get ABF details
 
     getFilenameWithoutExtension(x) {
-        return x.replace(/^.*[\\\/]/, '').replace(/\.[^/.]+$/, "");
+        return x.replace(/^.*[\\/]/, '').replace(/\.[^/.]+$/, "");
     }
 
     render() {
@@ -43,7 +43,7 @@ class ParentSummary extends React.Component {
                 {
                     this.props.cell.analysisImages.map(x =>
                         <a href={x} key={x}>
-                            <img className='m-3 shadow border border-dark' style={{ maxHeight: '200px' }} src={x} />
+                            <img className='m-3 shadow border border-dark' alt='' style={{ maxHeight: '200px' }} src={x} />
                         </a>
                     )
                 }
