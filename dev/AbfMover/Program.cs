@@ -33,7 +33,18 @@ public static class Program
         {
             Console.WriteLine($"Creating: {folderPath}/");
             if (!dryRun && !Directory.Exists(folderPath))
+            {
                 Directory.CreateDirectory(folderPath);
+            }
+
+            string expFilePath = Path.Combine(folderPath, "experiment.txt");
+            string folderDate = Path.GetFileName(folderPath);
+            string expContent = $"Example notes from {folderDate}...";
+            Console.WriteLine($"Writing: {expFilePath}/");
+            if (!dryRun && !File.Exists(expFilePath))
+            {
+                File.WriteAllText(expFilePath, expContent);
+            }
         }
     }
 
