@@ -4,6 +4,8 @@ public static class Program
 {
     public static void Main(string[] args)
     {
+        bool dryRun = false;
+
         string[] paths =
         {
             @"C:\Users\swharden\Documents\temp\DailyFolders\CA1",
@@ -11,13 +13,16 @@ public static class Program
         };
 
         foreach (string path in paths)
-            ProcessFolder(path);
+        {
+            string[] filePaths = Directory.GetFiles(path);
+            CreateFolders(filePaths, dryRun);
+            MoveFiles(filePaths, dryRun);
+            UpdateCellsFile(path, dryRun);
+        }
     }
 
-    private static void ProcessFolder(string path, bool dryRun = false)
+    private static void CreateFolders(string[] filePaths, bool dryRun)
     {
-
-        string[] filePaths = Directory.GetFiles(path);
         string[] newFolderPaths = filePaths
             .Select(x => GetTargetFolder(x))
             .Where(x => !string.IsNullOrWhiteSpace(x))
@@ -30,7 +35,10 @@ public static class Program
             if (!dryRun && !Directory.Exists(folderPath))
                 Directory.CreateDirectory(folderPath);
         }
+    }
 
+    private static void MoveFiles(string[] filePaths, bool dryRun)
+    {
         foreach (string filePath in filePaths)
         {
             string targetFolder = GetTargetFolder(filePath);
@@ -44,6 +52,27 @@ public static class Program
                 continue;
             File.Move(filePath, targetFilePath);
         }
+    }
+
+    private static void UpdateCellsFile(string path, bool dryRun)
+    {
+        string cellsFilePath = Path.Combine(path, "cells.txt");
+        if (!File.Exists(cellsFilePath))
+            return;
+        string[] lines = File.ReadAllLines(cellsFilePath);
+        for (int i = 0; i < lines.Length; i++)
+        {
+            string firstPart = lines[i].Split(" ")[0];
+            string targetFolder = GetTargetFolder(firstPart + ".abf");
+            if (string.IsNullOrEmpty(targetFolder))
+                continue;
+            lines[i] = $"{targetFolder}/{lines[i]}";
+            Console.WriteLine($"Cell: {lines[i]}");
+        }
+        if (dryRun)
+            return;
+        Console.WriteLine($"Writing: {cellsFilePath}");
+        File.WriteAllLines(cellsFilePath, lines);
     }
 
     public static string GetTargetFolder(string abfFilePath)
