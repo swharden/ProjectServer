@@ -63,6 +63,8 @@ public static class Program
         for (int i = 0; i < lines.Length; i++)
         {
             string firstPart = lines[i].Split(" ")[0];
+            if (firstPart.Contains("/"))
+                continue;
             string targetFolder = GetTargetFolder(firstPart + ".abf");
             if (string.IsNullOrEmpty(targetFolder))
                 continue;
