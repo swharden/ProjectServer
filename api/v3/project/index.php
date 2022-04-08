@@ -21,21 +21,23 @@ if (!is_file($pathLocal))
 
 $end_time = microtime(true);
 
-$abfFolders = [
-    "X:/Data/SD/DSI/CA1/Coronal",
-    "X:/Data/SD/practice/Jordan",
-    "X:/Data/SD/practice/Scott/2022/2022-01-04-AON",
-    "X:/Data/DIC2/2013/05-2013/*",
-];
+// load json from file
+$loadedProject = json_decode(file_get_contents($pathLocal));
 
 $response = array(
-    "title" => "Important Project",
-    "subtitle" => "Looking into the things that matter",
-    "notes" => "blah blah blah",
+    "timeStarted" => $start_time,
+    "timeFinished" => $end_time,
+    "elapsedMilliseconds" => ($end_time - $start_time) * 1000,
+    "title" => $loadedProject->title,
+    "subtitle" => $loadedProject->subtitle,
+    "notes" => $loadedProject->notes,
     "path" => LocalPathToX($pathX),
-    "abfFolders" => $abfFolders,
-    "abfFoldersScanned" => getValidFolderPaths($abfFolders),
+    "abfFolders" => $loadedProject->abfFolders,
+    "abfFoldersScanned" => getValidFolderPaths($loadedProject->abfFolders),
 );
+
+// write contents to file
+//file_put_contents($pathLocal, json_encode($response, JSON_PRETTY_PRINT));
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
