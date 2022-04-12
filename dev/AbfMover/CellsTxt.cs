@@ -78,7 +78,7 @@ public static class CellsTxt
 
     /// <summary>
     /// Break a folder with numerous ABFs into a series of smaller folders organized by date.
-    /// The original cells.txt will be broken into individual abfday.json files in each subfolder.
+    /// The original cells.txt will be broken into individual abf-day.json files in each subfolder.
     /// </summary>
     public static void BreakUp(string topFolder)
     {
@@ -127,7 +127,7 @@ public static class CellsTxt
             if (!Directory.Exists(dayFolder))
                 Directory.CreateDirectory(dayFolder);
 
-            string dailyRecordFilePath = Path.Combine(dayFolder, "abfday.json");
+            string dailyRecordFilePath = Path.Combine(dayFolder, "abf-day.json");
             if (File.Exists(dailyRecordFilePath))
                 throw new InvalidDataException($"already exists: {dailyRecordFilePath}");
 
