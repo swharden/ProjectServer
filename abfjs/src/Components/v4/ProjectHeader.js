@@ -31,14 +31,20 @@ class ProjectHeader extends React.Component {
     }
 
     render() {
-        return <div className='text-light p-1' style={{ backgroundColor: "#003366" }}>
+        return <div className='text-light' style={{ backgroundColor: "#003366" }}>
+
+            <div className='' style={{ fontSize: '.6em' }}>
+                <div className='d-inline-block px-1' style={{ backgroundColor: "#00000022", color: '#FFFFFF66' }}>
+                    PROJECT
+                </div>
+            </div>
 
             <div className='ms-2 mb-2'>
-                <div className='fs-3' style={{ fontWeight: 600 }}>{this.state.title}</div>
+                <div><b>{this.state.title}</b></div>
                 <div>{this.state.description}</div>
             </div>
 
-            <div className='mb-2'>
+            <div className='pb-2'>
                 <button class="btn btn-primary btn-sm ms-2" type="button"
                     data-bs-toggle="collapse" data-bs-target="#collapseDetails"
                     aria-expanded="false" aria-controls="collapseExample">

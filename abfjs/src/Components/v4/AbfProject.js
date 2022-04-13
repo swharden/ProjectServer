@@ -10,7 +10,7 @@ class AbfProject extends React.Component {
         return (
             <>
                 <ProjectHeader path={"X:/Projects/Aging-eCB"} />
-                <ExperimentHeader />
+                <ExperimentHeader path={"X:/Projects/Aging-eCB/abfs/exp1 - DSI in CA1"} />
                 <ExperimentSummary />
             </>
         );
