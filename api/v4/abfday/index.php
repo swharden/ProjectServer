@@ -1,10 +1,10 @@
 <?php
 
-// Example: http://192.168.1.9/abf-browser/api/v4/abfday.php?path=X:\Projects\Aging-eCB\abfs\exp1 - DSI in CA1\2022-03-10
+$timeStart = microtime(true);
 
-require_once("../shared.php");
-require_once("../paths.php");
-require_once("../tools.php");
+require_once("../../tools/error.php");
+require_once("../../tools/path.php");
+require_once("../../tools/string.php");
 
 if (!isset($_GET["path"]))
     errorAndDie(400, "request error", "'path' is required");
@@ -13,48 +13,57 @@ $localFolderPath = LocalPathFromX($_GET["path"]);
 if (!is_dir($localFolderPath))
     errorAndDie(500, "path error", "folder not found: $localFolderPath");
 
+// create response object with default values
+$abfDay = (object)[];
+$abfDay->path = LocalPathToX($localFolderPath);
+$abfDay->operator = null;
+$abfDay->animal = null;
+$abfDay->bath = null;
+$abfDay->internal = null;
+$abfDay->drugs = null;
+$abfDay->notes = null;
+$abfDay->cells = null;
+
+// replace default values with those from the JSON file
 $localAbfdayFilePath = $localFolderPath . DIRECTORY_SEPARATOR . "abfday.json";
-if (!is_file($localAbfdayFilePath))
-    errorAndDie(500, "path error", "file not found: $localAbfdayFilePath");
-
-$abfDay = json_decode(file_get_contents($localAbfdayFilePath));
-
-// TODO: identify parents manually using matched filenames
-$fileNames = array_slice(scandir($localFolderPath), 2);
-$fileNames = array_unique($fileNames);
-sort($fileNames);
-$abfDay->fileNames = $fileNames;
-
-// get sorted unique list of parents
-$parentIDs = [];
-foreach ($abfDay->cells as $cell) {
-    $parentIDs[] = $cell->id;
-}
-$parentIDs = array_unique($parentIDs);
-sort($parentIDs);
-$abfDay->parentIDs = $parentIDs;
-
-// TODO: use double sliding arrow to match ABFs to parents
-$filenamesWithParent = []; // TODO: fancier data type
-
-if (StartsWith($fileNames[0], $parentIDs[0])) {
-    $parentName = $parentIDs[0];
-    $parentIndex = 0;
-} else {
-    $parentName = "orphan";
-    $parentIndex = -1;
+if (is_file($localAbfdayFilePath)) {
+    $abfDayFile = json_decode(file_get_contents($localAbfdayFilePath));
+    $abfDay->operator = $abfDayFile->operator;
+    $abfDay->animal = $abfDayFile->animal;
+    $abfDay->bath = $abfDayFile->bath;
+    $abfDay->internal = $abfDayFile->internal;
+    $abfDay->drugs = $abfDayFile->drugs;
+    $abfDay->notes = $abfDayFile->notes;
+    $abfDay->cells = $abfDayFile->cells;
 }
 
-for ($i = 0; $i < count($fileNames); $i++) {
-    $filename = $fileNames[$i];
-    if (StartsWith($filename, $parentName)) {
-        $filenamesWithParent[] = "$parentName $filename";
+// add raw filesystem details
+$abfDay->files = [];
+$abfDay->folders = [];
+foreach (scandir($localFolderPath) as $fname) {
+    if (StartsWith($fname, ".") || StartsWith($fname, "_"))
+        continue;
+    $localPath = $localFolderPath . DIRECTORY_SEPARATOR . $fname;
+    if (is_dir($localPath)) {
+        $abfDay->folders[] = $fname;
     } else {
-        
+        $abfDay->files[] = $fname;
     }
 }
 
-$abfDay->filenamesWithParent = $filenamesWithParent;
+// add analysis files
+$abfDay->analyses = [];
+$localAnalysisPath = $localFolderPath . DIRECTORY_SEPARATOR . "_autoanalysis";
+if (is_dir($localAnalysisPath)) {
+    foreach (scandir($localAnalysisPath) as $fname) {
+        if (StartsWith($fname, ".") || StartsWith($fname, "_"))
+            continue;
+        $abfDay->analyses[] = $fname;
+    }
+}
+
+$timeEnd = microtime(true);
+$abfDay->elapsedMilliseconds = ($timeEnd - $timeStart) * 1000;
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");

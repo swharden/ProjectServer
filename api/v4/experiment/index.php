@@ -1,79 +1,10 @@
 <?php
 
-// ABFFOLDER.PHP
-// return a keyed array containing every cell in the ABF day folder
-function getCellsAbfday(string $folderPath)
-{
-    $cells = [];
-    $cells["cell1"] = "lolz";
-    $cells["cell2"] = "lolz";
-    $cells["cell3"] = "lolz";
-    return $cells;
-}
+$timeStart = microtime(true);
 
-// TODO: optimize using two pointer variables
-function GetAbfsByParent(array $filenames, array $analysisFilenames)
-{
-    $parent = "orphan";
-    $abfs[$parent] = [];
-    $analyses[$parent] = [];
-
-    foreach ($filenames as $filename) {
-        if (!EndsWith($filename, ".abf"))
-            continue;
-        $supportFiles = GetSupportFiles($filenames, $filename);
-        if (count($supportFiles) > 0) {
-            $parent = GetAbfID($filename);
-            $abfs[$parent] = [];
-            $analyses[$parent] = [];
-        }
-
-        array_push($abfs[$parent], $filename);
-        $abfID = GetAbfID($filename);
-        foreach ($analysisFilenames as $analysisFilename) {
-            if (StartsWith($analysisFilename, $abfID))
-                array_push($analyses[$parent], $analysisFilename);
-        }
-    }
-
-    if (count($abfs["orphan"]) == 0) {
-        unset($abfs["orphan"]);
-    }
-
-    return [$abfs, $analyses];
-}
-
-
-/* return all the non-ABF files with the same base filename */
-function GetSupportFiles(array $filenames, string $abfFilename)
-{
-    $abfID = GetAbfID($abfFilename);
-    $matchingFiles = [];
-    foreach ($filenames as $filename) {
-        if (EndsWith($filename, ".abf"))
-            continue;
-        if (StartsWith($filename, $abfID))
-            $matchingFiles[] = $filename;
-    }
-    return $matchingFiles;
-}
-
-/* return the abfID (basename) given an ABF filename */
-function GetAbfID(string $filename): string
-{
-    if (!EndsWith($filename, ".abf"))
-        throw new InvalidArgumentException("not an ABF filename: $filename");
-
-    return substr($filename, 0, strlen($filename) - 4);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Example: http://192.168.1.9/abf-browser/api/v4/experiment/?path=X:\Projects\Aging-eCB\abfs\exp1%20-%20DSI%20in%20CA1
-require_once("../shared.php");
-require_once("../paths.php");
-require_once("../tools.php");
-require_once("../json-experiment.php");
+require_once("../../tools/error.php");
+require_once("../../tools/path.php");
+require_once("../../tools/string.php");
 
 if (!isset($_GET["path"]))
     errorAndDie(400, "request error", "'path' is required");
@@ -86,10 +17,20 @@ $localExperimentFilePath = $localFolderPath . DIRECTORY_SEPARATOR . "experiment.
 if (!is_file($localExperimentFilePath))
     errorAndDie(500, "path error", "file not found: $localExperimentFilePath");
 
-// start return object from the experiment JSON file
-$experiment = json_decode(file_get_contents($localExperimentFilePath));
+// local and network file paths
+$experiment = (object)[];
+$experiment->path = LocalPathToX($localFolderPath);
 
-// add files, folders, and abfdayFolders
+// default to values read from JSON file
+$experimentFromFile = json_decode(file_get_contents($localExperimentFilePath));
+$experiment->title = $experimentFromFile->title;
+$experiment->description = $experimentFromFile->description;
+$experiment->notes = $experimentFromFile->notes;
+
+// add raw filesystem details
+$experiment->files = [];
+$experiment->folders = [];
+$experiment->abfdayFolders = [];
 foreach (scandir($localFolderPath) as $fname) {
     if (StartsWith($fname, "."))
         continue;
@@ -105,30 +46,11 @@ foreach (scandir($localFolderPath) as $fname) {
     }
 }
 
-// add cell details from abfday JSON files
-$experiment->cells = [];
-foreach ($experiment->abfdayFolders as $abfdayFolderName) {
+// DO NOT NOT look-up cells information at this level of abstract.
+// The client must make those calls individually at the folder level.
 
-    $abfDayFolderPath = $localFolderPath . DIRECTORY_SEPARATOR . $abfdayFolderName;
-    $abfDayFilenames = scandir($abfDayFolderPath);
-
-    $abfDayAnalysisFolderPath = $abfDayFolderPath . DIRECTORY_SEPARATOR . "_autoanalysis";
-    $abfDayAnalysisFilenames = [];
-    if (is_dir($abfDayAnalysisFolderPath))
-        $abfDayAnalysisFilenames = scandir($abfDayAnalysisFolderPath);
-
-    [$abfsByParent, $analysesByParent] = GetAbfsByParent($abfDayFilenames, $abfDayAnalysisFilenames);
-
-    $parents = array_keys($abfsByParent);
-    foreach ($parents as $parent) {
-        $cell = array(
-            "folder" => $abfdayFolderName,
-            "children" => $abfsByParent[$parent],
-            "analyses" => $analysesByParent[$parent],
-        );
-        $experiment->cells[] = $cell;
-    }
-}
+$timeEnd = microtime(true);
+$experiment->elapsedMilliseconds = ($timeEnd - $timeStart) * 1000;
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");

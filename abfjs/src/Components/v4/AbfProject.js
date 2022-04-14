@@ -11,14 +11,8 @@ class AbfProject extends React.Component {
         return (
             <>
                 <ProjectHeader path={"X:/Projects/Aging-eCB"} />
-                <ExperimentHeader path={"X:/Projects/Aging-eCB/abfs/exp1 - DSI in CA1"} />
+                <ExperimentHeader path={"X:/Projects/Sigma1R/experiments/METH intrinsic properties"} />
                 <ExperimentSummary />
-                <footer className='mt-5'>
-                    <TinyLabel text="FOOTER" />
-                    <div className='p-1'>
-                        <a href='http://192.168.1.9/abf-browser/api/v4/' style={{ textDecoration: 'none' }}>API Version 4</a>
-                    </div>
-                </footer>
             </>
         );
     }

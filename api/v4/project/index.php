@@ -1,9 +1,8 @@
 <?php
 
-// Example: http://192.168.1.9/abf-browser/api/v4/project/?path=X:\Projects\Aging-eCB
-require_once("../shared.php");
-require_once("../paths.php");
-require_once("../json-experiment.php");
+require_once("../../tools/error.php");
+require_once("../../tools/path.php");
+require_once("../../tools/string.php");
 
 if (!isset($_GET["path"]))
     errorAndDie(400, "request error", "'path' is required");
@@ -17,7 +16,32 @@ if (!is_file($localProjectFilePath))
     errorAndDie(500, "path error", "file not found: $localProjectFilePath");
 
 $project = json_decode(file_get_contents($localProjectFilePath));
-$project->abfExperiments = readExperiments($localFolderPath . DIRECTORY_SEPARATOR . "abfs");
+
+// add raw filesystem details
+$project->files = [];
+$project->folders = [];
+foreach (scandir($localFolderPath) as $fname) {
+    if (StartsWith($fname, "."))
+        continue;
+    $localPath = $localFolderPath . DIRECTORY_SEPARATOR . $fname;
+    if (is_dir($localPath)) {
+        $project->folders[] = $fname;
+    } else {
+        $project->files[] = $fname;
+    }
+}
+
+// add experiment folders
+$localExperimentFolder =  $localFolderPath . DIRECTORY_SEPARATOR . "experiments";
+$project->experimentFolders = [];
+if (is_dir($localExperimentFolder)) {
+    foreach (scandir($localExperimentFolder) as $fname) {
+        $experimentJsonFilePath = $localExperimentFolder . DIRECTORY_SEPARATOR . $fname . DIRECTORY_SEPARATOR . "experiment.json";
+        if (is_file($experimentJsonFilePath)) {
+            $project->experimentFolders[] = $fname;
+        }
+    }
+}
 
 header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
