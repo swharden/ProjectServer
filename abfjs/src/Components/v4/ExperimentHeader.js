@@ -1,4 +1,5 @@
 import React from 'react';
+import TinyLabel from "./TinyLabel";
 
 class ExperimentHeader extends React.Component {
 
@@ -33,11 +34,7 @@ class ExperimentHeader extends React.Component {
     render() {
         return <div className='' style={{ backgroundColor: "#CCC" }}>
 
-            <div className='' style={{ fontSize: '.6em' }}>
-                <div className='d-inline-block px-1' style={{ backgroundColor: "#00000011", color: '#000000AA' }}>
-                    EXPERIMENT
-                </div>
-            </div>
+            <TinyLabel text="EXPERIMENT" />
 
             <div className='ms-2 mb-2'>
                 <div><b>{this.state.title}</b></div>
@@ -56,7 +53,6 @@ class ExperimentHeader extends React.Component {
                     Days (?)
                 </button>
             </div>
-
 
         </div>
     }

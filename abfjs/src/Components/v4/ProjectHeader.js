@@ -1,4 +1,5 @@
 import React from 'react';
+import TinyLabel from "./TinyLabel";
 
 class ProjectHeader extends React.Component {
 
@@ -33,11 +34,7 @@ class ProjectHeader extends React.Component {
     render() {
         return <div className='text-light' style={{ backgroundColor: "#003366" }}>
 
-            <div className='' style={{ fontSize: '.6em' }}>
-                <div className='d-inline-block px-1' style={{ backgroundColor: "#00000022", color: '#FFFFFF66' }}>
-                    PROJECT
-                </div>
-            </div>
+            <TinyLabel text="PROJECT" light="true" />
 
             <div className='ms-2 mb-2'>
                 <div><b>{this.state.title}</b></div>
