@@ -82,12 +82,64 @@ public static class CellsTxt
     /// </summary>
     public static void BreakUp(string topFolder)
     {
-        BreakUpMoveFiles(topFolder);
+        BreakUpMoveABFs(topFolder);
+        BreakUpMoveAutoAnalyses(topFolder);
         BreakUpCellsFile(topFolder);
     }
 
-    private static void BreakUpMoveFiles(string topFolder)
+    private static void BreakUpMoveAutoAnalyses(string topFolder)
     {
+        string autoAnalysisFolder = Path.Combine(topFolder, "_autoanalysis");
+        if (!Directory.Exists(autoAnalysisFolder))
+        {
+            Console.WriteLine($"SKIPPING auto-analysis folder");
+            return;
+        }
+
+        // determine where to move each file
+        Console.WriteLine("Locating analysis files...");
+        Dictionary<string, string> filesToMove = new();
+        foreach (string filePath in Directory.GetFiles(autoAnalysisFolder, "*.*"))
+        {
+            string filename = Path.GetFileName(filePath).Split(".")[0];
+            try
+            {
+                string dayName = CellsTxt.GetSubfolderName(filename);
+                string targetFolder = Path.Combine(topFolder, dayName);
+                targetFolder = Path.Combine(targetFolder, "_autoanalysis");
+                filesToMove.Add(filePath, targetFolder);
+            }
+            catch (ArgumentException)
+            {
+                continue;
+            }
+        }
+
+        // create all target folders
+        Console.WriteLine("Creating new analysis folders...");
+        string[] targetFolders = filesToMove.Values.Distinct().ToArray();
+        foreach (string targetFolder in targetFolders)
+        {
+            if (!Directory.Exists(targetFolder))
+            {
+                Console.WriteLine($"CREATING: {targetFolder}");
+                Directory.CreateDirectory(targetFolder);
+            }
+        }
+
+        // move files
+        Console.WriteLine("Moving analysis files...");
+        foreach (string fileToMove in filesToMove.Keys)
+        {
+            string destination = Path.Combine(filesToMove[fileToMove], Path.GetFileName(fileToMove));
+            File.Move(fileToMove, destination);
+        }
+    }
+
+    private static void BreakUpMoveABFs(string topFolder)
+    {
+        Console.WriteLine("Moving ABFs...");
+
         foreach (string filePath in Directory.GetFiles(topFolder))
         {
             try
@@ -103,15 +155,15 @@ public static class CellsTxt
             }
             catch (ArgumentException)
             {
-                Console.WriteLine($"SKIPPING: {filePath}");
                 continue;
             }
-
         }
     }
 
     private static void BreakUpCellsFile(string topFolder)
     {
+        Console.WriteLine("Sharding cells file...");
+
         string cellsFilePath = Path.Combine(topFolder, "cells.txt");
         if (!File.Exists(cellsFilePath))
             return;
