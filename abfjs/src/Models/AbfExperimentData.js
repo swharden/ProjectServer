@@ -1,5 +1,7 @@
 class AbfExperimentData {
-    title = "important experiment";
+    title = null;
+    description = null;
+    
     constructor(path) {
         this.path = path
     }
