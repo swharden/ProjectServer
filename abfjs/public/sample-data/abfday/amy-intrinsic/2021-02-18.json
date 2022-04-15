@@ -1,0 +1,101 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_2_18_DIC3_0000",
+      "color": "#CCCCCC",
+      "comment": "SA4503 14 min fig23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0005",
+      "color": "#009900",
+      "comment": "SA4503 32min fig 23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0010",
+      "color": "#009900",
+      "comment": "SA4503 42min fig 23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0015",
+      "color": "#009900",
+      "comment": "SA4503 53min fig 23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0020",
+      "color": "#009900",
+      "comment": "SA4503 66min fig23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0025",
+      "color": "#009900",
+      "comment": "SA4503 10uM 77min fig23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0030",
+      "color": "#009900",
+      "comment": "SA4503 10uM 89min fig23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0035",
+      "color": "#009900",
+      "comment": "SA4503 10uM 100min fig23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0040",
+      "color": "#00CC00",
+      "comment": "no SA4503 21min fig 23",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0045",
+      "color": "#00CC00",
+      "comment": "no SA4503 9min fig24",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0050",
+      "color": "#00CC00",
+      "comment": "no SA4503 10min fig24",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0060",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0055",
+      "color": "#00CC00",
+      "comment": "no SA4503 14min",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0061",
+      "color": "#00CC00",
+      "comment": "no SA4503 34min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_2_18_DIC3_0066",
+      "color": "#00CC00",
+      "comment": "no SA4503 45min fig22",
+      "group": "Dissecting Incubation"
+    }
+  ]
+}

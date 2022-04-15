@@ -1,0 +1,83 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_05_06_DIC3_0000",
+      "color": "#009900",
+      "comment": "SA4503 10uM fig21 22min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0004",
+      "color": "#009900",
+      "comment": "SA4503 10uM fig 21 95min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0008",
+      "color": "#FF9999",
+      "comment": "SA4503 10uM fig21 111min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0012",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0014",
+      "color": "#6666BB",
+      "comment": "SA4503   CM304 75.6uM 45min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0018",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0021",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0025",
+      "color": "#6666BB",
+      "comment": "SA4503   CM304 75.6uM 82min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0029",
+      "color": "#6666BB",
+      "comment": "SA4503   CM304 75.6uM 13min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0033",
+      "color": "#6666BB",
+      "comment": "SA4503   CM304 75.6uM 62min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0037",
+      "color": "#6666BB",
+      "comment": "SA4503   CM304 75.6uM 98min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_05_06_DIC3_0043",
+      "color": "#FF9999",
+      "comment": "cortical neuron in sa4503 cm304 2hr",
+      "group": "ACSF Incubation"
+    }
+  ]
+}

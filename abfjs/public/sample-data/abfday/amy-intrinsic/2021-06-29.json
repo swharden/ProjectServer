@@ -1,0 +1,95 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_06_29_DIC3_0000",
+      "color": "#EEEEEE",
+      "comment": "CM304 1\u00B5M slice 1 30min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0006",
+      "color": "#CCCCFF",
+      "comment": "CM304 1\u00B5M slice 1 40min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0010",
+      "color": "#CCCCFF",
+      "comment": "CM304 1\u00B5M slice 1 50min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0014",
+      "color": "#FF9999",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0018",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0021",
+      "color": "#CCCCFF",
+      "comment": "CM304 1\u00B5M slice 2 25min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0025",
+      "color": "#333399",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M 25 min slice 2",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0029",
+      "color": "#333399",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M slice 2 45min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0034",
+      "color": "#333399",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M slice 2 60min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0038",
+      "color": "#FF9999",
+      "comment": "not MSN",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0042",
+      "color": "#CCCCFF",
+      "comment": "CM304 1\u00B5M slice 3 30min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0046",
+      "color": "#333399",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M slice 3 20min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0050",
+      "color": "#333399",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M slice 3 40min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_29_DIC3_0054",
+      "color": "#333399",
+      "comment": "CM304 1\u00B5M and SA4503 10\u00B5M slice 3 50min",
+      "group": "ACSF Incubation"
+    }
+  ]
+}

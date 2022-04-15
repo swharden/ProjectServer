@@ -1,0 +1,71 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_06_17_DIC3_0000",
+      "color": "#00CC00",
+      "comment": "ACSF no drug app unstable baseline",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0005",
+      "color": "#FF9999",
+      "comment": "drift",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0009",
+      "color": "#00CC00",
+      "comment": "ACSF   CM304 10uM drug app",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0015",
+      "color": "#00CC00",
+      "comment": "ACSF and CM304 10um drug app",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0023",
+      "color": "#00FF00",
+      "comment": "ACSF then S1RA 10uM bath switch",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0030",
+      "color": "#FFFF00",
+      "comment": "S1RA 10uM",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0036",
+      "color": "#FFFF00",
+      "comment": "S1RA 10uM",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0040",
+      "color": "#FFFF00",
+      "comment": "S1RA 10uM",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0044",
+      "color": "#FFFF00",
+      "comment": "S1RA 10uM",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_06_17_DIC3_0048",
+      "color": "#FFFF00",
+      "comment": "S1RA 10uM",
+      "group": "ACSF Incubation"
+    }
+  ]
+}

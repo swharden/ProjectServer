@@ -1,0 +1,113 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_03_11_DIC3_0000",
+      "color": "#FF9999",
+      "comment": "no SA4503 9min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0005",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0006",
+      "color": "#00CC00",
+      "comment": "no SA4503 52min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0010",
+      "color": "#00CC00",
+      "comment": "no SA4503 75min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0014",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0018",
+      "color": "#00CC00",
+      "comment": "no SA4503 106min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0022",
+      "color": "#00CC00",
+      "comment": "no SA4503 125min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0026",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0030",
+      "color": "#00CC00",
+      "comment": "no SA4503 153min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0034",
+      "color": "#FF9999",
+      "comment": "sa4503 10min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0039",
+      "color": "#FF9999",
+      "comment": "sa4503 47min fig22",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0040",
+      "color": "#009900",
+      "comment": "SA4503 10uM 64min fig24",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0048",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0044",
+      "color": "#009900",
+      "comment": "SA4503 10uM 78min fig24",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0052",
+      "color": "#009900",
+      "comment": "SA4503 10uM 97min fig24",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0056",
+      "color": "#009900",
+      "comment": "SA4503 10uM 109min fig24",
+      "group": "Dissecting Incubation"
+    },
+    {
+      "id": "2021_03_11_DIC3_0060",
+      "color": "#009900",
+      "comment": "SA4503 10uM 120min fig24",
+      "group": "Dissecting Incubation"
+    }
+  ]
+}

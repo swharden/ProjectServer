@@ -1,0 +1,137 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_03_22_DIC3_0000",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0000",
+      "color": "#009900",
+      "comment": "sa4503 7min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0005",
+      "color": "#009900",
+      "comment": "sa4503 22min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0009",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0013",
+      "color": "#009900",
+      "comment": "sa4503 46min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0018",
+      "color": "#009900",
+      "comment": "sa4503 59min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0022",
+      "color": "#009900",
+      "comment": "sa4503 72min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0026",
+      "color": "#009900",
+      "comment": "sa4503 89min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0030",
+      "color": "#FF9999",
+      "comment": "sa4503 107min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0035",
+      "color": "#00CC00",
+      "comment": "no SA4503 8min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0039",
+      "color": "#00CC00",
+      "comment": "no SA4503 28min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0043",
+      "color": "#FF9999",
+      "comment": "no SA4503 45min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0045",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0046",
+      "color": "#00CC00",
+      "comment": "no SA4503 60min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0050",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0051",
+      "color": "#009900",
+      "comment": "SA4503 9min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0055",
+      "color": "#009900",
+      "comment": "SA4503 40min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0060",
+      "color": "#009900",
+      "comment": "SA4503 54min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0064",
+      "color": "#009900",
+      "comment": "SA4503 66min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0068",
+      "color": "#009900",
+      "comment": "SA4503 79min",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_03_22_DIC1_0072",
+      "color": "#009900",
+      "comment": "SA4503 97min",
+      "group": "ACSF Incubation"
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_04_15_DIC1_0013",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0017",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0023",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0028",
+      "color": "#009900",
+      "comment": "SA4503 10uM 58min fig20",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0032",
+      "color": "#FF9999",
+      "comment": "SA4503 10uM 80min fig20",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0037",
+      "color": "#FF9999",
+      "comment": "SA4503 10uM 15min fig21 unstable",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0042",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0043",
+      "color": "#FF9999",
+      "comment": "SA4503 10uM 55min fig21",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0047",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0049",
+      "color": "#FF9999",
+      "comment": "not MSN",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0053",
+      "color": "#FF9999",
+      "comment": "no SA4503 15min fig21",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0057",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0058",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0062",
+      "color": "#FF9999",
+      "comment": "no SA4503 57min fig21",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_15_DIC1_0067",
+      "color": "#00CC00",
+      "comment": "no SA4503 72min fig21",
+      "group": "ACSF Incubation"
+    }
+  ]
+}

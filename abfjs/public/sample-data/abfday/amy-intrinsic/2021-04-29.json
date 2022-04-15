@@ -1,0 +1,65 @@
+{
+  "version": "4.0",
+  "operator": "",
+  "animal": "",
+  "bath": "",
+  "internal": "",
+  "drugs": "",
+  "notes": "",
+  "cells": [
+    {
+      "id": "2021_04_29_DIC1_0000",
+      "color": "#FF9999",
+      "comment": "dissecting incubation",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0004",
+      "color": "#FF9999",
+      "comment": "dissecting incubation",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0008",
+      "color": "#CCCCCC",
+      "comment": "no SA4503 ACSF 9mM Cl-",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0012",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0014",
+      "color": "#FF9999",
+      "comment": "not MSN",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0019",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0020",
+      "color": "#FF9999",
+      "comment": "?",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0022",
+      "color": "#00CC00",
+      "comment": "no SA4503",
+      "group": "ACSF Incubation"
+    },
+    {
+      "id": "2021_04_29_DIC1_0024",
+      "color": "#00CC00",
+      "comment": "no SA4503",
+      "group": "ACSF Incubation"
+    }
+  ]
+}
