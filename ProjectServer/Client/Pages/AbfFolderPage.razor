@@ -1,0 +1,119 @@
+﻿@page "/AbfFolder"
+@using ProjectServer.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Abf Folder</PageTitle>
+
+<div class="p-2" style="background: #EEEEEE;">
+	<div class="fw-bold lh-1" style="font-family: 'Arial Narrow'; font-size: 1.2em;">Abf Folder Browser</div>
+	<!-- TODO: make this links -->
+	<div class="font-monospace text-muted" style="font-size: .8em;">@Folder?.FolderPath</div>
+</div>
+
+@if (Folder is null)
+{
+	<div>path not yet set...</div>
+}
+else
+{
+	<div style="display: grid; grid-template-rows: auto; grid-template-columns: 250px auto;">
+
+		<nav class="border-end">
+			<div class="ps-2" style="height: 100vh; overflow-x:hidden; overflow-y: auto;">
+				@foreach (string group in Folder.AbfParents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x))
+				{
+					<div class="py-2">
+						<div class="lh-1" style="font-family: 'Arial Narrow', Arial, Helvetica, sans-serif; font-weight: 600; font-size: 1.2em;">
+							@group
+						</div>
+						@foreach (AbfParent parent in Folder.AbfParents.Where(x => x.Tags.Contains(group)))
+						{
+							<div style="font-size: .8em; line-height: 120%;">
+								<!-- TODO: make link valid so it can be copied -->
+								<a href="" class="font-monospace" style="background-color: @parent.Color; color: blue;" onclick=@(() => SelectParent(@parent.AbfID)) @onclick:preventDefault>
+									@parent.AbfID
+								</a>
+								<span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfPaths.Count()</span>
+								<span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
+							</div>
+
+							<!--
+							@foreach(var child in parent.ChildAbfPaths)
+							{
+								<div>@child</div>
+							}
+							-->
+						}
+					</div>
+				}
+			</div>
+		</nav>
+
+		@if (SelectedParent is null)
+		{
+			<main class="px-2">
+				<h3>Experiment Details</h3>
+				<code>@Folder.FolderPath/experiment.txt</code>
+				<pre>@Folder.ExperimentTxt</pre>
+			</main>
+		}
+		else
+		{
+			<div>
+				<h3 class="p-3" style="background-color: @SelectedParent.Color">@SelectedParent.AbfID</h3>
+				@foreach (string abfPath in SelectedParent.ChildAbfPaths)
+				{
+					<div>
+						<span class="font-monospace">@System.IO.Path.GetFileNameWithoutExtension(abfPath)</span>
+						<button>copy path</button>
+						<button>setpath</button>
+						<button>ignore</button>
+						<span>loading info...</span>
+					</div>
+				}
+			</div>
+		}
+	</div>
+}
+
+@code {
+
+	[Parameter]
+	[SupplyParameterFromQuery(Name = "path")]
+	public string? Path { get; set; }
+
+	private string Status { get; set; } = "Loading...";
+
+	private AbfFolder? Folder;
+
+	private AbfParent? SelectedParent { get; set; } = null;
+
+	protected override async Task OnParametersSetAsync()
+	{
+		Status = "Loading...";
+		string apiUrl = NavigationManager.BaseUri + "AbfFolder?path=" + Path;
+		Folder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
+		Status = "Loaded.";
+	}
+
+	private void SelectParent(string abfid)
+	{
+		Console.WriteLine($"selecting: {abfid}");
+
+		if (Folder is not null)
+		{
+			foreach (AbfParent f in Folder.AbfParents.Where(x => x.AbfID == abfid))
+			{
+				Console.WriteLine($"HIT: {f}");
+				SelectedParent = f;
+				StateHasChanged();
+				return;
+			}
+		}
+
+		Console.WriteLine($"no match");
+		SelectedParent = null;
+		StateHasChanged();
+	}
+}
