@@ -17,5 +17,15 @@ namespace ProjectServer.Tests
             foreach (var p in f.AbfParents)
                 Console.WriteLine(p);
         }
+
+        [Test]
+        public void Test_AbfFolder_NoCellsFile()
+        {
+            string abfFolderPath = @"X:/Data/SD/DSI/CA1/Coronal";
+            Shared.AbfFolder f = Shared.AbfFolder.Scan(abfFolderPath);
+            Console.WriteLine(f);
+            foreach (var p in f.AbfParents)
+                Console.WriteLine(p);
+        }
     }
 }

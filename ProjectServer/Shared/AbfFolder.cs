@@ -10,6 +10,7 @@ public class AbfFolder
     public string ExperimentTxt { get; set; } = string.Empty;
     public string[] AbfFilePaths { get; set; } = Array.Empty<string>();
     public string[] AnalysisFilePaths { get; set; } = Array.Empty<string>();
+    public string[] SubFolderNames { get; set; } = Array.Empty<string>();
     public AbfParent[] AbfParents { get; set; } = Array.Empty<AbfParent>();
 
     public AbfFolder()
@@ -46,9 +47,13 @@ public class AbfFolder
         AbfParent[] parents = GetParentsFromFileList(folderPath, allFileNames, analysisFilePaths);
         AddNotesFromCellsTxt(parents, folderPath);
 
+        string[] subFolderPaths = Directory.GetDirectories(folderPath) ?? Array.Empty<string>();
+        string[] subFolderNames = subFolderPaths.Select(x => Path.GetFileName(x)).ToArray();
+
         return new AbfFolder()
         {
             FolderPath = folderPath,
+            SubFolderNames = subFolderNames,
             ExperimentTxt = experimentTxt,
             AbfFilePaths = abfFilePaths,
             AnalysisFilePaths = analysisFilePaths,
