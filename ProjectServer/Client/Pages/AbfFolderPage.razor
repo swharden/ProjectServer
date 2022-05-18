@@ -6,9 +6,23 @@
 <PageTitle>Abf Folder</PageTitle>
 
 <div class="p-2" style="background: #EEEEEE;">
-	<div class="fw-bold lh-1" style="font-family: 'Arial Narrow';">Abf Folder Browser</div>
-	<!-- TODO: make this links -->
-	<div class="font-monospace text-muted" style="font-size: .8em;">@Folder?.FolderPath</div>
+	<div class="d-flex flex-row">
+		<div>
+			<div class="fw-bold lh-1" style="font-family: 'Arial Narrow';">Abf Folder Browser</div>
+
+			<div class="font-monospace" style="font-size: .8em;">
+				@foreach ((string name, string url) in GetSubFolderLinks(@Folder?.FolderPath))
+				{
+					<a href=@url style="color: blue;">@name</a><span style="opacity:.5;">/</span>
+				}
+			</div>
+
+		</div>
+		<div class="ms-2">
+			<button class="btn btn-sm btn-outline-primary">Copy Path</button>
+			<button class="btn btn-sm btn-outline-primary" @onclick="@LoadExperimentInfo">Experiment Notes</button>
+		</div>
+	</div>
 </div>
 
 @if (Folder is null)
@@ -19,12 +33,13 @@ else
 {
 	<div style="display: grid; grid-template-rows: auto; grid-template-columns: 250px auto;">
 
-		<nav class="border-end">
+		<nav class="">
+
 			<div class="ps-2" style="height: 100vh; overflow-x:hidden; overflow-y: auto;">
 				@foreach (string group in Folder.AbfParents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x))
 				{
 					<div class="py-2">
-						<div class="lh-1" style="font-family: 'Arial Narrow', Arial, Helvetica, sans-serif; font-weight: 600;">
+						<div class="lh-1" style="font-family: 'Arial Narrow'; font-weight: 600;">
 							@group
 						</div>
 						@foreach (AbfParent parent in Folder.AbfParents.Where(x => x.Tags.Contains(group)))
@@ -73,7 +88,17 @@ else
 
 	[Parameter]
 	[SupplyParameterFromQuery(Name = "path")]
-	public string? Path { get; set; }
+	public string? Path
+	{
+		get => _path;
+		set
+		{
+			_path = value;
+			LoadExperimentInfo();
+		}
+	}
+
+	private string? _path = null;
 
 	private string Status { get; set; } = "Loading...";
 
@@ -84,29 +109,45 @@ else
 	protected override async Task OnParametersSetAsync()
 	{
 		Status = "Loading...";
-		string apiUrl = NavigationManager.BaseUri + "AbfFolder?path=" + Path;
+		string apiUrl = NavigationManager.BaseUri + "api/AbfFolder?path=" + Path;
 		Folder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
 		Status = "Loaded.";
+	}
+
+	private void LoadExperimentInfo()
+	{
 		SelectedParent = null;
+		StateHasChanged();
 	}
 
 	private void SelectParent(string abfid)
 	{
-		Console.WriteLine($"selecting: {abfid}");
-
 		if (Folder is not null)
 		{
-			foreach (AbfParent f in Folder.AbfParents.Where(x => x.AbfID == abfid))
+			foreach (AbfParent abfParent in Folder.AbfParents.Where(x => x.AbfID == abfid))
 			{
-				Console.WriteLine($"HIT: {f}");
-				SelectedParent = f;
+				SelectedParent = abfParent;
 				StateHasChanged();
 				return;
 			}
 		}
 
-		Console.WriteLine($"no match");
-		SelectedParent = null;
-		StateHasChanged();
+		LoadExperimentInfo();
+	}
+
+	private (string, string)[] GetSubFolderLinks(string? path)
+	{
+		List<(string, string)> links = new();
+
+		path = path?.Replace("\\", "/");
+		while (!string.IsNullOrEmpty(path))
+		{
+			string folderName = System.IO.Path.GetFileName(path);
+			string folderUrl = "AbfFolder?path=" + path.Replace("/", "\\");
+			links.Insert(0, (folderName, folderUrl));
+			path = System.IO.Path.GetDirectoryName(path) ?? string.Empty;
+		}
+
+		return links.ToArray();
 	}
 }

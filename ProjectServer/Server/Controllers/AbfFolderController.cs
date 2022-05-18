@@ -3,7 +3,7 @@
 namespace ProjectServer.Server.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/AbfFolder")]
 public class AbfFolderController : ControllerBase
 {
     private readonly ILogger<AbfFolderController> _logger;
