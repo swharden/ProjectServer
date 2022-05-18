@@ -43,7 +43,7 @@ public class AbfFolder
             ? File.ReadAllText(experimentFilePath)
             : string.Empty;
 
-        AbfParent[] parents = GetParentsFromFileList(folderPath, allFileNames);
+        AbfParent[] parents = GetParentsFromFileList(folderPath, allFileNames, analysisFilePaths);
         AddNotesFromCellsTxt(parents, folderPath);
 
         return new AbfFolder()
@@ -56,7 +56,7 @@ public class AbfFolder
         };
     }
 
-    private static AbfParent[] GetParentsFromFileList(string folderPath, string[] filenames)
+    private static AbfParent[] GetParentsFromFileList(string folderPath, string[] filenames, string[] analysisFilePaths)
     {
         string[] nonAbfFilenames = filenames.Where(x => !x.EndsWith(".abf") && !x.EndsWith(".ignored")).ToArray();
         string[] abfFilenames = filenames.Where(x => x.EndsWith(".abf")).ToArray();
@@ -79,6 +79,16 @@ public class AbfFolder
             }
 
             parents.Last().ChildAbfPaths = parents.Last().ChildAbfPaths.Append(abfFilePath).ToArray();
+        }
+
+        foreach (AbfParent parent in parents)
+        {
+            List<string> childImagePaths = new();
+
+            foreach (string abfid in parent.ChildAbfPaths.Select(x => Path.GetFileNameWithoutExtension(x)))
+                childImagePaths.AddRange(analysisFilePaths.Where(x => Path.GetFileName(x).StartsWith(abfid)));
+
+            parent.ChildImagePaths = childImagePaths.ToArray();
         }
 
         return parents.Where(x => x.ChildAbfPaths.Any()).ToArray();

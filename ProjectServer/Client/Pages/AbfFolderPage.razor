@@ -61,16 +61,11 @@ else
 		else
 		{
 			<div>
-				<h3 class="p-3" style="background-color: @SelectedParent.Color">@SelectedParent.AbfID</h3>
-				@foreach (string abfPath in SelectedParent.ChildAbfPaths)
+				<div class="p-2" style="background-color: @SelectedParent.Color; font-family: 'Arial'; font-size: 1.5em; font-weight: 600;">@SelectedParent.AbfID</div>
+				<AbfInfoTable AbfPaths="@SelectedParent.ChildAbfPaths" />
+				@foreach (string imagePath in SelectedParent.ChildImagePaths)
 				{
-					<div>
-						<span class="font-monospace">@System.IO.Path.GetFileNameWithoutExtension(abfPath)</span>
-						<button>copy path</button>
-						<button>setpath</button>
-						<button>ignore</button>
-						<span>loading info...</span>
-					</div>
+					<AnalysisThumbnail ImagePath=@imagePath />
 				}
 			</div>
 		}

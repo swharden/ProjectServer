@@ -8,6 +8,7 @@ public class AbfParent
     public string Comment { get; set; } = string.Empty;
     public string[] Tags { get; set; } = Array.Empty<string>();
     public string[] ChildAbfPaths { get; set; } = Array.Empty<string>();
+    public string[] ChildImagePaths { get; set; } = Array.Empty<string>();
 
     public override string ToString()
     {

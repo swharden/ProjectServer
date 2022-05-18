@@ -1,0 +1,14 @@
+﻿<button @onclick=OnClick style="cursor: pointer; font-family: monospace; font-size: .8em; background: #fafafa; border: 1px solid #ccc;">
+	Ignore
+</button>
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public string AbfPath { get; set; } = string.Empty;
+
+	private void OnClick()
+	{
+		Console.WriteLine($"ignoring: {AbfPath}");
+	}
+}

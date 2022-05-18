@@ -1,0 +1,94 @@
+﻿@using ProjectServer.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+@foreach (string abfPath in AbfPaths)
+{
+	<div class="px-2" style="font-size: .8em; line-height: 150%; padding: 2px; background-color: @GetBackgroundColor(abfPath);">
+		<span class="font-monospace">@System.IO.Path.GetFileNameWithoutExtension(abfPath.Replace("\\", "/"))</span>
+		<CopyButton Label="copy path" Data=@abfPath />
+		<CopyButton Label="setpath" Data=@GetOriginSetpathCommand(abfPath) />
+		<IgnoreButton AbfPath="sample abf path" />
+		<span>@GetProtocol(abfPath)</span>
+		<span class="text-muted">@GetSweepInfo(abfPath)</span>
+		<span class="fw-bold">@GetComments(abfPath)</span>
+	</div>
+}
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public string[] AbfPaths
+	{
+		get => _abfPaths;
+		set
+		{
+			_abfPaths = value;
+			UpdateAbfInfos().GetAwaiter();
+		}
+	}
+
+	private string[] _abfPaths = Array.Empty<string>();
+
+	private readonly Dictionary<string, AbfInfo> AbfInfoByPath = new();
+
+	private string GetBackgroundColor(string abfPath) => Array.IndexOf(AbfPaths, abfPath) % 2 == 0 ? "#eeeeee" : "#e6e6e6";
+
+	private async Task UpdateAbfInfos()
+	{
+		foreach (string abfPath in AbfPaths)
+		{
+			string url = NavigationManager.BaseUri + "AbfInfo?path=" + abfPath;
+			AbfInfo? info = await Http.GetFromJsonAsync<AbfInfo>(url);
+			if (info is not null)
+			{
+				AbfInfoByPath[abfPath] = info;
+				StateHasChanged();
+			}
+		}
+	}
+
+	private string GetSweepInfo(string abfPath)
+	{
+		if (AbfInfoByPath.ContainsKey(abfPath))
+		{
+			int sweepCount = AbfInfoByPath[abfPath].SweepCount;
+			double sweepLength = AbfInfoByPath[abfPath].SweepLengthSec;
+			double totalSec = sweepCount * sweepLength;
+			return $"{sweepCount} sweeps, {sweepLength} sec each, {totalSec} sec total";
+		}
+		else
+		{
+			return "unknown";
+		}
+	}
+
+	private string GetComments(string abfPath)
+	{
+		if (AbfInfoByPath.ContainsKey(abfPath))
+		{
+			return AbfInfoByPath[abfPath].Comments;
+		}
+		else
+		{
+			return "unknown";
+		}
+	}
+
+	private string GetProtocol(string abfPath)
+	{
+		if (AbfInfoByPath.ContainsKey(abfPath))
+		{
+			return AbfInfoByPath[abfPath].Protocol;
+		}
+		else
+		{
+			return "unknown";
+		}
+	}
+
+	private string GetOriginSetpathCommand(string abfPath)
+	{
+		return $"setpath \"{abfPath}\";";
+	}
+}

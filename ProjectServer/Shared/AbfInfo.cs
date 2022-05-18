@@ -9,19 +9,26 @@ public class AbfInfo
     public double SweepLengthSec { get; set; } = 0;
     public string Comments { get; set; } = string.Empty;
 
+    public override string ToString()
+    {
+        return $"{AbfID} ({Protocol}) with {SweepCount} sweeps ({SweepLengthSec} sec each) comments={Comments}";
+    }
+
     public static AbfInfo FromAbf(string abfFilePath)
     {
         abfFilePath = Path.GetFullPath(abfFilePath);
         if (!File.Exists(abfFilePath))
             throw new FileNotFoundException(abfFilePath);
 
+        MinimalAbfReader abf = new(abfFilePath);
+
         return new AbfInfo()
         {
             AbfFilePath = abfFilePath,
-            Protocol = "test protocol",
-            SweepCount = 420,
-            SweepLengthSec = 69,
-            Comments = "test comments",
+            Protocol = abf.Protocol,
+            SweepCount = abf.SweepCount,
+            SweepLengthSec = abf.SweepLengthSec,
+            Comments = abf.Comments,
         };
     }
 }
