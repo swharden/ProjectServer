@@ -33,7 +33,7 @@ public static class CellsTxt
 
             string[] parts = line.Split(" ", 3);
             string abfID = parts[0];
-            string color = GetColor(parts.Length > 1 ? parts[1] : string.Empty);
+            string color = GetHexColor(parts.Length > 1 ? parts[1] : string.Empty);
             string comment = parts.Length > 2 ? parts[2] : string.Empty;
             if (comment == "?")
                 comment = string.Empty;
@@ -54,7 +54,26 @@ public static class CellsTxt
         return parents.ToArray();
     }
 
-    private static string GetColor(string code)
+    public static string[] GetDefaultColors()
+    {
+        return new string[]
+        {
+            "#FFFFFF",
+            "#EEEEEE",
+            "#00FF00",
+            "#00CC00",
+            "#009900",
+            "#FF9999",
+            "#CCCCCC",
+            "#CCCCFF",
+            "#9999DD",
+            "#6666BB",
+            "#333399",
+            "#FFFF00",
+        };
+    }
+
+    public static string GetHexColor(string code)
     {
         return code switch
         {

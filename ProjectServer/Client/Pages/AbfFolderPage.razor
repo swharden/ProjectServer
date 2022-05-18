@@ -6,7 +6,7 @@
 <PageTitle>Abf Folder</PageTitle>
 
 <div class="p-2" style="background: #EEEEEE;">
-	<div class="fw-bold lh-1" style="font-family: 'Arial Narrow'; font-size: 1.2em;">Abf Folder Browser</div>
+	<div class="fw-bold lh-1" style="font-family: 'Arial Narrow';">Abf Folder Browser</div>
 	<!-- TODO: make this links -->
 	<div class="font-monospace text-muted" style="font-size: .8em;">@Folder?.FolderPath</div>
 </div>
@@ -24,7 +24,7 @@ else
 				@foreach (string group in Folder.AbfParents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x))
 				{
 					<div class="py-2">
-						<div class="lh-1" style="font-family: 'Arial Narrow', Arial, Helvetica, sans-serif; font-weight: 600; font-size: 1.2em;">
+						<div class="lh-1" style="font-family: 'Arial Narrow', Arial, Helvetica, sans-serif; font-weight: 600;">
 							@group
 						</div>
 						@foreach (AbfParent parent in Folder.AbfParents.Where(x => x.Tags.Contains(group)))
@@ -37,13 +37,6 @@ else
 								<span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfPaths.Count()</span>
 								<span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
 							</div>
-
-							<!--
-							@foreach(var child in parent.ChildAbfPaths)
-							{
-								<div>@child</div>
-							}
-							-->
 						}
 					</div>
 				}
@@ -61,8 +54,12 @@ else
 		else
 		{
 			<div>
-				<div class="p-2" style="background-color: @SelectedParent.Color; font-family: 'Arial'; font-size: 1.5em; font-weight: 600;">@SelectedParent.AbfID</div>
+				<AbfParentEditor AbfPath="@SelectedParent.AbfFilePath"
+						 Color="@SelectedParent.Color"
+						 Comment="@SelectedParent.Comment" />
+
 				<AbfInfoTable AbfPaths="@SelectedParent.ChildAbfPaths" />
+
 				@foreach (string imagePath in SelectedParent.ChildImagePaths)
 				{
 					<AnalysisThumbnail ImagePath=@imagePath />
@@ -90,6 +87,7 @@ else
 		string apiUrl = NavigationManager.BaseUri + "AbfFolder?path=" + Path;
 		Folder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
 		Status = "Loaded.";
+		SelectedParent = null;
 	}
 
 	private void SelectParent(string abfid)

@@ -9,8 +9,8 @@
 		<CopyButton Label="copy path" Data=@abfPath />
 		<CopyButton Label="setpath" Data=@GetOriginSetpathCommand(abfPath) />
 		<IgnoreButton AbfPath="sample abf path" />
-		<span>@GetProtocol(abfPath)</span>
-		<span class="text-muted">@GetSweepInfo(abfPath)</span>
+		<span class="font-monospace">@GetProtocol(abfPath)</span>
+		<span class="text-muted" style="font-family: 'Arial Narrow'">@GetSweepInfo(abfPath)</span>
 		<span class="fw-bold">@GetComments(abfPath)</span>
 	</div>
 }
@@ -32,7 +32,13 @@
 
 	private readonly Dictionary<string, AbfInfo> AbfInfoByPath = new();
 
-	private string GetBackgroundColor(string abfPath) => Array.IndexOf(AbfPaths, abfPath) % 2 == 0 ? "#eeeeee" : "#e6e6e6";
+	private string GetBackgroundColor(string abfPath)
+	{
+		if (GetComments(abfPath).Length > 0)
+			return "#fff8d7";
+
+		return Array.IndexOf(AbfPaths, abfPath) % 2 == 0 ? "#eeeeee" : "#e6e6e6";
+	}
 
 	private async Task UpdateAbfInfos()
 	{
@@ -59,7 +65,7 @@
 		}
 		else
 		{
-			return "unknown";
+			return string.Empty;
 		}
 	}
 
@@ -71,7 +77,7 @@
 		}
 		else
 		{
-			return "unknown";
+			return string.Empty;
 		}
 	}
 
@@ -83,7 +89,7 @@
 		}
 		else
 		{
-			return "unknown";
+			return string.Empty;
 		}
 	}
 
