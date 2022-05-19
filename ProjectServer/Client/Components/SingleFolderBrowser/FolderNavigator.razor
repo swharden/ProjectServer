@@ -1,0 +1,93 @@
+﻿@using ProjectServer.Shared
+@inject HttpClient Http
+
+<div class="bg-light border-bottom px-2">
+
+	<div class="d-flex">
+		<div>
+
+			<div class="fw-bold">ABF Single Folder Browser</div>
+
+			<div class="font-monospace">
+				@foreach (string path in GetChildPaths())
+				{
+					<span>
+						<a href='' class="mx-0 px-0" style="color: blue;" onclick="@(() => LoadPath(@path))" @onclick:preventDefault>
+							@Path.GetFileName(path)
+						</a>
+					</span>
+
+					<span style="opacity: .7">/</span>
+				}
+			</div>
+
+			@foreach (string folderName in GetSubFolderNames())
+			{
+				<div class="ps-2">
+					<span>📂</span>
+					<a href='' class="font-monospace" style="color: blue;" onclick="@(() => EnterSubfolder(@folderName))" @onclick:preventDefault>
+						@folderName
+					</a>
+				</div>
+			}
+		</div>
+
+		<div class="spinner-border mx-3 my-2 text-primary" role="status" style="visibility: @SpinnerVisibility;">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+
+</div>
+
+@code {
+
+	[Parameter]
+	[EditorRequired]
+	public AbfFolder? AbfFolder { get; set; } = null;
+
+	[Parameter]
+	[EditorRequired]
+	public EventCallback<string> OnPathChangedCallback { get; set; }
+
+	[Parameter]
+	[EditorRequired]
+	public bool Loading { get; set; } = true;
+
+	public string SpinnerVisibility => Loading ? "visible" : "hidden";
+
+	private string[] GetSubFolderNames()
+	{
+		if (AbfFolder is null)
+			return Array.Empty<string>();
+
+		if (AbfFolder.AbfFilePaths.Any())
+			return Array.Empty<string>();
+
+		return AbfFolder.SubFolderNames;
+	}
+
+	private async Task LoadPath(string newPath)
+	{
+		await OnPathChangedCallback.InvokeAsync(newPath);
+	}
+
+	private async Task EnterSubfolder(string subFolderName)
+	{
+		await LoadPath(AbfFolder?.FolderPath + "\\" + subFolderName);
+	}
+
+	private string[] GetChildPaths()
+	{
+		if (AbfFolder is null)
+			return Array.Empty<string>();
+
+		List<string> paths = new();
+		string path = AbfFolder.FolderPath.Replace("\\", "/");
+		while (!string.IsNullOrEmpty(path))
+		{
+			paths.Insert(0, path);
+			path = Path.GetDirectoryName(path) ?? string.Empty;
+		}
+		return paths.Where(x => !string.IsNullOrWhiteSpace(Path.GetFileName(x))).ToArray();
+	}
+}

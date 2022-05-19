@@ -2,29 +2,41 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-@foreach (string abfPath in AbfPaths)
+@if (AbfParent is not null)
 {
-	<div class="px-2" style="font-size: .8em; line-height: 150%; padding: 2px; background-color: @GetBackgroundColor(abfPath);">
-		<span class="font-monospace">@System.IO.Path.GetFileNameWithoutExtension(abfPath.Replace("\\", "/"))</span>
-		<CopyButton Label="copy path" Data=@abfPath />
-		<CopyButton Label="setpath" Data=@GetOriginSetpathCommand(abfPath) />
-		<IgnoreButton AbfPath="sample abf path" />
-		<span class="font-monospace">@GetProtocol(abfPath)</span>
-		<span class="text-muted" style="font-family: 'Arial Narrow'">@GetSweepInfo(abfPath)</span>
-		<span class="fw-bold">@GetComments(abfPath)</span>
-	</div>
+	foreach (string abfPath in AbfParent.ChildAbfPaths)
+	{
+		<div class="px-2" style="font-size: .8em; line-height: 150%; padding: 2px; background-color: @GetBackgroundColor(abfPath);">
+			<span class="font-monospace">@System.IO.Path.GetFileNameWithoutExtension(abfPath.Replace("\\", "/"))</span>
+			<AbfListCopyButton Label="copy path" Data=@abfPath />
+			<AbfListCopyButton Label="setpath" Data=@GetOriginSetpathCommand(abfPath) />
+			<AbfListIgnoreButton AbfPath="sample abf path" />
+			<span class="font-monospace">@GetProtocol(abfPath)</span>
+			<span class="text-muted" style="font-family: 'Arial Narrow'">@GetSweepInfo(abfPath)</span>
+			<span class="fw-bold">@GetComments(abfPath)</span>
+		</div>
+	}
 }
 
 @code {
 	[Parameter]
 	[EditorRequired]
-	public string[] AbfPaths
+	public AbfParent? AbfParent { get; set; } = null;
+
+	protected override async Task OnParametersSetAsync()
 	{
-		get => _abfPaths;
-		set
+		if (AbfParent is null)
+			return;
+
+		foreach (string abfPath in AbfParent.ChildAbfPaths)
 		{
-			_abfPaths = value;
-			UpdateAbfInfos().GetAwaiter();
+			string url = NavigationManager.BaseUri + "AbfInfo?path=" + abfPath;
+			AbfInfo? info = await Http.GetFromJsonAsync<AbfInfo>(url);
+			if (info is not null)
+			{
+				AbfInfoByPath[abfPath] = info;
+				StateHasChanged();
+			}
 		}
 	}
 
@@ -34,15 +46,21 @@
 
 	private string GetBackgroundColor(string abfPath)
 	{
+		if (AbfParent is null)
+			return string.Empty;
+
 		if (GetComments(abfPath).Length > 0)
 			return "#fff8d7";
 
-		return Array.IndexOf(AbfPaths, abfPath) % 2 == 0 ? "#eeeeee" : "#e6e6e6";
+		return Array.IndexOf(AbfParent.ChildAbfPaths, abfPath) % 2 == 0 ? "#eeeeee" : "#e6e6e6";
 	}
 
 	private async Task UpdateAbfInfos()
 	{
-		foreach (string abfPath in AbfPaths)
+		if (AbfParent is null)
+			return;
+
+		foreach (string abfPath in AbfParent.ChildAbfPaths)
 		{
 			string url = NavigationManager.BaseUri + "AbfInfo?path=" + abfPath;
 			AbfInfo? info = await Http.GetFromJsonAsync<AbfInfo>(url);

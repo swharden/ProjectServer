@@ -1,0 +1,57 @@
+﻿@using ProjectServer.Shared
+
+
+<div class="my-2">
+	<button class="btn btn-primary btn-sm" @onclick=ShowExperimentNotes>Experiment Notes</button>
+</div>
+
+@foreach (string group in AbfParents.SelectMany(x => x.Tags).Append("Unclassified").Distinct().OrderBy(x => x))
+{
+	AbfParent[] matchingParents = AbfParents.Where(x => group == "Unclassified" ? x.Tags.Length == 0 : x.Tags.Contains(group)).ToArray();
+
+	if (!matchingParents.Any())
+		continue;
+
+	<div class="py-2">
+		<div class="lh-1" style="font-family: 'Arial Narrow'; font-weight: 600;">
+			@group
+		</div>
+		@foreach (AbfParent parent in matchingParents)
+		{
+			string visibility = (parent.AbfFilePath == SelectedParent?.AbfFilePath) ? "visible" : "hidden";
+
+			<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+				<span class="fw-bold font-monospace" style="visibility: @visibility">»</span>
+				<a href="" class="font-monospace" style="background-color: @parent.Color; color: blue;" onclick=@(() => SelectParent(@parent.AbfID)) @onclick:preventDefault>
+					@parent.AbfID
+				</a>
+				<span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfPaths.Count()</span>
+				<span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
+			</div>
+		}
+	</div>
+}
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public AbfParent[] AbfParents { get; set; } = Array.Empty<AbfParent>();
+
+	public AbfParent? SelectedParent = null;
+
+	[Parameter]
+	[EditorRequired]
+	public EventCallback<string> OnAbfSelectedCallback { get; set; }
+
+	private void SelectParent(string abfid)
+	{
+		var matchingParents = AbfParents.Where(x => x.AbfID == abfid);
+		SelectedParent = matchingParents.Any() ? matchingParents.First() : null;
+		OnAbfSelectedCallback.InvokeAsync(abfid);
+	}
+
+	private void ShowExperimentNotes()
+	{
+		OnAbfSelectedCallback.InvokeAsync(null);
+	}
+}

@@ -1,0 +1,86 @@
+﻿@page "/SingleFolderBrowser"
+@using ProjectServer.Shared
+@using ProjectServer.Client.Components.SingleFolderBrowser
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<header style="background-color: #EEEEEE;">
+	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder Loading=@Loading />
+</header>
+
+<div style="display: grid; grid-template-rows: auto; grid-template-columns: 250px auto;">
+
+	@if (SelectedFolder is not null && IsAbfFolder)
+	{
+		<div>
+			<div class="ps-2" style="height: 80vh; overflow-x:hidden; overflow-y: auto; overflow: auto;">
+				<ParentList AbfParents=AbfParents OnAbfSelectedCallback=SelectParent />
+
+				<div class="p-2" style="font-size: .8em; opacity: .5;">
+					<div>ABFs: @SelectedFolder.AbfFilePaths.Count()</div>
+					<div>Parents: @SelectedFolder.AbfParents.Count()</div>
+					<div>Load time: @LoadTimeMilliseconds ms</div>
+				</div>
+			</div>
+		</div>
+	}
+
+	<main>
+		@if (SelectedParent is not null)
+		{
+			<ParentNotes AbfParent=@SelectedParent />
+			<AbfList AbfParent=@SelectedParent />
+			<AnalysisThumbnails AbfParent=@SelectedParent />
+		}
+		else
+		{
+			if (IsAbfFolder)
+			{
+				<ExperimentInfo AbfFolder=@SelectedFolder />
+			}
+		}
+	</main>
+
+</div>
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string FolderPath { get; set; } = string.Empty;
+
+	private AbfParent[] AbfParents => SelectedFolder?.AbfParents ?? Array.Empty<AbfParent>();
+
+	private AbfFolder? SelectedFolder { get; set; } = null;
+
+	private AbfParent? SelectedParent { get; set; } = null;
+
+	private bool IsAbfFolder => (SelectedFolder is not null && SelectedFolder.AbfFilePaths.Any());
+
+	private bool Loading { get; set; } = true;
+	private double LoadTimeMilliseconds { get; set; } = 0;
+
+	protected override async Task OnInitializedAsync()
+	{
+		string initialPath = string.IsNullOrEmpty(FolderPath) ? @"X:/Data" : FolderPath;
+		await LoadFolder(initialPath);
+	}
+
+	private void SelectParent(string abfid)
+	{
+		var matchingParents = AbfParents.Where(x => x.AbfID == abfid);
+		SelectedParent = matchingParents.Any() ? matchingParents.First() : null;
+	}
+
+	private async Task LoadFolder(string path)
+	{
+		System.Diagnostics.Stopwatch sw = new();
+		sw.Start();
+		Loading = true;
+		FolderPath = path.Replace("/", "\\");
+		string apiUrl = "/api/AbfFolder?path=" + FolderPath;
+		SelectedFolder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
+		sw.Stop();
+		Loading = false;
+		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);
+	}
+}
