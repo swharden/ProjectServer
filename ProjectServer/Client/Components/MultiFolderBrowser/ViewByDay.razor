@@ -1,0 +1,57 @@
+﻿@using ProjectServer.Shared
+
+@if (ExperimentFolder is not null)
+{
+	@foreach (AbfFolder folder in ExperimentFolder.AbfFolders)
+	{
+		<div class="card m-5 shadow-sm">
+			<div class="card-header">
+				<div class="d-flex align-items-center">
+					<div class="fs-2 me-2">📂</div>
+					<div class="fs-3 fw-bold lh-1">@Path.GetFileName(@folder.FolderPath.Replace("\\", "/"))</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+
+					@if (@folder.AbfParents.Any())
+					{
+						<h3>ABF Parents</h3>
+						<ul>
+							@foreach (AbfParent parent in @folder.AbfParents)
+							{
+								<li class="my-2">
+									<a class="font-monospace px-2 py-1" style="background-color: @parent.Color; color: blue;">
+										@parent.AbfID
+									</a>
+									<span class="font-monospace" style="color: #AAAAAA">(@parent.ChildAbfPaths.Count())</span>
+									<span>@parent.Comment</span>
+									@foreach (string tag in parent.Tags)
+									{
+										<span class="badge rounded-pill text-bg-secondary">@tag</span>
+									}
+								</li>
+							}
+						</ul>
+					}
+
+					@if (!string.IsNullOrWhiteSpace(folder.ExperimentTxt))
+					{
+						<h3 class="mt-4">Notes</h3>
+						<div class="px-2">
+							<code>
+								<pre>@folder.ExperimentTxt</pre>
+							</code>
+						</div>
+					}
+				</p>
+			</div>
+		</div>
+	}
+}
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public ExperimentFolder? ExperimentFolder { get; set; } = null;
+}

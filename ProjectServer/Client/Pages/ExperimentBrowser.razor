@@ -1,0 +1,82 @@
+﻿@page "/ExperimentBrowser"
+@using ProjectServer.Shared
+@using ProjectServer.Client.Components.MultiFolderBrowser
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<div class="px-2 pb-2" style="background-color: #EEEEEE;">
+	<div class="fw-bold">Multi-Folder Experiment Browser</div>
+	<div><code>@FolderPath</code></div>
+	@if (ExperimentFolder is null)
+	{
+		<div class="spinner-border mx-3 my-2 text-primary" role="status">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	}
+	else
+	{
+		<div>
+			<div>Title: <code>@ExperimentFolder.Info.Title</code></div>
+			<div>Subtitle: <code>@ExperimentFolder.Info.SubTitle</code></div>
+			<div>Description: <code>@ExperimentFolder.Info.Description</code></div>
+			<button class="btn btn-primary btn-sm">Edit</button>
+
+			<select @bind=View>
+				<option value=@ViewType.ByDay>By Day</option>
+				<option value=@ViewType.ByTag>By Tag</option>
+				<option value=@ViewType.ByColor>By Color</option>
+			</select>
+		</div>
+	}
+</div>
+
+@if (View == ViewType.ByDay)
+{
+	<ViewByDay ExperimentFolder=@ExperimentFolder />
+}
+else if (View == ViewType.ByTag)
+{
+	<ViewByGroup ExperimentFolder=@ExperimentFolder />
+}
+else if (View == ViewType.ByColor)
+{
+	<ViewByColor ExperimentFolder=@ExperimentFolder />
+}
+else
+{
+	<h3>unsupported view</h3>
+}
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string FolderPath { get; set; } = string.Empty;
+
+	double LoadTimeMilliseconds;
+
+	ExperimentFolder? ExperimentFolder;
+
+	enum ViewType { ByDay, ByTag, ByColor }
+
+	ViewType View { get; set; } = ViewType.ByDay;
+
+	protected override async Task OnInitializedAsync()
+	{
+		string initialPath = string.IsNullOrEmpty(FolderPath) ? @"X:/Data" : FolderPath;
+		await LoadFolder(initialPath);
+	}
+
+	private async Task LoadFolder(string path)
+	{
+		path = path.Replace("/", "\\");
+
+		var sw = System.Diagnostics.Stopwatch.StartNew();
+		FolderPath = path;
+		string apiUrl = "/api/Experiment?path=" + FolderPath;
+		ExperimentFolder = await Http.GetFromJsonAsync<ExperimentFolder>(apiUrl);
+		string newUrl = $"/ExperimentBrowser?FolderPath={FolderPath}";
+		if (NavigationManager.Uri != newUrl)
+			NavigationManager.NavigateTo(newUrl);
+		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);
+	}
+}

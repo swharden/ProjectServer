@@ -1,31 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ProjectServer.Tests;
 
-namespace ProjectServer.Tests
+internal class AbfParentTests
 {
-    internal class AbfParentTests
+    [Test]
+    public void Test_AbfFolder_Scan()
     {
-        [Test]
-        public void Test_AbfFolder_Scan()
-        {
-            string testFolder = @"X:\Data\SD\DSI\PFC\abfs";
-            Shared.AbfFolder f = Shared.AbfFolder.Scan(testFolder);
-            Console.WriteLine(f);
-            foreach (var p in f.AbfParents)
-                Console.WriteLine(p);
-        }
+        string testFolder = @"X:\Data\SD\DSI\PFC\abfs";
+        Shared.AbfFolder f = Shared.AbfFolder.Scan(testFolder);
+        Console.WriteLine(f);
+        foreach (var p in f.AbfParents)
+            Console.WriteLine(p);
+    }
 
-        [Test]
-        public void Test_AbfFolder_NoCellsFile()
-        {
-            string abfFolderPath = @"X:/Data/SD/DSI/CA1/Coronal";
-            Shared.AbfFolder f = Shared.AbfFolder.Scan(abfFolderPath);
-            Console.WriteLine(f);
-            foreach (var p in f.AbfParents)
-                Console.WriteLine(p);
-        }
+    [Test]
+    public void Test_AbfFolder_NoCellsFile()
+    {
+        string abfFolderPath = @"X:/Data/SD/DSI/CA1/Coronal";
+        Shared.AbfFolder f = Shared.AbfFolder.Scan(abfFolderPath);
+        Console.WriteLine(f);
+        foreach (var p in f.AbfParents)
+            Console.WriteLine(p);
     }
 }
