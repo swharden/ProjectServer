@@ -3,35 +3,55 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
-	<div class="fw-bold">Multi-Folder Experiment Browser</div>
-	<div><code>@FolderPath</code></div>
-	@if (ExperimentFolder is null)
-	{
+<div class="bg-dark text-light px-3 py-2">
+	<span class="pe-2" style="opacity: .5">Experiment Browser (for multi-folder ABF projects)</span>
+	<a href="/">Home</a>
+</div>
+
+@if (ExperimentFolder is null)
+{
+	<div class="m-5">
+		<h5>Loading Multi-Folder ABF Project...</h5>
 		<div class="spinner-border mx-3 my-2 text-primary" role="status">
 			<span class="visually-hidden">Loading...</span>
 		</div>
-	}
-	else
-	{
-		<div class="lh-1 p-2">
+	</div>
+}
+else
+{
+	<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
+		<div class="p-2">
 			<div class="fw-bold fs-3">@ExperimentFolder.Info.Title</div>
-			<div class="text-muted fs-5">@ExperimentFolder.Info.Description</div>
-			<div class="my-2">
-				<a href="">Edit</a> <span style="opacity:.5;">|</span> <a href="">Notes</a>
+			<div class="text-muted">
+				@ExperimentFolder.Info.Description
+				<a class="link-primary" style="font-size: .8em; cursor:pointer">✏️</a>
+			</div>
+			<div><code>@FolderPath</code></div>
+			<div>
+				<button class="btn btn-secondary btn-sm" onclick="@(() => {ShowNotes = !ShowNotes;})">
+					@(ShowNotes ? "Hide Notes" : "Show Notes")
+				</button>
+				<div class="d-inline-block mt-2">
+					View by:
+					<select @bind=View>
+						<option value=@ViewType.ByDay>Day</option>
+						<option value=@ViewType.ByColor>Color</option>
+						<option value=@ViewType.ByTag>Tag</option>
+					</select>
+				</div>
 			</div>
 
-			<div class="d-inline-block mt-2">
-				View by:
-				<select @bind=View>
-					<option value=@ViewType.ByDay>Day</option>
-					<option value=@ViewType.ByColor>Color</option>
-					<option value=@ViewType.ByTag>Tag</option>
-				</select>
-			</div>
+			@if (ShowNotes)
+			{
+				<div class="mt-3">
+					<pre class="font-monospace my-1">@ExperimentFolder.Info.Notes</pre>
+					<a class="link-primary">Edit Notes</a>
+				</div>
+			}
+
 		</div>
-	}
-</div>
+	</div>
+}
 
 @if (View == ViewType.ByDay)
 {
@@ -88,6 +108,8 @@ else
 	enum ViewType { ByDay, ByTag, ByColor }
 
 	ViewType View { get; set; } = ViewType.ByDay;
+
+	bool ShowNotes { get; set; } = false;
 
 	public AbfParent[] AllParents => (ExperimentFolder is null)
 		? Array.Empty<AbfParent>()

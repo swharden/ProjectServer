@@ -4,6 +4,11 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+<div class="bg-dark text-light px-3 py-2">
+	<span class="pe-2" style="opacity: .5">Traditional ABF Browser (for single-folder ABF projects)</span>
+	<a href="/">Home</a>
+</div>
+
 <header style="background-color: #EEEEEE;">
 	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder Loading=@Loading />
 </header>

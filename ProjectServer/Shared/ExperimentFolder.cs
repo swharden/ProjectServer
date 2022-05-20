@@ -17,18 +17,28 @@ public class ExperimentFolder
         if (!Directory.Exists(folderPath))
             throw new DirectoryNotFoundException(folderPath);
 
-        ExperimentFolderInfo info = new()
+        AbfFolder[] abfFolders = Directory.GetDirectories(folderPath).Select(x => AbfFolder.Scan(x)).ToArray();
+
+        ExperimentFolderInfo info = new() { Title = "Untitled Experiment", Description = "no description" };
+        string experimentJsonFilePath = Path.Combine(folderPath, "experiment.json");
+        if (File.Exists(experimentJsonFilePath))
         {
-            Title = "test title",
-            Description = "test description",
-            Notes = "test notes",
-        };
+            try
+            {
+                info = ExperimentFolderInfo.LoadJsonFile(experimentJsonFilePath);
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                info.Title = "JSON ERROR";
+                info.Description = "experiment.json could not be parsed";
+            }
+        }
 
         return new ExperimentFolder()
         {
             FolderPath = folderPath,
+            AbfFolders = abfFolders,
             Info = info,
-            AbfFolders = Directory.GetDirectories(folderPath).Select(x => AbfFolder.Scan(x)).ToArray(),
         };
     }
 }

@@ -9,5 +9,9 @@ internal class ExperimentFolderTests
     {
         ExperimentFolder exp = ExperimentFolder.Scan(@"X:\Data\zProjects\Aging and eCBs\experiments\CA1\DSI");
         Console.WriteLine(exp);
+
+        exp.Info.SaveJsonFile("test123.json");
+        ExperimentFolderInfo info2 = ExperimentFolderInfo.LoadJsonFile("test123.json");
+        Console.WriteLine(info2);
     }
 }
