@@ -73,13 +73,12 @@
 
 	private async Task LoadFolder(string path)
 	{
-		System.Diagnostics.Stopwatch sw = new();
-		sw.Start();
+		var sw = System.Diagnostics.Stopwatch.StartNew();
 		Loading = true;
 		FolderPath = path.Replace("/", "\\");
 		string apiUrl = "/api/AbfFolder?path=" + FolderPath;
 		SelectedFolder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
-		sw.Stop();
+		NavigationManager.NavigateTo($"/SingleFolderBrowser?FolderPath={FolderPath}");
 		Loading = false;
 		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);
 	}
