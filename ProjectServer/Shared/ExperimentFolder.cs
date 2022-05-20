@@ -20,8 +20,8 @@ public class ExperimentFolder
         ExperimentFolderInfo info = new()
         {
             Title = "test title",
-            SubTitle = "test subtitle",
             Description = "test description",
+            Notes = "test notes",
         };
 
         return new ExperimentFolder()

@@ -3,7 +3,7 @@
 public class AbfParent
 {
     public string AbfFilePath { get; set; } = string.Empty;
-    public string AbfID => Path.GetFileNameWithoutExtension(AbfFilePath);
+    public string AbfID => Path.GetFileNameWithoutExtension(AbfFilePath.Replace("\\", "/"));
     public string Color { get; set; } = string.Empty;
     public string Comment { get; set; } = string.Empty;
     public string[] Tags { get; set; } = Array.Empty<string>();

@@ -1,0 +1,64 @@
+﻿@using ProjectServer.Shared
+
+<div class="card m-5 shadow-sm">
+	<h3 class="card-header" style="background-color: @BackgroundColor">
+		@Title
+	</h3>
+	<div class="card-body">
+		@if (AbfParents is not null)
+		{
+			@if (AbfParents.Any())
+			{
+				<h5>ABF Parents</h5>
+				<ul class="list-unstyled my-0">
+					@foreach (AbfParent parent in AbfParents)
+					{
+						<AbfParentListItem AbfParent=@parent />
+					}
+				</ul>
+			}
+
+			@if (!string.IsNullOrWhiteSpace(Notes))
+			{
+				<h5 class="mt-4">Notes</h5>
+				<div><code><pre class="bg-light border p-2 rounded d-inline-block">@Notes</pre></code></div>
+				<button class="btn btn-primary btn-sm">Edit Notes</button>
+			}
+
+			@if (ShowSetpath)
+			{
+				<h5 class="mt-4">Origin Commands</h5>
+				<div class="bg-light border p-2 rounded text-muted font-monospace"  style="white-space:pre; overflow-x:auto; font-size: .8em;">
+						@foreach(AbfParent parent in AbfParents)
+						{
+							<div>setpath "@parent.AbfFilePath";</div>
+						}
+				</div>
+				<button class="btn btn-primary mt-2">Copy</button>
+			}
+		}
+		else
+		{
+			<div>Loading ABFs...</div>
+		}
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public AbfParent[]? AbfParents { get; set; } = null;
+
+	[Parameter]
+	[EditorRequired]
+	public string Title { get; set; } = string.Empty;
+
+	[Parameter]
+	public string BackgroundColor { get; set; } = string.Empty;
+
+	[Parameter]
+	public string Notes { get; set; } = string.Empty;
+
+	[Parameter]
+	public bool ShowSetpath { get; set; } = false;
+}

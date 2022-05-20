@@ -79,7 +79,7 @@ public class AbfFolder
 
             if (isParent)
             {
-                AbfParent newParent = new() { AbfFilePath = abfFilename };
+                AbfParent newParent = new() { AbfFilePath = abfFilePath };
                 parents.Add(newParent);
             }
 

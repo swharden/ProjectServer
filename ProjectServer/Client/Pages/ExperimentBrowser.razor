@@ -1,10 +1,9 @@
 ﻿@page "/ExperimentBrowser"
 @using ProjectServer.Shared
-@using ProjectServer.Client.Components.MultiFolderBrowser
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<div class="px-2 pb-2" style="background-color: #EEEEEE;">
+<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
 	<div class="fw-bold">Multi-Folder Experiment Browser</div>
 	<div><code>@FolderPath</code></div>
 	@if (ExperimentFolder is null)
@@ -15,32 +14,62 @@
 	}
 	else
 	{
-		<div>
-			<div>Title: <code>@ExperimentFolder.Info.Title</code></div>
-			<div>Subtitle: <code>@ExperimentFolder.Info.SubTitle</code></div>
-			<div>Description: <code>@ExperimentFolder.Info.Description</code></div>
-			<button class="btn btn-primary btn-sm">Edit</button>
+		<div class="lh-1 p-2">
+			<div class="fw-bold fs-3">@ExperimentFolder.Info.Title</div>
+			<div class="text-muted fs-5">@ExperimentFolder.Info.Description</div>
+			<div class="my-2">
+				<a href="">Edit</a> <span style="opacity:.5;">|</span> <a href="">Notes</a>
+			</div>
 
-			<select @bind=View>
-				<option value=@ViewType.ByDay>By Day</option>
-				<option value=@ViewType.ByTag>By Tag</option>
-				<option value=@ViewType.ByColor>By Color</option>
-			</select>
+			<div class="d-inline-block mt-2">
+				View by:
+				<select @bind=View>
+					<option value=@ViewType.ByDay>Day</option>
+					<option value=@ViewType.ByColor>Color</option>
+					<option value=@ViewType.ByTag>Tag</option>
+				</select>
+			</div>
 		</div>
 	}
 </div>
 
 @if (View == ViewType.ByDay)
 {
-	<ViewByDay ExperimentFolder=@ExperimentFolder />
+	if (@ExperimentFolder is not null)
+	{
+		foreach (AbfFolder folder in ExperimentFolder.AbfFolders)
+		{
+			string title = "📂 " + Path.GetFileName(folder.FolderPath.Replace("\\", "/"));
+			<AbfParentsCard AbfParents=@folder.AbfParents Title=@title Notes=@folder.ExperimentTxt />
+		}
+	}
 }
 else if (View == ViewType.ByTag)
 {
-	<ViewByGroup ExperimentFolder=@ExperimentFolder />
+	HashSet<string> tags = new();
+	foreach (var parent in AllParents)
+		foreach (var tag in parent.Tags)
+			tags.Add(tag);
+
+	foreach (string tag in tags.OrderBy(x => x))
+	{
+		AbfParent[] matchingParents = string.IsNullOrWhiteSpace(tag)
+			? AllParents.Where(x => x.Tags.Length == 0 || x.Tags.Contains(tag)).ToArray()
+			: AllParents.Where(x => x.Tags.Contains(tag)).ToArray();
+
+		string title = string.IsNullOrWhiteSpace(tag) ? "No Tag" : tag;
+		<AbfParentsCard AbfParents=@matchingParents Title=@title ShowSetpath=true />
+
+	}
 }
 else if (View == ViewType.ByColor)
 {
-	<ViewByColor ExperimentFolder=@ExperimentFolder />
+	foreach (string color in AllParents.Select(x => x.Color).Distinct().OrderBy(x => x))
+	{
+		AbfParent[] matchingParents = AllParents.Where(x => x.Color == color).ToArray();
+		string title = string.IsNullOrWhiteSpace(color) ? "No Color" : $"Color {color}";
+		<AbfParentsCard AbfParents=@matchingParents Title=@title BackgroundColor=@color ShowSetpath=true />
+	}
 }
 else
 {
@@ -59,6 +88,10 @@ else
 	enum ViewType { ByDay, ByTag, ByColor }
 
 	ViewType View { get; set; } = ViewType.ByDay;
+
+	public AbfParent[] AllParents => (ExperimentFolder is null)
+		? Array.Empty<AbfParent>()
+		: ExperimentFolder.AbfFolders.SelectMany(x => x.AbfParents).ToArray();
 
 	protected override async Task OnInitializedAsync()
 	{
