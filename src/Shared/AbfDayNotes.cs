@@ -38,6 +38,7 @@ public class AbfDayNotes
         AppendLineIfNotEmpty(sb, "external", External);
         AppendLineIfNotEmpty(sb, "cagecard", CageCard);
         AppendLineIfNotEmpty(sb, "intervention", Intervention);
+        sb.AppendLine(Notes);
         return sb.ToString();
     }
     public static AbfDayNotes FromTxt(string txt)
@@ -77,7 +78,7 @@ public class AbfDayNotes
                 day.Internal = value;
             else if (key == "external")
                 day.External = value;
-            else if (key == "cagecard")
+            else if (key == "cagecard" || key == "cage card")
                 day.CageCard = value;
             else if (key == "intervention")
                 day.Intervention = value;
