@@ -4,6 +4,7 @@ namespace ProjectServer.Tests;
 
 internal class ExperimentFolderTests
 {
+    [Ignore("depends on local drive")]
     [Test]
     public void Test_Experiment_Load()
     {

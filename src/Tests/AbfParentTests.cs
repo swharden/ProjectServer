@@ -2,6 +2,7 @@
 
 internal class AbfParentTests
 {
+    [Ignore("depends on local drive")]
     [Test]
     public void Test_AbfFolder_Scan()
     {
@@ -12,6 +13,7 @@ internal class AbfParentTests
             Console.WriteLine(p);
     }
 
+    [Ignore("depends on local drive")]
     [Test]
     public void Test_AbfFolder_NoCellsFile()
     {

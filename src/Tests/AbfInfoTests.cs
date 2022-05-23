@@ -2,6 +2,7 @@
 
 internal class AbfInfoTests
 {
+    [Ignore("depends on local drive")]
     [Test]
     public void Test_AbfInfo_ReadFile()
     {
@@ -10,6 +11,7 @@ internal class AbfInfoTests
         Console.WriteLine(info);
     }
 
+    [Ignore("depends on local drive")]
     [Test]
     public void Test_AbfReader_ReadFile()
     {
