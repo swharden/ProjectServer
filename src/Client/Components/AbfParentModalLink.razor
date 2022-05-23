@@ -30,6 +30,7 @@
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body p-0">
+					<AbfParentEditor AbfParent=@AbfParent OnAbfEdited=OnAbfEdited />
 					<AbfInfoList AbfParent=@AbfParent AutoLoadAbfInfo=@LoadAbfInfo />
 					<AnalysisThumbnails AbfParent=@AbfParent />
 				</div>
@@ -53,5 +54,10 @@ else
 	{
 		LoadAbfInfo = true;
 		Console.WriteLine($"Loading ABF info for: {AbfParent?.AbfID}");
+	}
+
+	private void OnAbfEdited()
+	{
+		
 	}
 }
