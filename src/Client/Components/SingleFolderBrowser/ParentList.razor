@@ -21,6 +21,10 @@
 			string visibility = (parent.AbfFilePath == SelectedParent?.AbfFilePath) ? "visible" : "hidden";
 
 			<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+				<!--  
+					choose an arrow shape from here: https://www.toptal.com/designers/htmlarrows/arrows/ 
+					Options I like include: »➧➲➳➾→⇒⇛⇨⤳⥤➛➔➜➛➤➥🔎👉▶
+				-->
 				<span class="fw-bold font-monospace" style="visibility: @visibility">»</span>
 				<a href="" class="font-monospace" style="background-color: @parent.Color; color: blue;" onclick=@(() => SelectParent(@parent.AbfID)) @onclick:preventDefault>
 					@parent.AbfID

@@ -34,7 +34,7 @@
 	<main>
 		@if (SelectedParent is not null)
 		{
-			<ParentNotes AbfParent=@SelectedParent />
+			<ParentEditor AbfParent=@SelectedParent OnAbfEdited="@OnAbfEdited" />
 			<AbfInfoList AbfParent=@SelectedParent />
 			<AnalysisThumbnails AbfParent=@SelectedParent />
 		}
@@ -87,5 +87,10 @@
 		NavigationManager.NavigateTo($"/SingleFolderBrowser?FolderPath={FolderPath}");
 		Loading = false;
 		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);
+	}
+
+	private void OnAbfEdited()
+	{
+		StateHasChanged();
 	}
 }
