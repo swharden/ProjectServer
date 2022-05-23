@@ -1,8 +1,7 @@
-﻿<!-- 
+﻿<!--
 	This component shows all child ABFs of the given ABF Parent as a list with "copy", "setpath", and "ignore" buttons.
 	Optionally ABF information (protocol, seep count, comments, etc) can be obtained with individual HTTP requests.
 -->
-
 @using ProjectServer.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -39,16 +38,20 @@
 		if (!AutoLoadAbfInfo)
 			return;
 
-		foreach (string abfPath in AbfParent.ChildAbfPaths)
-		{
-			string url = NavigationManager.BaseUri + "AbfInfo?path=" + abfPath;
-			AbfInfo? info = await Http.GetFromJsonAsync<AbfInfo>(url);
-			if (info is not null)
-			{
-				AbfInfoByPath[abfPath] = info;
-				StateHasChanged();
-			}
-		}
+		var tasks = AbfParent.ChildAbfPaths
+			.Select(async abfPath =>
+				{
+					string url = NavigationManager.BaseUri + "AbfInfo?path=" + abfPath;
+					AbfInfo? info = await Http.GetFromJsonAsync<AbfInfo>(url);
+					if (info is not null)
+					{
+						AbfInfoByPath[abfPath] = info;
+						StateHasChanged();
+					}
+				})
+			.ToList();
+
+		await Task.WhenAll(tasks);
 	}
 
 	private string[] _abfPaths = Array.Empty<string>();
