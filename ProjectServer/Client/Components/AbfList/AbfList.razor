@@ -1,4 +1,9 @@
-﻿@using ProjectServer.Shared
+﻿<!-- 
+	This component shows all child ABFs of the given ABF Parent as a list with "copy", "setpath", and "ignore" buttons.
+	Optionally ABF information (protocol, seep count, comments, etc) can be obtained with individual HTTP requests.
+-->
+
+@using ProjectServer.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
@@ -23,9 +28,15 @@
 	[EditorRequired]
 	public AbfParent? AbfParent { get; set; } = null;
 
+	[Parameter]
+	public bool AutoLoadAbfInfo { get; set; } = true;
+
 	protected override async Task OnParametersSetAsync()
 	{
 		if (AbfParent is null)
+			return;
+
+		if (!AutoLoadAbfInfo)
 			return;
 
 		foreach (string abfPath in AbfParent.ChildAbfPaths)

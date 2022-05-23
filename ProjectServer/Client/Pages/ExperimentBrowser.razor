@@ -4,18 +4,13 @@
 @inject NavigationManager NavigationManager
 
 <div class="bg-dark text-light px-3 py-2">
-	<span class="pe-2" style="opacity: .5">Experiment Browser (for multi-folder ABF projects)</span>
+	<span class="pe-2" style="opacity: .5">Experiment Browser</span>
 	<a href="/">Home</a>
 </div>
 
 @if (ExperimentFolder is null)
 {
-	<div class="m-5">
-		<h5>Loading Multi-Folder ABF Project...</h5>
-		<div class="spinner-border mx-3 my-2 text-primary" role="status">
-			<span class="visually-hidden">Loading...</span>
-		</div>
-	</div>
+	<LoadingSpinner Message="Loading Experiment..." />
 }
 else
 {

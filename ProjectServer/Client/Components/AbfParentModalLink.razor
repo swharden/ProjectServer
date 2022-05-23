@@ -1,0 +1,57 @@
+﻿@using ProjectServer.Shared
+@using ProjectServer.Client.Components.AbfList
+
+@if (AbfParent is not null)
+{
+	string modalID = "modal_" + AbfParent.AbfID;
+
+	<li class="my-1 lh-1">
+		<a class="font-monospace px-1" style="background-color: @AbfParent.Color; color: blue;"
+	   data-bs-toggle="modal" data-bs-target=@("#"+modalID) @onclick=ModalOpened>
+			@AbfParent.AbfID
+		</a>
+
+		<span class="font-monospace" style="color: #AAAAAA">(@AbfParent.ChildAbfPaths.Count())</span>
+		<span>@AbfParent.Comment</span>
+		@foreach (string tag in AbfParent.Tags)
+		{
+			<span class="badge rounded-pill text-bg-secondary mx-1">@tag</span>
+		}
+	</li>
+
+	<div class="modal fade" id=@modalID tabindex="-1">
+		<div class="modal-dialog modal-dialog-scrollable modal-xl">
+			<div class="modal-content">
+				<div class="modal-header" style="background-color: @AbfParent.Color">
+					<div>
+						<h5 class="modal-title" id="exampleModalLabel">@AbfParent.AbfID</h5>
+						<div class="font-monospace" style="font-size: .8em;">@AbfParent.AbfFilePath</div>
+					</div>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body p-0">
+					<AbfList AbfParent=@AbfParent AutoLoadAbfInfo=@LoadAbfInfo />
+					<AnalysisThumbnails AbfParent=@AbfParent />
+				</div>
+			</div>
+		</div>
+	</div>
+}
+else
+{
+	<li>loading ABF parent...</li>
+}
+
+@code {
+	[Parameter]
+	[EditorRequired]
+	public AbfParent? AbfParent { get; set; } = null;
+
+	private bool LoadAbfInfo { get; set; } = false;
+
+	private void ModalOpened()
+	{
+		LoadAbfInfo = true;
+		Console.WriteLine($"Loading ABF info for: {AbfParent?.AbfID}");
+	}
+}

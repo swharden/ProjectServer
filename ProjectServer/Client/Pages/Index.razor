@@ -2,10 +2,19 @@
 
 <PageTitle>Project Server</PageTitle>
 
+<div class="bg-dark text-light">
+	<div class="container">
+		<div class="fs-1 py-2">
+			Project Server
+		</div>
+	</div>
+</div>
+
 <div class="container my-5">
 
 	<div class="mt-5 fs-3 fw-bold lh-1">Traditional ABF Browser</div>
-	<div><i>For viewing one folder at a time</i></div>
+	<div><i>For navigating ABFs in a single folder.</i></div>
+	<div><i>This may be the <mark>best view at rig time</mark>.</i></div>
 	<ul>
 		<li><a href="/SingleFolderBrowser?FolderPath=X:\Data\F344\Aging BLA\basal excitability round2\abfs\">Aging BLA</a></li>
 		<li><a href="/SingleFolderBrowser?FolderPath=X:\Data\SD\DSI\PFC\abfs">DSI</a></li>
@@ -14,11 +23,21 @@
 		<li><a href="/SingleFolderBrowser?FolderPath=X:\Data\zProjects\Aging and eCBs\experiments\CA1\DSI\">CA1 DSI</a> (daily folders)</li>
 	</ul>
 
-	<div class="mt-5 fs-3 fw-bold lh-1">Multi-Folder ABF Browser</div>
-	<div><i>For viewing experiment folders with <code>experiment.json</code> and daily subfolders</i></div>
+	<div class="mt-5 fs-3 fw-bold lh-1">Experiment Viewer</div>
+	<div><i>Experiment folders have <code>experiment.json</code> and daily subfolders containing ABFs.</i></div>
+	<div><i>This viewer has <mark>grouping tools</mark> to span across multiple folders.</i></div>
+	<div><i>This may be the <mark>best view at analysis time</mark>.</i></div>
 	<ul>
 		<li><a href="/ExperimentBrowser?FolderPath=X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)">ACh</a></li>
 		<li><a href="/ExperimentBrowser?FolderPath=X:\Data\zProjects\Aging and eCBs\experiments\CA1\DSI">CA1</a></li>
+	</ul>
+
+	<div class="mt-5 fs-3 fw-bold lh-1">Project Viewer</div>
+	<div><i>Project folders have <code>project.json</code> and contain multiple experiments.</i></div>
+	<div><i>This viewer provides links to all experiments for a project.</i></div>
+	<div><i>This may be the <mark>best view for inspecting a project</mark> if you don't know much about it.</i></div>
+	<ul>
+		<li>(none yet)</li>
 	</ul>
 
 </div>
