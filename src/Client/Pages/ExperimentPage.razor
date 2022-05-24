@@ -1,4 +1,4 @@
-﻿@page "/ExperimentBrowser"
+﻿@page "/Experiment"
 @using ProjectServer.Shared
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -124,7 +124,7 @@ else
 		FolderPath = path;
 		string apiUrl = "/api/Experiment?path=" + FolderPath;
 		ExperimentFolder = await Http.GetFromJsonAsync<ExperimentFolder>(apiUrl);
-		string newUrl = $"/ExperimentBrowser?FolderPath={FolderPath}";
+		string newUrl = NavigationManager.Uri + $"?FolderPath={FolderPath}";
 		if (NavigationManager.Uri != newUrl)
 			NavigationManager.NavigateTo(newUrl);
 		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);

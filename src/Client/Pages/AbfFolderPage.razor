@@ -1,4 +1,4 @@
-﻿@page "/SingleFolderBrowser"
+﻿@page "/AbfFolder"
 @using ProjectServer.Shared
 @using ProjectServer.Client.Components.SingleFolderBrowser
 @using ProjectServer.Client.Components.AbfList
@@ -6,7 +6,7 @@
 @inject NavigationManager NavigationManager
 
 <div class="bg-dark text-light px-3 py-2">
-	<span class="pe-2" style="opacity: .5">Traditional ABF Browser (for single-folder ABF projects)</span>
+	<span class="pe-2" style="opacity: .5">ABF Folder Browser</span>
 	<a href="/">Home</a>
 </div>
 
@@ -14,43 +14,40 @@
 	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder Loading=@Loading />
 </header>
 
-<div style="display: grid; grid-template-rows: auto; grid-template-columns: 250px auto;">
-
-	@if (SelectedFolder is not null && IsAbfFolder)
+@if (SelectedFolder is not null)
+{
+	@if (@IsAbfFolder)
 	{
-		<div>
-			<div class="ps-2" style="height: 80vh; overflow-x:hidden; overflow-y: auto; overflow: auto;">
-				<ParentList AbfParents=AbfParents OnAbfSelectedCallback=SelectParent />
+		<!-- two-column layout where content of the first two elements can independently scroll vertically -->
+		<div style="display: grid; grid-template-rows: auto; grid-template-columns: 250px auto;">
 
-				<div class="p-2" style="font-size: .8em; opacity: .5;">
-					<div>ABFs: @SelectedFolder.AbfFilePaths.Count()</div>
-					<div>Parents: @SelectedFolder.AbfParents.Count()</div>
-					<div>Load time: @LoadTimeMilliseconds ms</div>
-				</div>
-			</div>
+			<nav class="ps-2" style="height: 80vh; overflow-x:hidden; overflow-y: auto; overflow: auto;">
+				<ParentList AbfParents=AbfParents OnAbfSelectedCallback=SelectParent />
+			</nav>
+
+			<main>
+				@if (SelectedParent is null)
+				{
+					<ExperimentInfo AbfFolder=@SelectedFolder />
+				}
+				else
+				{
+					<div class="p-2" style="background-color: @SelectedParent.Color; font-family: 'Arial'; font-size: 1.5em; font-weight: 600;">
+						@SelectedParent.AbfID
+					</div>
+					<AbfParentEditor AbfParent=@SelectedParent OnAbfEdited="@OnAbfEdited" />
+					<AbfInfoList AbfParent=@SelectedParent />
+					<AnalysisThumbnails AbfParent=@SelectedParent />
+				}
+			</main>
+
 		</div>
 	}
-
-	<main>
-		@if (SelectedParent is not null)
-		{
-			<div class="p-2" style="background-color: @SelectedParent.Color; font-family: 'Arial'; font-size: 1.5em; font-weight: 600;">
-				@SelectedParent.AbfID
-			</div>
-			<AbfParentEditor AbfParent=@SelectedParent OnAbfEdited="@OnAbfEdited" />
-			<AbfInfoList AbfParent=@SelectedParent />
-			<AnalysisThumbnails AbfParent=@SelectedParent />
-		}
-		else
-		{
-			if (IsAbfFolder)
-			{
-				<ExperimentInfo AbfFolder=@SelectedFolder />
-			}
-		}
-	</main>
-
-</div>
+	else
+	{
+		<div class="m-3 text-muted">This folder does not contain ABF files.</div>
+	}
+}
 
 @code {
 	[Parameter]
@@ -87,9 +84,11 @@
 		FolderPath = path.Replace("/", "\\");
 		string apiUrl = "/api/AbfFolder?path=" + FolderPath;
 		SelectedFolder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
-		NavigationManager.NavigateTo($"/SingleFolderBrowser?FolderPath={FolderPath}");
+		NavigationManager.NavigateTo(NavigationManager.Uri + $"?FolderPath={FolderPath}");
 		Loading = false;
+		SelectedParent = null;
 		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);
+		StateHasChanged();
 	}
 
 	private void OnAbfEdited()
