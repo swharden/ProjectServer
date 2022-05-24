@@ -69,13 +69,16 @@ else if (View == ViewType.ByTag)
 
 	foreach (string tag in tags.OrderBy(x => x))
 	{
-		AbfParent[] matchingParents = string.IsNullOrWhiteSpace(tag)
-			? AllParents.Where(x => x.Tags.Length == 0 || x.Tags.Contains(tag)).ToArray()
-			: AllParents.Where(x => x.Tags.Contains(tag)).ToArray();
-
-		string title = string.IsNullOrWhiteSpace(tag) ? "No Tag" : tag;
-		<AbfParentsCard AbfParents=@matchingParents Title=@title ShowSetpath=true />
-
+		if (string.IsNullOrWhiteSpace(tag))
+		{
+			AbfParent[] parentsWithoutTags = AllParents.Where(x => !x.Tags.Any()).ToArray();
+			<AbfParentsCard AbfParents=@parentsWithoutTags Title="No Tag" ShowSetpath=true />
+		}
+		else
+		{
+			AbfParent[] parentsWithTag = AllParents.Where(x => x.Tags.Contains(tag)).ToArray();
+			<AbfParentsCard AbfParents=@parentsWithTag Title=@tag ShowSetpath=true />
+		}
 	}
 }
 else if (View == ViewType.ByColor)
