@@ -17,16 +17,7 @@ public class ProjectController : ControllerBase
     public Shared.ProjectFolder Get(string? path)
     {
         Shared.ProjectFolder project = Shared.ProjectFolder.Load(path ?? "X:/");
-
-        if (project.Exists)
-        {
-            Logger.LogInformation($"Project '{project.Title}': {path}");
-        }
-        else
-        {
-            Logger.LogInformation($"Project does not exist: {path}");
-        }
-
+        project.ScanAndLoadExperiments();
         return project;
     }
 }

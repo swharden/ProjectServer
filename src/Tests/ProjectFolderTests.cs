@@ -9,7 +9,6 @@ internal class ProjectFolderTests
     {
         ProjectFolder project1 = new()
         {
-            FolderPath = "some path",
             Created = DateTime.Now.AddMinutes(-5),
             Title = "test title",
             Description = "test description",
@@ -49,6 +48,15 @@ internal class ProjectFolderTests
 
         Assert.That(proj.Title, Is.EqualTo("seed title"));
         Assert.That(proj.Description, Is.EqualTo("seed description"));
+    }
+
+    [Test]
+    public void Test_Project_Load()
+    {
+        string folderPath = "./";
+        ProjectFolder.SeedFolder(folderPath, "seed title", "seed description");
+        ProjectFolder proj = ProjectFolder.Load(folderPath);
+        Console.WriteLine(proj.FolderPath);
     }
 
     [Test]

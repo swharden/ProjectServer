@@ -13,7 +13,7 @@ public class ProjectFolder
     public string Notes { get; set; } = string.Empty;
     public string[] ExperimentFolders { get; set; } = Array.Empty<string>();
     public string[] ExperimentFoldersScanned { get; set; } = Array.Empty<string>();
-    public ExperimentFolderInfo[] Experiments { get; set; } = Array.Empty<ExperimentFolderInfo>();
+    public ExperimentFolder[] Experiments { get; set; } = Array.Empty<ExperimentFolder>();
 
     public static void SeedFolder(string folderPath, string title, string description, string notes = "")
     {
@@ -62,7 +62,8 @@ public class ProjectFolder
             if (absoluteGivenPath.EndsWith("/*") || absoluteGivenPath.EndsWith("\\*"))
             {
                 string givenFolder = absoluteGivenPath.Substring(0, absoluteGivenPath.Length - 2).Replace("\\", "/");
-                paths.AddRange(Directory.GetDirectories(givenFolder));
+                if (Directory.Exists(givenFolder))
+                    paths.AddRange(Directory.GetDirectories(givenFolder));
             }
             else
             {
@@ -73,9 +74,9 @@ public class ProjectFolder
         return paths.Select(x => x.Replace("/", "\\")).Distinct().ToArray();
     }
 
-    private static ExperimentFolderInfo[] LoadExperiments(string[] experimentFolderPaths)
+    private static ExperimentFolder[] LoadExperiments(string[] experimentFolderPaths)
     {
-        List<ExperimentFolderInfo> experiments = new();
+        List<ExperimentFolder> experiments = new();
 
         foreach (string folderPath in experimentFolderPaths)
         {
@@ -83,7 +84,7 @@ public class ProjectFolder
 
             if (File.Exists(experimentJsonFilePath))
             {
-                ExperimentFolderInfo experiment = ExperimentFolderInfo.LoadJsonFile(experimentJsonFilePath);
+                ExperimentFolder experiment = ExperimentFolder.LoadJsonFile(experimentJsonFilePath);
                 experiments.Add(experiment);
             }
         }
@@ -99,12 +100,15 @@ public class ProjectFolder
 
     public static ProjectFolder Load(string folderPath)
     {
+        folderPath = folderPath.Replace("\\", "/");
         folderPath = Path.GetFullPath(folderPath);
         if (!Directory.Exists(folderPath))
             throw new DirectoryNotFoundException(folderPath);
 
         string jsonFilePath = Path.Combine(folderPath, "project.json");
-        return LoadJsonFile(jsonFilePath);
+        ProjectFolder project = LoadJsonFile(jsonFilePath);
+        project.FolderPath = project.FolderPath.Replace("/", "\\");
+        return project;
     }
 
     public void Save(string folderPath)
@@ -127,6 +131,7 @@ public class ProjectFolder
             ProjectFolder project = LoadJson(json);
             project.FolderPath = Path.GetFullPath(Path.GetDirectoryName(filePath) ?? string.Empty);
             project.ScanAndLoadExperiments();
+            project.FolderPath = Path.GetDirectoryName(filePath) ?? String.Empty;
             return project;
         }
         else

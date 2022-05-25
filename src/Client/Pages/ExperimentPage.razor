@@ -17,9 +17,9 @@ else
 {
 	<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
 		<div class="p-2">
-			<div class="fw-bold fs-3">@ExperimentFolder.Info.Title</div>
+			<div class="fw-bold fs-3">@ExperimentFolder.Title</div>
 			<div class="text-muted">
-				@ExperimentFolder.Info.Description
+				@ExperimentFolder.Description
 				<a class="link-primary" style="font-size: .8em; cursor:pointer">✏️</a>
 			</div>
 			<div><code>@FolderPath</code></div>
@@ -40,7 +40,7 @@ else
 			@if (ShowNotes)
 			{
 				<div class="mt-3">
-					<pre class="font-monospace my-1">@ExperimentFolder.Info.Notes</pre>
+					<pre class="font-monospace my-1">@ExperimentFolder.Notes</pre>
 					<a class="link-primary">Edit Notes</a>
 				</div>
 			}

@@ -27,6 +27,6 @@ internal class AbfDayNotesTests
 
         Shared.AbfDayNotes day2 = Shared.AbfDayNotes.LoadTxtFile("test123.txt");
 
-        Assert.That(day1.GetTxt(), Is.EqualTo(day2.GetTxt()));
+        Assert.That(day1.GetTxt().Trim(), Is.EqualTo(day2.GetTxt().Trim()));
     }
 }

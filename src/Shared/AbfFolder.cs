@@ -13,11 +13,6 @@ public class AbfFolder
     public string[] SubFolderNames { get; set; } = Array.Empty<string>();
     public AbfParent[] AbfParents { get; set; } = Array.Empty<AbfParent>();
 
-    public AbfFolder()
-    {
-
-    }
-
     public override string ToString()
     {
         return $"ABF Folder with {AbfFilePaths.Length} ABFs ({AbfParents.Length} parents) and {AnalysisFilePaths.Length} analysis files";

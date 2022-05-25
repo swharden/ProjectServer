@@ -39,9 +39,11 @@ else
 	<div class="m-3">
 		<h3>Experiments Found (@ProjectFolder.Experiments.Length)</h3>
 		<ul>
-			@foreach (ExperimentFolderInfo info in ProjectFolder.Experiments)
+			@foreach (ExperimentFolder experiment in ProjectFolder.Experiments)
 			{
-				<li><a class="fw-bold">@info.Title</a> - @info.Description</li>
+				Console.WriteLine(experiment);
+				Console.WriteLine(experiment.FolderPath);
+				<li><a href="/Experiment?FolderPath=@experiment.FolderPath" class="fw-bold">@experiment.Title</a> - @experiment.Description</li>
 			}
 		</ul>
 	</div>

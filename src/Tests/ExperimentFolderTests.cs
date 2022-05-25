@@ -4,15 +4,24 @@ namespace ProjectServer.Tests;
 
 internal class ExperimentFolderTests
 {
-    [Ignore("depends on local drive")]
     [Test]
     public void Test_Experiment_Load()
     {
-        ExperimentFolder exp = ExperimentFolder.Scan(@"X:\Data\zProjects\Aging and eCBs\experiments\CA1\DSI");
-        Console.WriteLine(exp);
+        ExperimentFolder exp = new()
+        {
+            Title = "test title",
+            Description = "test description",
+            Notes = "test notes",
+        };
 
-        exp.Info.SaveJsonFile("test123.json");
-        ExperimentFolderInfo info2 = ExperimentFolderInfo.LoadJsonFile("test123.json");
-        Console.WriteLine(info2);
+        string jsonFilePath = Path.GetFullPath("test-exp.json");
+
+        exp.SaveJsonFile(jsonFilePath);
+
+        ExperimentFolder exp2 = ExperimentFolder.LoadJsonFile(jsonFilePath);
+
+        Assert.That(exp.Title, Is.EqualTo(exp2.Title));
+        Assert.That(exp.Description, Is.EqualTo(exp2.Description));
+        Assert.That(exp.Notes, Is.EqualTo(exp2.Notes));
     }
 }

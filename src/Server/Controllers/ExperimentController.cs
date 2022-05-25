@@ -14,8 +14,11 @@ public class ExperimentController : ControllerBase
     }
 
     [HttpGet]
-    public Shared.ExperimentFolder Get(string? path)
+    public Shared.ExperimentFolder Get(string? path, bool? scan = true)
     {
-        return Shared.ExperimentFolder.Scan(path ?? "X:/");
+        Shared.ExperimentFolder experiment = Shared.ExperimentFolder.FromFolderPath(path ?? "X:/", scan ?? true);
+        if (string.IsNullOrWhiteSpace(experiment.FolderPath))
+            throw new InvalidOperationException();
+        return experiment;
     }
 }

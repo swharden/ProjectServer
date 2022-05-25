@@ -1,46 +1,106 @@
-﻿namespace ProjectServer.Shared;
+﻿using System.Text.Json;
+
+namespace ProjectServer.Shared;
 
 public class ExperimentFolder
 {
     public string FolderPath { get; set; } = string.Empty;
-    public ExperimentFolderInfo Info { get; set; } = new ExperimentFolderInfo();
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public string Notes { get; set; } = string.Empty;
     public AbfFolder[] AbfFolders { get; set; } = Array.Empty<AbfFolder>();
-
-    // TODO: make a ScanAbfFolders (don't do it automatically)
 
     public override string ToString()
     {
-        return $"ABF Experiment ({Info.Title}) with {AbfFolders.Length} subfolders and {AbfFolders.Select(x => x.AbfFilePaths.Length).Sum()} ABFs";
+        return $"ABF Experiment ({Title}) with {AbfFolders.Length} subfolders and {AbfFolders.Select(x => x.AbfFilePaths.Length).Sum()} ABFs";
     }
 
-    public static ExperimentFolder Scan(string folderPath)
+    public static ExperimentFolder FromFolderPath(string folderPath, bool scanAbfs)
     {
         folderPath = Path.GetFullPath(folderPath);
         if (!Directory.Exists(folderPath))
             throw new DirectoryNotFoundException(folderPath);
 
-        AbfFolder[] abfFolders = Directory.GetDirectories(folderPath).Select(x => AbfFolder.Scan(x)).ToArray();
-
-        ExperimentFolderInfo info = new() { Title = "Untitled Experiment", Description = "no description" };
-        string experimentJsonFilePath = Path.Combine(folderPath, "experiment.json");
-        if (File.Exists(experimentJsonFilePath))
+        ExperimentFolder experiment = new()
         {
-            try
-            {
-                info = ExperimentFolderInfo.LoadJsonFile(experimentJsonFilePath);
-            }
-            catch (System.Text.Json.JsonException)
-            {
-                info.Title = "JSON ERROR";
-                info.Description = "experiment.json could not be parsed";
-            }
+            FolderPath = folderPath
+        };
+
+        string jsonFilePath = Path.Combine(folderPath, "experiment.json");
+        if (File.Exists(jsonFilePath))
+        {
+            ExperimentFolder exp = ExperimentFolder.LoadJsonFile(jsonFilePath);
+            experiment.Title = exp.Title;
+            experiment.Description = exp.Notes;
+            experiment.Notes = exp.Notes;
+        }
+        else
+        {
+            experiment.Title = "no JSON file";
+            experiment.Description = jsonFilePath;
         }
 
-        return new ExperimentFolder()
+        if (scanAbfs)
         {
-            FolderPath = folderPath,
-            AbfFolders = abfFolders,
-            Info = info,
+            experiment.ScanAbfFolders();
+        }
+
+        if (string.IsNullOrWhiteSpace(experiment.FolderPath))
+            throw new InvalidOperationException();
+
+        return experiment;
+    }
+
+    public void ScanAbfFolders()
+    {
+        AbfFolders = Directory.GetDirectories(FolderPath)
+            .Select(x => AbfFolder.Scan(x))
+            .ToArray();
+    }
+
+    public static ExperimentFolder LoadJsonFile(string filePath)
+    {
+        ExperimentFolder info = new()
+        {
+            FolderPath = Path.GetDirectoryName(filePath.Replace("\\", "/")) ?? String.Empty,
         };
+
+        string json = File.ReadAllText(filePath);
+        using JsonDocument document = JsonDocument.Parse(json);
+
+        if (document.RootElement.TryGetProperty("Title", out JsonElement title))
+        {
+            info.Title = title.ToString();
+        }
+
+        if (document.RootElement.TryGetProperty("Description", out JsonElement description))
+        {
+            info.Description = description.ToString();
+        }
+
+        if (document.RootElement.TryGetProperty("Notes", out JsonElement notes))
+        {
+            info.Notes = notes.ToString();
+        }
+
+        return info;
+    }
+
+    public void SaveJsonFile(string filePath)
+    {
+        using MemoryStream stream = new();
+        JsonWriterOptions options = new() { Indented = true };
+        using Utf8JsonWriter writer = new(stream, options);
+
+        writer.WriteStartObject();
+        writer.WriteString("Title", Title);
+        writer.WriteString("Description", Description);
+        writer.WriteString("Notes", Notes);
+        writer.WriteEndObject();
+
+        writer.Flush();
+        string json = System.Text.Encoding.UTF8.GetString(stream.ToArray());
+
+        File.WriteAllText(filePath, json);
     }
 }
