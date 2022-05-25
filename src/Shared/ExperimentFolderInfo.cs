@@ -2,6 +2,7 @@
 
 namespace ProjectServer.Shared;
 
+// TODO: move these properties into the ExperimentFolder
 public class ExperimentFolderInfo
 {
     public string Title { get; set; } = string.Empty;
@@ -10,8 +11,27 @@ public class ExperimentFolderInfo
 
     public static ExperimentFolderInfo LoadJsonFile(string filePath)
     {
-        return JsonSerializer.Deserialize<ExperimentFolderInfo>(File.ReadAllText(filePath))
-            ?? throw new NullReferenceException();
+        ExperimentFolderInfo info = new();
+
+        string json = File.ReadAllText(filePath);
+        using JsonDocument document = JsonDocument.Parse(json);
+
+        if (document.RootElement.TryGetProperty("Title", out JsonElement title))
+        {
+            info.Title = title.ToString();
+        }
+
+        if (document.RootElement.TryGetProperty("Description", out JsonElement description))
+        {
+            info.Description = description.ToString();
+        }
+
+        if (document.RootElement.TryGetProperty("Notes", out JsonElement notes))
+        {
+            info.Notes = notes.ToString();
+        }
+
+        return info;
     }
 
     public void SaveJsonFile(string filePath)

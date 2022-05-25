@@ -1,0 +1,7 @@
+### request project that does exist
+GET http://localhost:5167/api/Project
+    ?path=X:\Data\zProjects\Oxytocin Biosensor
+
+### request project that does not exist
+GET http://localhost:5167/api/Project
+    ?path=X:\Data\zProjects\Oxytocin Sensitivity of Cultured NG cells

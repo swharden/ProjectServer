@@ -1,0 +1,80 @@
+﻿@page "/Project"
+@using ProjectServer.Shared
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<div class="bg-dark text-light p-2">
+	<span>Project Viewer: Dev Mode</span>
+	<span class="mx-3 bg-warning text-dark rounded px-2 py-1"><strong>WARNING:</strong> Edits are only saved in memory (not written to disk)</span>
+	<a href="/">Home</a>
+</div>
+
+@if (ProjectFolder is null)
+{
+	<LoadingSpinner Message="Loading Project..." />
+}
+else
+{
+	<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
+		<div class="p-2">
+			<div class="fw-bold fs-3">@ProjectFolder.Title</div>
+			<div class="text-muted">
+				<span>@ProjectFolder.Description</span>
+				<a class="link-primary" style="font-size: .8em; cursor:pointer">✏️</a>
+			</div>
+			<div><code>@FolderPath</code></div>
+		</div>
+	</div>
+
+	<div class="m-3">
+		<h3>Experiment Folders Scanned (@ProjectFolder.ExperimentFoldersScanned.Length)</h3>
+		<ul>
+			@foreach (string path in ProjectFolder.ExperimentFoldersScanned)
+			{
+				<li><code>@path</code></li>
+			}
+		</ul>
+	</div>
+
+	<div class="m-3">
+		<h3>Experiments Found (@ProjectFolder.Experiments.Length)</h3>
+		<ul>
+			@foreach (ExperimentFolderInfo info in ProjectFolder.Experiments)
+			{
+				<li><a class="fw-bold">@info.Title</a> - @info.Description</li>
+			}
+		</ul>
+	</div>
+
+	<div class="m-3">
+		<h3>
+			Project Notes
+		</h3>
+		<div class="card m-3">
+			<div class="card-header">
+				Note Editor
+			</div>
+			<div class="card-body p-0">
+				<textarea class="form-control m-0 border-0 font-monospace bg-light" style="height: 300px;" placeholder="notes go here" @bind=NotesText></textarea>
+			</div>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter]
+	[SupplyParameterFromQuery]
+	public string FolderPath { get; set; } = string.Empty;
+
+	ProjectFolder? ProjectFolder;
+
+	private string NotesText { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		FolderPath = string.IsNullOrEmpty(FolderPath) ? @"X:/Data" : FolderPath;
+		FolderPath = FolderPath.Replace("/", "\\");
+		string apiUrl = "/api/Project?path=" + FolderPath;
+		ProjectFolder = await Http.GetFromJsonAsync<ProjectFolder>(apiUrl);
+	}
+}

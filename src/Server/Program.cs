@@ -1,8 +1,9 @@
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+builder.Host.ConfigureLogging(logging => logging.AddConsole());
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (args is null || args.Length != 1)
 {

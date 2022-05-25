@@ -6,6 +6,8 @@ public class ExperimentFolder
     public ExperimentFolderInfo Info { get; set; } = new ExperimentFolderInfo();
     public AbfFolder[] AbfFolders { get; set; } = Array.Empty<AbfFolder>();
 
+    // TODO: make a ScanAbfFolders (don't do it automatically)
+
     public override string ToString()
     {
         return $"ABF Experiment ({Info.Title}) with {AbfFolders.Length} subfolders and {AbfFolders.Select(x => x.AbfFilePaths.Length).Sum()} ABFs";
