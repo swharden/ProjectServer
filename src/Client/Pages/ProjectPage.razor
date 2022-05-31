@@ -3,12 +3,6 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<div class="bg-dark text-light p-2">
-	<span>Project Viewer: Dev Mode</span>
-	<span class="mx-3 bg-warning text-dark rounded px-2 py-1"><strong>WARNING:</strong> Edits are only saved in memory (not written to disk)</span>
-	<a href="/">Home</a>
-</div>
-
 @if (ProjectFolder is null)
 {
 	<LoadingSpinner Message="Loading Project..." />
@@ -20,47 +14,68 @@ else
 			<div class="fw-bold fs-3">@ProjectFolder.Title</div>
 			<div class="text-muted">
 				<span>@ProjectFolder.Description</span>
-				<a class="link-primary" style="font-size: .8em; cursor:pointer">✏️</a>
+				<a data-bs-toggle="modal" data-bs-target="#editProjectModal" style="cursor: pointer" @onclick=ProjectEditorOpened>
+					✏️
+				</a>
 			</div>
 			<div><code>@FolderPath</code></div>
 		</div>
 	</div>
 
-	<div class="m-3">
-		<h3>Experiment Folders Scanned (@ProjectFolder.ExperimentFoldersScanned.Length)</h3>
-		<ul>
-			@foreach (string path in ProjectFolder.ExperimentFoldersScanned)
-			{
-				<li><code>@path</code></li>
-			}
-		</ul>
-	</div>
-
-	<div class="m-3">
-		<h3>Experiments Found (@ProjectFolder.Experiments.Length)</h3>
-		<ul>
-			@foreach (ExperimentFolder experiment in ProjectFolder.Experiments)
-			{
-				Console.WriteLine(experiment);
-				Console.WriteLine(experiment.FolderPath);
-				<li><a href="/Experiment?FolderPath=@experiment.FolderPath" class="fw-bold">@experiment.Title</a> - @experiment.Description</li>
-			}
-		</ul>
-	</div>
-
-	<div class="m-3">
-		<h3>
-			Project Notes
-		</h3>
-		<div class="card m-3">
-			<div class="card-header">
-				Note Editor
+	<div class="mx-3 mt-3">
+		<h3>Experiments</h3>
+		<div>Only folders containing <code>experiment.json</code> are shown here.</div>
+		@foreach (ExperimentFolder experiment in ProjectFolder.Experiments)
+		{
+			<div class="mx-3 p-2 my-4 bg-light border rounded shadow-sm" style="border-left: 5px solid #CCC">
+				<div>
+					<a href="/Experiment?FolderPath=@experiment.FolderPath" class="fw-bold">
+						@experiment.Title
+					</a>
+				</div>
+				<div>
+					@experiment.Description
+				</div>
+				<div>
+					<code>@experiment.FolderPath</code>
+				</div>
 			</div>
-			<div class="card-body p-0">
-				<textarea class="form-control m-0 border-0 font-monospace bg-light" style="height: 300px;" placeholder="notes go here" @bind=NotesText></textarea>
+		}
+	</div>
+
+	<div class="mx-3 mt-3">
+		<h3>Folders</h3>
+		<div>Folders here may contain experiments that lack <code>experiment.json</code> describing them.</div>
+		<div>Click a folder to add information required to convert it to an experiment.</div>
+		<ul class="mt-2">
+			@foreach (string folderPath in ProjectFolder.ExperimentFoldersScanned)
+			{
+				string safePath = folderPath.Replace("/", "\\");
+				if (safePath == FolderPath)
+					continue;
+
+				<li>
+					<div class="font-monospace">
+						<a href="/Experiment?FolderPath=@folderPath">
+							@folderPath
+						</a>
+					</div>
+				</li>
+			}
+		</ul>
+	</div>
+
+	@if (!string.IsNullOrWhiteSpace(@NotesText))
+	{
+		<div class="mx-3 mt-5">
+			<h3>Notes</h3>
+			<div class="px-3">
+				<pre>@NotesText</pre>
 			</div>
 		</div>
-	</div>
+	}
+
+	<ProjectEditorModal OnSave=ProjectEditsSaved @ref="EditorModal" />
 }
 
 @code {
@@ -70,13 +85,36 @@ else
 
 	ProjectFolder? ProjectFolder;
 
-	private string NotesText { get; set; } = string.Empty;
+	ProjectEditorModal EditorModal = null!;
+
+	private string NotesText => (ProjectFolder is null) ? "loading..." : ProjectFolder.Notes;
 
 	protected override async Task OnInitializedAsync()
+	{
+		await ReloadProject();
+	}
+
+	async Task ReloadProject()
 	{
 		FolderPath = string.IsNullOrEmpty(FolderPath) ? @"X:/Data" : FolderPath;
 		FolderPath = FolderPath.Replace("/", "\\");
 		string apiUrl = "/api/Project?path=" + FolderPath;
 		ProjectFolder = await Http.GetFromJsonAsync<ProjectFolder>(apiUrl);
+	}
+
+	void ProjectEditorOpened()
+	{
+		if (ProjectFolder is not null)
+			EditorModal.PopulateFields(ProjectFolder);
+	}
+
+	async Task ProjectEditsSaved()
+	{
+		if (ProjectFolder is null)
+			return;
+
+		Shared.DTOs.ProjectInfo info = EditorModal.GetUpdatedInfo();
+		HttpResponseMessage response = await Http.PutAsJsonAsync("/api/Project", info);
+		await ReloadProject();
 	}
 }

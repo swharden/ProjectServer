@@ -20,4 +20,17 @@ public class ProjectController : ControllerBase
         project.ScanAndLoadExperiments();
         return project;
     }
+
+    [HttpPut]
+    public IActionResult Put(Shared.DTOs.ProjectInfo project)
+    {
+        string folderPath = Path.GetFullPath(project.FolderPath.Replace("\\", "/"));
+        if (!Directory.Exists(folderPath))
+            return BadRequest($"folder not found: {folderPath}");
+
+        string jsonFilePath = Path.Combine(folderPath, "project.json");
+        string json = project.ToJson();
+        System.IO.File.WriteAllText(jsonFilePath, json);
+        return NoContent();
+    }
 }
