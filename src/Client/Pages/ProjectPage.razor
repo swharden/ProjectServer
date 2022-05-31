@@ -65,12 +65,12 @@ else
 		</ul>
 	</div>
 
-	@if (!string.IsNullOrWhiteSpace(@NotesText))
+	@if (!string.IsNullOrWhiteSpace(@ProjectFolder.Notes))
 	{
 		<div class="mx-3 mt-5">
 			<h3>Notes</h3>
 			<div class="px-3">
-				<pre>@NotesText</pre>
+				<pre>@ProjectFolder.Notes</pre>
 			</div>
 		</div>
 	}
@@ -86,8 +86,6 @@ else
 	ProjectFolder? ProjectFolder;
 
 	ProjectEditorModal EditorModal = null!;
-
-	private string NotesText => (ProjectFolder is null) ? "loading..." : ProjectFolder.Notes;
 
 	protected override async Task OnInitializedAsync()
 	{

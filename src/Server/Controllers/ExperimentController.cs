@@ -16,9 +16,21 @@ public class ExperimentController : ControllerBase
     [HttpGet]
     public Shared.ExperimentFolder Get(string? path, bool? scan = true)
     {
-        Shared.ExperimentFolder experiment = Shared.ExperimentFolder.FromFolderPath(path ?? "X:/", scan ?? true);
-        if (string.IsNullOrWhiteSpace(experiment.FolderPath))
-            throw new InvalidOperationException();
-        return experiment;
+        return Shared.ExperimentFolder.FromFolderPath(
+            folderPath: path ?? "X:/",
+            scanAbfs: scan ?? true);
+    }
+
+    [HttpPut]
+    public IActionResult Put(Shared.DTOs.ExperimentInfo experiment)
+    {
+        string folderPath = Path.GetFullPath(experiment.FolderPath.Replace("\\", "/"));
+        if (!Directory.Exists(folderPath))
+            return BadRequest($"folder not found: {folderPath}");
+
+        string jsonFilePath = Path.Combine(folderPath, "experiment.json");
+        string json = experiment.ToJson();
+        System.IO.File.WriteAllText(jsonFilePath, json);
+        return NoContent();
     }
 }

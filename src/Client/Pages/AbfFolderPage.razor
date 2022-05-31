@@ -12,10 +12,14 @@
 </div>
 
 <header style="background-color: #EEEEEE;">
-	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder Loading=@Loading />
+	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder />
 </header>
 
-@if (SelectedFolder is not null)
+@if (SelectedFolder is null)
+{
+	<LoadingSpinner Message="Loading Folder..." />
+}
+else
 {
 	@if (@IsAbfFolder)
 	{
@@ -63,9 +67,6 @@
 
 	private bool IsAbfFolder => (SelectedFolder is not null && SelectedFolder.AbfFilePaths.Any());
 
-	private bool Loading { get; set; } = true;
-	private double LoadTimeMilliseconds { get; set; } = 0;
-
 	protected override async Task OnInitializedAsync()
 	{
 		string initialPath = string.IsNullOrEmpty(FolderPath) ? @"X:/Data" : FolderPath;
@@ -81,14 +82,11 @@
 	private async Task LoadFolder(string path)
 	{
 		var sw = System.Diagnostics.Stopwatch.StartNew();
-		Loading = true;
 		FolderPath = path.Replace("/", "\\");
 		string apiUrl = "/api/AbfFolder?path=" + FolderPath;
 		SelectedFolder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
 		NavigationManager.NavigateTo(NavigationManager.Uri + $"?FolderPath={FolderPath}");
-		Loading = false;
 		SelectedParent = null;
-		LoadTimeMilliseconds = Math.Round(sw.Elapsed.TotalMilliseconds, 3);
 		StateHasChanged();
 	}
 

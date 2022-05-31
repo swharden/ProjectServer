@@ -27,26 +27,18 @@ public class ExperimentFolder
         };
 
         string jsonFilePath = Path.Combine(folderPath, "experiment.json");
-        if (File.Exists(jsonFilePath))
-        {
-            ExperimentFolder exp = ExperimentFolder.LoadJsonFile(jsonFilePath);
-            experiment.Title = exp.Title;
-            experiment.Description = exp.Notes;
-            experiment.Notes = exp.Notes;
-        }
-        else
-        {
-            experiment.Title = "no JSON file";
-            experiment.Description = jsonFilePath;
-        }
+        if (!File.Exists(jsonFilePath))
+            return experiment;
+
+        string json = File.ReadAllText(jsonFilePath);
+
+        DTOs.ExperimentInfo exp = DTOs.ExperimentInfo.FromJson(json);
+        experiment.Title = exp.Title;
+        experiment.Description = exp.Description;
+        experiment.Notes = exp.Notes;
 
         if (scanAbfs)
-        {
             experiment.ScanAbfFolders();
-        }
-
-        if (string.IsNullOrWhiteSpace(experiment.FolderPath))
-            throw new InvalidOperationException();
 
         return experiment;
     }

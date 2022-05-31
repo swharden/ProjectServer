@@ -31,10 +31,6 @@
 				</div>
 			}
 		</div>
-
-		<div class="spinner-border mx-3 my-2 text-primary" role="status" style="visibility: @SpinnerVisibility;">
-			<span class="visually-hidden">Loading...</span>
-		</div>
 	</div>
 
 </div>
@@ -48,12 +44,6 @@
 	[Parameter]
 	[EditorRequired]
 	public EventCallback<string> OnPathChangedCallback { get; set; }
-
-	[Parameter]
-	[EditorRequired]
-	public bool Loading { get; set; } = true;
-
-	public string SpinnerVisibility => Loading ? "visible" : "hidden";
 
 	private string[] GetSubFolderNames()
 	{
