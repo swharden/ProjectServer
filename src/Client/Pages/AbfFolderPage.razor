@@ -5,31 +5,27 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
-<div class="bg-dark text-light p-2">
-	<span>ABF Folder Browser: Dev Mode</span>
-	<span class="mx-3 bg-warning text-dark rounded px-2 py-1"><strong>WARNING:</strong> Edits are only saved in memory (not written to disk)</span>
-	<a href="/">Home</a>
-</div>
-
-<header style="background-color: #EEEEEE;">
-	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder />
-</header>
+<PageTitle>ABF Folder</PageTitle>
 
 @if (SelectedFolder is null)
 {
-	<LoadingSpinner Message="Loading Folder..." />
+	<LoadingSpinner Message="Loading ABF Folder..." />
 }
 else
 {
+	<FolderNavigator OnPathChangedCallback=LoadFolder AbfFolder=@SelectedFolder />
+
 	@if (@IsAbfFolder)
 	{
 		<!-- two-column layout where content of the first two elements can independently scroll vertically -->
 		<div style="display: grid; grid-template-rows: auto; grid-template-columns: 250px auto;">
 
-			<nav class="ps-2" style="height: 80vh; overflow-x:hidden; overflow-y: auto; overflow: auto;">
+			<!-- LEFT SIDE OF PAGE -->
+			<nav style="height: 80vh; overflow-x:hidden; overflow-y: auto; overflow: auto;">
 				<ParentList AbfParents=AbfParents OnAbfSelectedCallback=SelectParent />
 			</nav>
 
+			<!-- RIGHT SIDE OF PAGE -->
 			<main>
 				@if (SelectedParent is null)
 				{
@@ -47,10 +43,6 @@ else
 			</main>
 
 		</div>
-	}
-	else
-	{
-		<div class="m-3 text-muted">This folder does not contain ABF files.</div>
 	}
 }
 

@@ -3,28 +3,36 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+<PageTitle>Project</PageTitle>
+
 @if (ProjectFolder is null)
 {
 	<LoadingSpinner Message="Loading Project..." />
 }
 else
 {
-	<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
+	<div class="px-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
 		<div class="p-2">
-			<div class="fw-bold fs-3">@ProjectFolder.Title</div>
-			<div class="text-muted">
-				<span>@ProjectFolder.Description</span>
-				<a data-bs-toggle="modal" data-bs-target="#editProjectModal" style="cursor: pointer" @onclick=ProjectEditorOpened>
-					✏️
-				</a>
+
+			<div class="d-flex justify-content-between">
+				<div>
+					<strong>@ProjectFolder.Title</strong>
+					<a data-bs-toggle="modal" data-bs-target="#editProjectModal" style="cursor: pointer" @onclick=ProjectEditorOpened>
+						✏️
+					</a>
+				</div>
+				<a href="/">Home Page</a>
 			</div>
+
+			<div>
+				<span>@ProjectFolder.Description</span>
+			</div>
+
 			<div><code>@FolderPath</code></div>
 		</div>
 	</div>
 
 	<div class="mx-3 mt-3">
-		<h3>Experiments</h3>
-		<div>Only folders containing <code>experiment.json</code> are shown here.</div>
 		@foreach (ExperimentFolder experiment in ProjectFolder.Experiments)
 		{
 			<div class="mx-3 p-2 my-4 bg-light border rounded shadow-sm" style="border-left: 5px solid #CCC">
@@ -41,28 +49,6 @@ else
 				</div>
 			</div>
 		}
-	</div>
-
-	<div class="mx-3 mt-3">
-		<h3>Folders</h3>
-		<div>Folders here may contain experiments that lack <code>experiment.json</code> describing them.</div>
-		<div>Click a folder to add information required to convert it to an experiment.</div>
-		<ul class="mt-2">
-			@foreach (string folderPath in ProjectFolder.ExperimentFoldersScanned)
-			{
-				string safePath = folderPath.Replace("/", "\\");
-				if (safePath == FolderPath)
-					continue;
-
-				<li>
-					<div class="font-monospace">
-						<a href="/Experiment?FolderPath=@folderPath">
-							@folderPath
-						</a>
-					</div>
-				</li>
-			}
-		</ul>
 	</div>
 
 	@if (!string.IsNullOrWhiteSpace(@ProjectFolder.Notes))

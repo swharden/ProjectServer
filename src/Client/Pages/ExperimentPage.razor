@@ -3,45 +3,48 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 
+<PageTitle>Experiment</PageTitle>
+
 @if (ExperimentFolder is null)
 {
-	<LoadingSpinner Message="Loading Experiment..." />
+	<LoadingSpinner Message="Loading Multi-Folder Experiment..." />
 }
 else
 {
-	<div class="px-2 pb-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
-		<div class="p-2">
-			<div class="fw-bold fs-3">@ExperimentFolder.Title</div>
-			<div class="text-muted">
-				@ExperimentFolder.Description
+	<div class="px-2" style="background-color: #EEEEEE; border-bottom: 1px solid #CCCCCC">
+
+		<div class="d-flex justify-content-between">
+			<div class="fw-bold">
+				@ExperimentFolder.Title
 				<a data-bs-toggle="modal" data-bs-target="#editExperimentModal" style="cursor: pointer" @onclick=ExperimentEditorOpened>
 					✏️
 				</a>
 			</div>
-
 			<div>
-				<code>@FolderPath</code>
+				<a href="/">Home Page</a>
 			</div>
 		</div>
-	</div>
 
-	<div class="m-3">
-		<h3 class="">Experiment Notes</h3>
-		<div class="mt-3">
+		<div>
+			@ExperimentFolder.Description
+		</div>
+
+		<div>
+			<code>@FolderPath</code>
+		</div>
+
+		<div class="text-muted">
 			<pre class="font-monospace my-1">@ExperimentFolder.Notes</pre>
 		</div>
 	</div>
 
-	<div class="m-3">
-		<h3>Grouped Cells</h3>
-		<div>
-			Group by:
-			<select @bind=View>
-				<option value=@ViewType.ByDay>Day</option>
-				<option value=@ViewType.ByColor>Color</option>
-				<option value=@ViewType.ByTag>Tag</option>
-			</select>
-		</div>
+	<div class="m-2">
+		Group by:
+		<select @bind=View>
+			<option value=@ViewType.ByDay>Day</option>
+			<option value=@ViewType.ByColor>Color</option>
+			<option value=@ViewType.ByTag>Tag</option>
+		</select>
 	</div>
 
 	<ExperimentEditorModal OnSave=ExperimentEditsSaved @ref="EditorModal" />
@@ -60,17 +63,15 @@ else
 }
 else if (View == ViewType.ByTag)
 {
-	HashSet<string> tags = new();
-	foreach (var parent in AllParents)
-		foreach (var tag in parent.Tags)
-			tags.Add(tag);
-
-	foreach (string tag in tags.OrderBy(x => x))
+	foreach (string tag in GetUniqueTags())
 	{
 		if (string.IsNullOrWhiteSpace(tag))
 		{
-			AbfParent[] parentsWithoutTags = AllParents.Where(x => !x.Tags.Any()).ToArray();
-			<AbfParentsCard AbfParents=@parentsWithoutTags Title="No Tag" ShowSetpath=true />
+			AbfParent[] parentsWithoutTags = AllParents.Where(x => x.Tags is null || x.Tags.Length == 0).ToArray();
+			if (parentsWithoutTags.Any())
+			{
+				<AbfParentsCard AbfParents=@parentsWithoutTags Title="No Tag" ShowSetpath=true />
+			}
 		}
 		else
 		{
@@ -109,6 +110,17 @@ else
 	public AbfParent[] AllParents => (ExperimentFolder is null)
 		? Array.Empty<AbfParent>()
 		: ExperimentFolder.AbfFolders.SelectMany(x => x.AbfParents).ToArray();
+
+	private string[] GetUniqueTags()
+	{
+		HashSet<string> tags = new();
+
+		foreach (AbfParent parent in AllParents)
+			foreach (string tag in parent.Tags)
+				tags.Add(tag);
+
+		return tags.OrderBy(x => x).ToArray();
+	}
 
 	protected override async Task OnInitializedAsync()
 	{

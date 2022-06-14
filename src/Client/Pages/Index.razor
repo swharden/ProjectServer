@@ -1,45 +1,21 @@
 ﻿@page "/"
 
-<PageTitle>Project Server</PageTitle>
-
-<div class="bg-dark text-light">
-	<div class="container">
-		<div class="fs-1 py-2">
-			Project Server
-		</div>
-	</div>
-</div>
+<PageTitle>Project List</PageTitle>
 
 <div class="container my-5">
 
-	<div class="mt-5 fs-3 fw-bold lh-1">Traditional ABF Browser</div>
-	<div><i>For navigating ABFs in a single folder.</i></div>
-	<div><i>This may be the <mark>best view at rig time</mark>.</i></div>
+	<h1>Projects</h1>
+
+	<div class="mt-5"><strong>New ACh project</strong> (daily folders)</div>
 	<ul>
-		<li><a href="/AbfFolder?FolderPath=X:\Data\F344\Aging BLA\basal excitability round2\abfs\">Old BLA project</a> (large folder)</li>
-		<li><a href="/AbfFolder?FolderPath=X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)">Cholinergics</a> (daily folders) - best example for daily notes</li>
-		<li><a href="/AbfFolder?FolderPath=X:\Data\zProjects\Aging and eCBs\experiments\CA1\DSI\">CA1 DSI</a> (daily folders)</li>
+		<li><a href='/AbfFolder?FolderPath=X:\Data\zProjects\Aging%20and%20Cholinergics\experiments\10%20uM%20CCh%20(bath%20app)\2022-06-09-DIC2'>daily folder view</a></li>
+		<li><a href='/Experiment?FolderPath=X:\Data\zProjects\Aging%20and%20Cholinergics\experiments\10%20uM%20CCh%20(bath%20app)'>experiment view</a></li>
+		<li><a href='/Project?FolderPath=X:\Data\zProjects\Aging%20and%20Cholinergics'>project view</a></li>
 	</ul>
 
-	<div class="mt-5 fs-3 fw-bold lh-1">Experiment Viewer</div>
-	<div><i>Experiment folders have <code>experiment.json</code> and daily subfolders containing ABFs.</i></div>
-	<div><i>This viewer has <mark>grouping tools</mark> to span across multiple folders.</i></div>
-	<div><i>This may be the <mark>best view at analysis time</mark>.</i></div>
+	<div class="mt-5"><strong>Old ACh project</strong> (one huge folder)</div>
 	<ul>
-		<li><a href="/Experiment?FolderPath=X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)">ACh</a></li>
-		<li><a href="/Experiment?FolderPath=X:\Data\zProjects\Aging and eCBs\experiments\CA1\DSI">CA1</a></li>
-	</ul>
-
-	<div class="mt-5 fs-3 fw-bold lh-1">Project Viewer</div>
-	<div><i>Project folders have <code>project.json</code> and contain multiple experiments.</i></div>
-	<div><i>This viewer provides links to all experiments for a project.</i></div>
-	<div><i>This may be the <mark>best view for inspecting a project</mark> if you don't know much about it.</i></div>
-	<ul>
-		<li><a href="/Project?FolderPath=X:\Data\zProjects\Aging and Cholinergics">Aging and Cholinergics</a></li>
-		<li><a href="/Project?FolderPath=X:\Data\zProjects\Aging and eCBs">Aging and eCBs</a></li>
-		<li><a href="/Project?FolderPath=X:\Data\zProjects\Aging and SB">Aging and SB</a></li>
-		<li><a href="/Project?FolderPath=X:\Data\zProjects\Oxytocin Biosensor">Oxytocin Biosensor</a></li>
-		<li><a href="/Project?FolderPath=X:\Data\zProjects\Oxytocin Sensitivity of Cultured NG cells">Oxytocin Sensitivity of Cultured NG cells</a></li>
+		<li><a href='/AbfFolder?FolderPath=X:\Data\F344\Aging%20BLA\basal%20excitability%20round2\abfs\'>folder view</a></li>
 	</ul>
 
 </div>

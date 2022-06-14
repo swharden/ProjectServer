@@ -1,8 +1,10 @@
 ﻿@using ProjectServer.Shared
 
 
-<div class="my-2">
-	<button class="btn btn-primary btn-sm" @onclick=ShowExperimentNotes>Experiment Notes</button>
+<div class="m-2">
+	<a style="color: blue;" href="" @onclick:preventDefault @onclick=ShowExperimentNotes>
+		<strong>Notes 📝</strong>
+	</a>
 </div>
 
 @foreach (string group in AbfParents.SelectMany(x => x.Tags).Append("Unclassified").Distinct().OrderBy(x => x))
@@ -12,17 +14,19 @@
 	if (!matchingParents.Any())
 		continue;
 
-	<div class="py-2">
-		<div class="lh-1" style="font-family: 'Arial Narrow'; font-weight: 600;">
+	<div class="pb-4">
+
+		<div class="lh-1 ms-2" style="font-family: 'Arial Narrow'; font-weight: 600;">
 			@group
 		</div>
+
 		@foreach (AbfParent parent in matchingParents)
 		{
 			string visibility = (parent.AbfFilePath == SelectedParent?.AbfFilePath) ? "visible" : "hidden";
 
 			<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
-				<!--  
-					choose an arrow shape from here: https://www.toptal.com/designers/htmlarrows/arrows/ 
+				<!--
+					choose an arrow shape from here: https://www.toptal.com/designers/htmlarrows/arrows/
 					Options I like include: »➧➲➳➾→⇒⇛⇨⤳⥤➛➔➜➛➤➥🔎👉▶
 				-->
 				<span class="fw-bold font-monospace" style="visibility: @visibility">»</span>
