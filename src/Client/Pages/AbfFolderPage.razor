@@ -77,7 +77,8 @@ else
 		FolderPath = path.Replace("/", "\\");
 		string apiUrl = "/api/AbfFolder?path=" + FolderPath;
 		SelectedFolder = await Http.GetFromJsonAsync<AbfFolder>(apiUrl);
-		NavigationManager.NavigateTo(NavigationManager.Uri + $"?FolderPath={FolderPath}");
+		string newUrl = NavigationManager.GetUriWithQueryParameter("FolderPath", FolderPath);
+		NavigationManager.NavigateTo(newUrl);
 		SelectedParent = null;
 		StateHasChanged();
 	}
