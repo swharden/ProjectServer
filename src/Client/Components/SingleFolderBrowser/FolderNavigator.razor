@@ -1,15 +1,16 @@
 ﻿@using ProjectServer.Shared
 @inject HttpClient Http
+@inject IJSRuntime JSRuntime
 
-<div class="bg-light border-bottom px-2">
+<div>
 
-	<div class="d-flex justify-content-between">
+	<div class="bg-dark text-light p-2">
 		<strong>ABF Folder</strong>
-		<a href='/'>Home Page</a>
+		<a class="ms-3" href='#' onclick="@GetCopyJS()" @onclick:preventDefault>Copy Path</a>
+		<a class="ms-3" href='/'>Home Page</a>
 	</div>
 
-	<div class="d-flex">
-
+	<div class="p-2 d-flex" style="background-color: #f1f1f1;">
 		<div class="font-monospace">
 			@foreach (string path in GetChildPaths())
 			{
@@ -23,6 +24,7 @@
 			}
 		</div>
 	</div>
+
 </div>
 
 <div>
@@ -81,5 +83,14 @@
 			path = Path.GetDirectoryName(path) ?? string.Empty;
 		}
 		return paths.Where(x => !string.IsNullOrWhiteSpace(Path.GetFileName(x))).ToArray();
+	}
+
+	private string GetCopyJS()
+	{
+		if (AbfFolder is null)
+			return string.Empty;
+
+		string text = AbfFolder.FolderPath.Replace("\\", "/");
+		return $"navigator.clipboard.writeText('{text}')";
 	}
 }
