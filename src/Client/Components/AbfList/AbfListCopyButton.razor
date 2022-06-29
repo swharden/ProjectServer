@@ -1,6 +1,4 @@
-﻿@inject IJSRuntime JSRuntime
-
-<button onclick="@GetOnClickJS()" class="small-gray-button">
+﻿<button onclick="@GetCopyJS()" class="small-gray-button">
 	@Label
 </button>
 
@@ -13,13 +11,7 @@
 	[EditorRequired]
 	public string Data { get; set; } = string.Empty;
 
-	private async Task OnClick()
-	{
-		await JSRuntime.InvokeVoidAsync("clipboardCopy.copyText", Data);
-		Console.WriteLine($"copied: {Data}");
-	}
-
-	private string GetOnClickJS()
+	private string GetCopyJS()
 	{
 		string safePath = Data.Replace("\\", "/");
 		return $"navigator.clipboard.writeText('{safePath}')";

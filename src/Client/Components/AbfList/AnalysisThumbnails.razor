@@ -4,7 +4,7 @@
 
 @foreach (string imagePath in AbfParent.ChildImagePaths)
 {
-	string url = imagePath.Replace("X:", "http://192.168.1.9/X").Replace("\\", "/");
+	string url = "/api/ImageFile/?path=" + imagePath;
 	<a href=@url target="_blank">
 		<img src=@url style="height: 200px; border: 1px solid black; margin: 10px; box-shadow: 5px 5px 10px rgb(0 0 0 / 20%)" />
 	</a>
