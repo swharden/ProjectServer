@@ -39,3 +39,9 @@ img {
 .info-comment {
     font-family: Arial, sans-serif;
 }
+
+.tag {
+    background-color: #CCC;
+    margin: 3px;
+    border-radius: 1em;
+}

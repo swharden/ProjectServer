@@ -3,13 +3,26 @@
 	string ArrowVisibility = (parent == SelectedParent) ? "visible" : "hidden";
 
 	<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+
+		<!-- selected arrow -->
 		<span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
+
+		<!-- clickable AbfID -->
 		<a href="" @onclick:preventDefault @onclick="()=>SelectParent(parent)" class="font-monospace" style="background-color: @parent.Color; color: blue;">
 			@parent.AbfID
 		</a>
+
+		<!-- child count -->
 		<span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfCount</span>
+
+		<!-- tags -->
+		@foreach (string tag in parent.Tags)
+		{
+			<div class="tag">@tag</div>
+		}
+
+		<!-- comment -->
 		<span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
-		<!-- TODO: show tags -->
 	</div>
 
 }

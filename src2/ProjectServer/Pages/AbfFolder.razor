@@ -56,7 +56,7 @@
 	{
 		@if (SelectedParent is not null)
 		{
-			<CellDetails Parent=@SelectedParent />
+			<CellDetails Parent=@SelectedParent OnInfoChanged=@OnInfoChanged />
 		}
 		else
 		{
@@ -134,5 +134,13 @@
 	private void OnSelectParent(AbfParentInfo parent)
 	{
 		SelectedParent = parent;
+	}
+
+	/// <summary>
+	/// Called when cells.txt has been modified
+	/// </summary>
+	private void OnInfoChanged()
+	{
+		
 	}
 }
