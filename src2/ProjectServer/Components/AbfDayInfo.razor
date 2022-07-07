@@ -1,0 +1,191 @@
+﻿<div class="px-4 py-3 m-0">
+
+	<div class="mb-3">
+		<div class="fs-3 fw-bolder">ABF Day Notes</div>
+		<div style="font-size: .8em; opacity: .5;">@ExperimentFilePath</div>
+		@if (!ExperimentFileExists)
+		{
+			<div class="my-3"><mark>WARNING: file does not exist!</mark></div>
+		}
+	</div>
+
+	<div class="row">
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Species</span>
+				<input type="text" class="form-control" @bind=EditSpecies>
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Strain</span>
+				<input type="text" class="form-control" @bind="@EditStrain">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Date</span>
+				<input type="text" class="form-control" @bind="@EditDate">
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Genotype</span>
+				<input type="text" class="form-control" @bind="@EditGenotype">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">DOB</span>
+				<input type="text" class="form-control" @bind="@EditDOB">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Sex</span>
+				<input type="text" class="form-control" @bind="@EditSex">
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Rig</span>
+				<input type="text" class="form-control" @bind="@EditRig">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Experimenter</span>
+				<input type="text" class="form-control" @bind="@EditExperimenter">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Internal</span>
+				<input type="text" class="form-control" @bind="@EditInternal">
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">External</span>
+				<input type="text" class="form-control" @bind="@EditExternal">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Cage Card</span>
+				<input type="text" class="form-control" @bind="@EditCageCard">
+			</div>
+		</div>
+
+		<div class="col-md">
+			<div class="input-group mb-3 input-group col-3">
+				<span class="input-group-text" id="basic-addon1">Intervention</span>
+				<input type="text" class="form-control" @bind="@EditIntervention">
+			</div>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-header" style="background-color: #e9ecef;">
+			Additional Notes
+		</div>
+		<div class="card-body p-0">
+			<textarea class="form-control m-0 border-0" style="height: 300px;" @bind=EditNotes></textarea>
+		</div>
+	</div>
+
+	<div class="text-end my-3">
+		<button class="btn btn-secondary me-2" @onclick=LoadFromFile>Previous</button>
+		<button class="btn btn-secondary me-2" @onclick=LoadFromFile>Reload</button>
+		<button class="btn btn-primary me-2" @onclick=SaveToFile>Save</button>
+	</div>
+</div>
+
+
+@code {
+	[Parameter, EditorRequired]
+	public string FolderPath { get; set; } = string.Empty;
+
+	private string ExperimentFilePath => Path.Combine(FolderPath, "experiment.txt");
+	private bool ExperimentFileExists => File.Exists(ExperimentFilePath);
+
+	private string EditSpecies { get; set; } = string.Empty;
+
+	private string EditStrain { get; set; } = string.Empty;
+
+	private string EditDate { get; set; } = string.Empty;
+
+	private string EditGenotype { get; set; } = string.Empty;
+
+	private string EditDOB { get; set; } = string.Empty;
+
+	private string EditSex { get; set; } = string.Empty;
+
+	private string EditRig { get; set; } = string.Empty;
+
+	private string EditExperimenter { get; set; } = string.Empty;
+
+	private string EditInternal { get; set; } = string.Empty;
+
+	private string EditExternal { get; set; } = string.Empty;
+
+	private string EditCageCard { get; set; } = string.Empty;
+
+	private string EditIntervention { get; set; } = string.Empty;
+
+	private string EditNotes { get; set; } = string.Empty;
+
+	protected override void OnInitialized()
+	{
+		LoadFromFile();
+	}
+
+	private void LoadFromFile()
+	{
+		if (ExperimentFileExists)
+		{
+			string raw = File.ReadAllText(ExperimentFilePath);
+
+			AbfDayNotes notes = AbfDayNotes.FromTxt(raw);
+			EditSpecies = notes.Species;
+			EditStrain = notes.Strain;
+			EditDate = notes.Date;
+			EditGenotype = notes.Genotype;
+			EditDOB = notes.DOB;
+			EditSex = notes.Sex;
+			EditRig = notes.Rig;
+			EditExperimenter = notes.Experimenter;
+			EditInternal = notes.Internal;
+			EditExternal = notes.External;
+			EditCageCard = notes.CageCard;
+			EditIntervention = notes.Intervention;
+			EditNotes = notes.Notes;
+		}
+	}
+
+	private void SaveToFile()
+	{
+
+	}
+
+	private void LoadPreviousDay()
+	{
+		
+	}
+}

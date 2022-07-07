@@ -51,13 +51,21 @@
 	}
 </nav>
 
-<main class="">
-	@if (SelectedParent is not null)
+<main>
+	@if (IsAbfFolder)
 	{
-		<CellDetails Parent=@SelectedParent />
-	} else
+		@if (SelectedParent is not null)
+		{
+			<CellDetails Parent=@SelectedParent />
+		}
+		else
+		{
+			<AbfDayInfo FolderPath=@FolderPath />
+		}
+	}
+	else
 	{
-		<h2 class="p-2">ABF not selected</h2>
+		<h2 class="p-2">Folder does not contain ABF files</h2>
 	}
 </main>
 
