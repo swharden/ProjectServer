@@ -1,0 +1,102 @@
+﻿
+<div class="" style="background-color: @Parent.Color">
+	<div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
+</div>
+
+<div class="p-2" style="background-color: #e6e6e6;">
+
+	<!-- colors -->
+	@foreach (string color in CellsFile.GetDefaultColors())
+	{
+		string thisColor = color;
+		<div class="px-2 me-1 mt-1 mb-2 d-inline-block" style="background-color: @color; border: 1px solid #bebebe;">
+			<input class="form-check-input p-0"
+			   style="margin: 10px 3px;"
+			   type="radio"
+			   name="radioColor" />
+		</div>
+	}
+
+	<!-- comments -->
+	<div class="d-flex" style="width: 550px;">
+		<input type="text" class="flex-fill form-control form-control-sm d-inline-block" placeholder="comment">
+		<button type="button" class="flex-fill btn btn-primary btn-sm ms-2" onclick="@(async () => {await Save();})">Save</button>
+		<button type="button" class="flex-fill btn btn-secondary btn-sm ms-2" @onclick=Reset>Cancel</button>
+	</div>
+
+	<!-- tags -->
+	<div class="mt-2">
+		<input type="text" class="form-control form-control-sm d-inline-block" placeholder="tag" style="width: 200px;">
+		<button type="button" class="flex-fill btn btn-primary btn-sm me-1" onclick="@(async () => {await AddTag();})">Add Tag</button>
+		@foreach (string tag in @Parent.Tags)
+		{
+			<span class="badge rounded-pill text-bg-secondary mx-1">
+				<span>@tag</span>
+				<span style="cursor: pointer" onclick="@(async ()=>{await DeleteTag(tag);})">❌</span>
+			</span>
+		}
+	</div>
+</div>
+
+<!-- list of child ABFs -->
+@foreach (string abfPath in Parent.ChildAbfPaths)
+{
+	Domain.AbfInfo abf = Domain.AbfInfo.FromAbf(abfPath);
+
+	<div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
+		<span class="font-monospace">@abf.AbfID</span>
+
+		<button class="button-small">copy path</button>
+		<button class="button-small">setpath</button>
+		<button class="button-small">ignore</button>
+
+		<span class="font-monospace">@abf.Protocol</span>
+
+		<span class="info-light">
+			| sweeps: @abf.SweepCount
+			| sweep length: @abf.SweepLengthSec sec
+		</span>
+		@if (abf.HasComments)
+		{
+			<span class="info-light">
+				| Comments:
+			</span>
+			<span class="info-comment">
+				<strong>@abf.Comments</strong>
+			</span>
+		}
+	</div>
+}
+
+<!-- analysis images for all child ABFs -->
+@foreach (string imagePath in Parent.GetAnalysisImagePaths())
+{
+	string url = $"/image?path={imagePath}";
+	<a href=@url target="_blank"><img src=@url /></a>
+}
+
+@code {
+	[Parameter, EditorRequired]
+	public AbfParentInfo Parent { get; set; } = null!;
+
+
+	private async Task Save()
+	{
+
+	}
+
+	private async Task Reset()
+	{
+
+	}
+
+	private async Task AddTag()
+	{
+
+	}
+
+	private async Task DeleteTag(string tag)
+	{
+
+	}
+}

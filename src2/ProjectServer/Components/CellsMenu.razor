@@ -1,0 +1,38 @@
+﻿@foreach (AbfParentInfo parent in Parents)
+{
+	string ArrowVisibility = (parent == SelectedParent) ? "visible" : "hidden";
+
+	<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+		<span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
+		<a href="" @onclick:preventDefault @onclick="()=>SelectParent(parent)" class="font-monospace" style="background-color: @parent.Color; color: blue;">
+			@parent.AbfID
+		</a>
+		<span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfCount</span>
+		<span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
+		<!-- TODO: show tags -->
+	</div>
+
+}
+
+@code {
+	[Parameter, EditorRequired]
+	public string FolderPath { get; set; } = string.Empty;
+
+	[Parameter, EditorRequired]
+	public EventCallback<AbfParentInfo> OnSelectParent { get; set; }
+
+	private Domain.AbfParentInfo[] Parents = Array.Empty<Domain.AbfParentInfo>();
+
+	private Domain.AbfParentInfo? SelectedParent = null;
+
+	protected override void OnInitialized()
+	{
+		Parents = Domain.CellsFile.Load(FolderPath);
+	}
+
+	private void SelectParent(AbfParentInfo parent)
+	{
+		SelectedParent = parent;
+		OnSelectParent.InvokeAsync(parent);
+	}
+}

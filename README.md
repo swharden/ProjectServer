@@ -9,3 +9,5 @@ In this repository you will find remnants of multiple iterations of this project
 * ReactJS frontend and PHP backend
 
 * Blazor WebAssembly frontend and .NET Core backend
+
+* Server-Side Blazor
