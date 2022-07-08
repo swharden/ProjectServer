@@ -1,0 +1,7 @@
+2022_05_09_0000 b unstable
+2022_05_09_0002 b unstable
+2022_05_09_0009 g Full effect experiment
+2022_05_09_0026 w high Ra before drug, but Full effect experiment.
+2022_05_09_0042 g Full effect experiment
+2022_05_09_0058 g Full effect experiment
+2022_05_09_0074 g Cell went into i=0 mode by mistake.

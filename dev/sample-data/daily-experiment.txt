@@ -1,0 +1,21 @@
+species: Rat
+strain: anonymous hybrid
+genotype: N/A
+sex: FEMALE
+DOB:? "22 months"
+rig: DIC2
+experimenter: ABC
+internal: BK11 (BAPTA)
+external: ACSF with (bath applied) APV (40 uM), DNQX (20 uM), PTX (100 uM), and CGP (10 uM)
+
+Cage Card: 123456789
+PI: Anonymous Person
+Protocol: 123456789
+Requisition: 12345
+Age/Wt: 22 months
+Species: Rat
+S/S/B: anonymous hybrid
+Receive date: 04/26/22
+Transfer date: 04/26/22
+Birthdate: N/A
+Sex: female

@@ -1,0 +1,22 @@
+# comment lines should be ignored
+# comment lines should be ignored
+
+# ABFs 0-4 are orphan
+
+# these have no heading
+2022_01_03_0005 g1 comment
+2022_01_03_0010 g1 comment
+
+--- heading 1
+2022_01_03_0015 g1 comment
+2022_01_03_0020 g1 comment
+2022_01_03_0025 g1 comment
+2022_01_03_0030 g1 comment
+
+--- heading 2
+2022_01_03_0035 g1 comment
+2022_01_03_0040 g1 comment
+
+# comment lines should be ignored
+# comment lines should be ignored
+# comment lines should be ignored
