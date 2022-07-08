@@ -1,7 +1,8 @@
 ﻿namespace ProjectServer.Domain
 {
     /// <summary>
-    /// Information traditionally stored in cells.txt
+    /// Information about a parent and all of its children.
+    /// This class is only used to bundle details together for displaying things on the website.
     /// </summary>
     public class AbfParentInfo
     {

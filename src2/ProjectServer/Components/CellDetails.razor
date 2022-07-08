@@ -1,132 +1,132 @@
 ﻿
 <div class="" style="background-color: @Parent.Color">
-	<div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
+    <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
 </div>
 
 <div class="p-2" style="background-color: #e6e6e6;">
 
-	<!-- colors -->
-	@foreach (string color in CellsFile.GetDefaultColors())
-	{
-		string thisColor = color;
-		<div class="px-2 me-1 mt-1 mb-2 d-inline-block" style="background-color: @color; border: 1px solid #bebebe;">
-			<input class="form-check-input p-0"
-			   style="margin: 10px 3px;"
-			   type="radio"
-			   name="radioColor" />
-		</div>
-	}
+    <!-- colors -->
+    @foreach (string color in Core.CellsFile.KnownColors.Values)
+    {
+        string thisColor = color;
+        <div class="px-2 me-1 mt-1 mb-2 d-inline-block" style="background-color: @color; border: 1px solid #bebebe;">
+            <input class="form-check-input p-0"
+               style="margin: 10px 3px;"
+               type="radio"
+               name="radioColor" />
+        </div>
+    }
 
-	<!-- comments -->
-	<div class="d-flex" style="width: 520px;">
-		<input type="text" class="flex-fill form-control form-control-sm d-inline-block" placeholder="comment" @bind=EditComment>
-		<button type="button" class="flex-fill btn btn-primary btn-sm ms-2" @onclick=SaveChanges>Save</button>
-	</div>
+    <!-- comments -->
+    <div class="d-flex" style="width: 520px;">
+        <input type="text" class="flex-fill form-control form-control-sm d-inline-block" placeholder="comment" @bind=EditComment>
+        <button type="button" class="flex-fill btn btn-primary btn-sm ms-2" @onclick=SaveChanges>Save</button>
+    </div>
 
-	<!-- tags -->
-	<div class="mt-2">
-		<div class="d-inline-block">
-			<input type="text" class="form-control form-control-sm d-inline-block" placeholder="tag" style="width: 200px;" @bind=EditTag>
-			<button type="button" class="flex-fill btn btn-primary btn-sm me-1" @onclick=AddTag>Add Tag</button>
-		</div>
-		@foreach (string tag in @Tags)
-		{
-			<div class="tag px-2 d-inline-block">
-				<div class="d-inline-block">@tag</div>
-				<div class="d-inline-block" style="cursor: pointer" @onclick="()=>DeleteTag(tag)">❌</div>
-			</div>
-		}
-	</div>
+    <!-- tags -->
+    <div class="mt-2">
+        <div class="d-inline-block">
+            <input type="text" class="form-control form-control-sm d-inline-block" placeholder="tag" style="width: 200px;" @bind=EditTag>
+            <button type="button" class="flex-fill btn btn-primary btn-sm me-1" @onclick=AddTag>Add Tag</button>
+        </div>
+        @foreach (string tag in @Tags)
+        {
+            <div class="tag px-2 d-inline-block">
+                <div class="d-inline-block">@tag</div>
+                <div class="d-inline-block" style="cursor: pointer" @onclick="()=>DeleteTag(tag)">❌</div>
+            </div>
+        }
+    </div>
 </div>
 
 <!-- list of child ABFs -->
 @foreach (string abfPath in Parent.ChildAbfPaths)
 {
-	Domain.AbfInfo abf = Domain.AbfInfo.FromAbf(abfPath);
+    Core.AbfInfo abf = Core.AbfInfo.FromAbf(abfPath);
 
-	<div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
-		<span class="font-monospace">@abf.AbfID</span>
+    <div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
+        <span class="font-monospace">@abf.AbfID</span>
 
-		<button class="button-small">copy path</button>
-		<button class="button-small">setpath</button>
-		<button class="button-small">ignore</button>
+        <button class="button-small">copy path</button>
+        <button class="button-small">setpath</button>
+        <button class="button-small">ignore</button>
 
-		<span class="font-monospace">@abf.Protocol</span>
+        <span class="font-monospace">@abf.Protocol</span>
 
-		<span class="info-light">
-			| sweeps: @abf.SweepCount
-			| sweep length: @abf.SweepLengthSec sec
-		</span>
-		@if (abf.HasComments)
-		{
-			<span class="info-light">
-				| Comments:
-			</span>
-			<span class="info-comment">
-				<strong>@abf.Comments</strong>
-			</span>
-		}
-	</div>
+        <span class="info-light">
+            | sweeps: @abf.SweepCount
+            | sweep length: @abf.SweepLengthSec sec
+        </span>
+        @if (abf.HasComments)
+        {
+            <span class="info-light">
+                | Comments:
+            </span>
+            <span class="info-comment">
+                <strong>@abf.Comments</strong>
+            </span>
+        }
+    </div>
 }
 
 <!-- analysis images for all child ABFs -->
 @foreach (string imagePath in Parent.GetAnalysisImagePaths())
 {
-	string url = $"/image?path={imagePath}";
-	<a href=@url target="_blank"><img src=@url /></a>
+    string url = $"/image?path={imagePath}";
+    <a href=@url target="_blank"><img src=@url /></a>
 }
 
 @code {
-	[Parameter, EditorRequired]
-	public AbfParentInfo Parent
-	{
-		get => _Parent;
-		set
-		{
-			_Parent = value;
-			EditComment = value.Comment;
-			Tags.Clear();
-			Tags.AddRange(value.Tags);
-		}
-	}
+    [Parameter, EditorRequired]
+    public AbfParentInfo Parent
+    {
+        get => _Parent;
+        set
+        {
+            _Parent = value;
+            EditComment = value.Comment;
+            Tags.Clear();
+            Tags.AddRange(value.Tags);
+        }
+    }
 
-	[Parameter, EditorRequired]
-	public EventCallback<AbfParentInfo> OnInfoChanged { get; set; }
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnInfoChanged { get; set; }
 
-	public AbfParentInfo _Parent { get; set; } = null!;
+    public AbfParentInfo _Parent { get; set; } = null!;
 
-	private string EditComment { get; set; } = string.Empty;
+    private string EditComment { get; set; } = string.Empty;
 
-	private string EditTag { get; set; } = string.Empty;
+    private string EditTag { get; set; } = string.Empty;
 
-	private List<string> Tags { get; set; } = new();
+    private List<string> Tags { get; set; } = new();
 
-	private void SaveChanges()
-	{
-		// TODO: implement only after file writing works
-		//OnInfoChanged.InvokeAsync();
-	}
+    private void SaveChanges()
+    {
+        // TODO: implement only after file writing works
+        //OnInfoChanged.InvokeAsync();
+    }
 
-	private void AddTag()
-	{
-		if (string.IsNullOrWhiteSpace(EditTag))
-			return;
+    private void AddTag()
+    {
+        if (string.IsNullOrWhiteSpace(EditTag))
+            return;
 
-		if (!Tags.Contains(EditTag))
-		{
-			Tags.Add(EditTag);
-			SaveChanges();
-		}
+        if (!Tags.Contains(EditTag))
+        {
+            Tags.Add(EditTag);
+            SaveChanges();
+        }
 
-		EditTag = string.Empty;
-	}
+        EditTag = string.Empty;
+    }
 
-	private void DeleteTag(string tag)
-	{
-		if (Tags.Contains(tag))
-		{
-			Tags.Remove(tag);
-			SaveChanges();
-		}
-	}
+    private void DeleteTag(string tag)
+    {
+        if (Tags.Contains(tag))
+        {
+            Tags.Remove(tag);
+            SaveChanges();
+        }
+    }
 }

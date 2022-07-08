@@ -1,51 +1,81 @@
 ﻿@foreach (AbfParentInfo parent in Parents)
 {
-	string ArrowVisibility = (parent == SelectedParent) ? "visible" : "hidden";
+    string ArrowVisibility = (parent == SelectedParent) ? "visible" : "hidden";
 
-	<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+    <div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
 
-		<!-- selected arrow -->
-		<span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
+        <!-- selected arrow -->
+        <span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
 
-		<!-- clickable AbfID -->
-		<a href="" @onclick:preventDefault @onclick="()=>SelectParent(parent)" class="font-monospace" style="background-color: @parent.Color; color: blue;">
-			@parent.AbfID
-		</a>
+        <!-- clickable AbfID -->
+        <a href="" @onclick:preventDefault @onclick="()=>SelectParent(parent)" class="font-monospace" style="background-color: @parent.Color; color: blue;">
+            @parent.AbfID
+        </a>
 
-		<!-- child count -->
-		<span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfCount</span>
+        <!-- child count -->
+        <span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfCount</span>
 
-		<!-- tags -->
-		@foreach (string tag in parent.Tags)
-		{
-			<div class="tag">@tag</div>
-		}
+        <!-- tags -->
+        @foreach (string tag in parent.Tags)
+        {
+            <div class="tag">@tag</div>
+        }
 
-		<!-- comment -->
-		<span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
-	</div>
+        <!-- comment -->
+        <span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
+    </div>
 
 }
 
 @code {
-	[Parameter, EditorRequired]
-	public string FolderPath { get; set; } = string.Empty;
+    [Parameter, EditorRequired]
+    public string FolderPath { get; set; } = string.Empty;
 
-	[Parameter, EditorRequired]
-	public EventCallback<AbfParentInfo> OnSelectParent { get; set; }
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnSelectParent { get; set; }
 
-	private Domain.AbfParentInfo[] Parents = Array.Empty<Domain.AbfParentInfo>();
+    private Domain.AbfParentInfo[] Parents = Array.Empty<Domain.AbfParentInfo>();
 
-	private Domain.AbfParentInfo? SelectedParent = null;
+    private Domain.AbfParentInfo? SelectedParent = null;
 
-	protected override void OnInitialized()
-	{
-		Parents = Domain.CellsFile.Load(FolderPath);
-	}
+    protected override void OnInitialized()
+    {
+        PopulateMenu();
+    }
 
-	private void SelectParent(AbfParentInfo parent)
-	{
-		SelectedParent = parent;
-		OnSelectParent.InvokeAsync(parent);
-	}
+    private void PopulateMenu()
+    {
+        string cellsFilePath = Path.Combine(FolderPath, "cells.txt");
+        string cellsTxt = File.Exists(cellsFilePath) ? File.ReadAllText(cellsFilePath) : string.Empty;
+        var cells = new Core.CellsFile(cellsTxt);
+
+        List<Domain.AbfParentInfo> parents = new();
+        foreach (var kvp in Core.Parents.GetAbfsByParent(FolderPath))
+        {
+            string abfID = kvp.Key;
+            string[] childPaths = kvp.Value;
+
+            Domain.AbfParentInfo abfInfo;
+
+            var knownCell = cells.Lookup(abfID);
+            if (knownCell is null)
+            {
+                abfInfo = new(childPaths.First(), string.Empty, string.Empty, string.Empty, Array.Empty<string>(), childPaths);
+            }
+            else
+            {
+                abfInfo = new(childPaths.First(), knownCell.Heading, knownCell.Color, knownCell.Comment, knownCell.Tags, childPaths);
+            }
+
+            parents.Add(abfInfo);
+        }
+
+        Parents = parents.ToArray();
+    }
+
+    private void SelectParent(AbfParentInfo parent)
+    {
+        SelectedParent = parent;
+        OnSelectParent.InvokeAsync(parent);
+    }
 }
