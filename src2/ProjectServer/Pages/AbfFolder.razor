@@ -1,6 +1,6 @@
 ﻿@page "/AbfFolder"
 @inject NavigationManager NavManager
-@inject Services.ClipboardService ClipboardService
+@inject IJSRuntime JSRuntime
 @using Microsoft.AspNetCore.WebUtilities;
 @using Microsoft.Extensions.Primitives;
 @using ProjectServer.Components;
@@ -43,7 +43,7 @@
             }
         </div>
 
-        <button class="button-small" @onclick="(()=>ClipboardService.WriteTextAsync(FolderPath))">copy path</button>
+        <button class="button-small" @onclick=ClickedCopyPath>copy path</button>
     </div>
 
     <!-- ABF list -->
@@ -147,5 +147,10 @@
     private void OnInfoChanged()
     {
         CellsMenuRef.PopulateMenu();
+    }
+
+    private async Task ClickedCopyPath()
+    {
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", FolderPath);
     }
 }

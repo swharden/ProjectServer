@@ -1,6 +1,4 @@
-﻿@inject Services.ClipboardService ClipboardService
-
-@inject IJSRuntime JSRuntime
+﻿@inject IJSRuntime JSRuntime
 
 <div class="" style="background-color: @Parent.Color">
     <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
@@ -159,14 +157,14 @@
         EditColor = args.Value!.ToString() ?? string.Empty;
     }
 
-    private void ClickedCopyPath(Core.AbfInfo abf)
+    private async Task ClickedCopyPath(Core.AbfInfo abf)
     {
-        ClipboardService.WriteTextAsync(abf.AbfFilePath);
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", abf.AbfFilePath);
     }
 
-    private void ClickedSetPath(Core.AbfInfo abf)
+    private async Task ClickedSetPath(Core.AbfInfo abf)
     {
-        ClipboardService.WriteTextAsync($"setpath \"{abf.AbfFilePath}\"");
+        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"setpath \"{abf.AbfFilePath}\"");
     }
 
     private async Task ClickedIgnore(Core.AbfInfo abf)
