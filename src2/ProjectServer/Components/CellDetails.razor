@@ -1,5 +1,7 @@
 ﻿@inject Services.ClipboardService ClipboardService
 
+@inject IJSRuntime JSRuntime
+
 <div class="" style="background-color: @Parent.Color">
     <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
 </div>
@@ -52,7 +54,7 @@
 
         <button class="button-small" @onclick="() => ClickedCopyPath(abf)">copy path</button>
         <button class="button-small" @onclick="() => ClickedSetPath(abf)">setpath</button>
-        <button class="button-small">ignore</button>
+        <button class="button-small" @onclick="() => ClickedIgnore(abf)">ignore</button>
 
         <span class="font-monospace">@abf.Protocol</span>
 
@@ -165,5 +167,16 @@
     private void ClickedSetPath(Core.AbfInfo abf)
     {
         ClipboardService.WriteTextAsync($"setpath \"{abf.AbfFilePath}\"");
+    }
+
+    private async Task ClickedIgnore(Core.AbfInfo abf)
+    {
+        bool confirmResult = await JSRuntime.InvokeAsync<bool>("confirm", "Do you want to ignore this ABF by renaming it?");
+
+        if (confirmResult == true)
+        {
+            File.Move(abf.AbfFilePath, abf.AbfFilePath + ".ignored");
+            await OnInfoChanged.InvokeAsync();
+        }
     }
 }
