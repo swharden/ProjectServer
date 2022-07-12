@@ -47,7 +47,7 @@
 	@if (IsAbfFolder)
 	{
 		<h2 class="p-2">ABF Folder</h2>
-		<CellsMenu FolderPath=@FolderPath OnSelectParent=@OnSelectParent />
+		<CellsMenu FolderPath=@FolderPath OnSelectParent=@OnSelectParent @ref="CellsMenuRef" />
 	}
 </nav>
 
@@ -56,7 +56,7 @@
 	{
 		@if (SelectedParent is not null)
 		{
-			<CellDetails Parent=@SelectedParent OnInfoChanged=@OnInfoChanged />
+			<CellDetails Parent=@SelectedParent OnInfoChanged=@OnInfoChanged @ref="CellsDetailsRef" />
 		}
 		else
 		{
@@ -77,6 +77,8 @@
 	string[] FilePaths = Array.Empty<string>();
 	bool IsAbfFolder;
 	Domain.AbfParentInfo? SelectedParent = null;
+	CellsMenu CellsMenuRef = null!;
+	CellDetails CellsDetailsRef = null!;
 
 	protected override void OnInitialized()
 	{
@@ -141,6 +143,6 @@
 	/// </summary>
 	private void OnInfoChanged()
 	{
-		
+		CellsMenuRef.PopulateMenu();
 	}
 }

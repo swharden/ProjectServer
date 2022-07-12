@@ -13,7 +13,7 @@
         </a>
 
         <!-- child count -->
-        <span class="font-monospace" style="color: #AAAAAA">@parent.ChildAbfCount</span>
+        <div class="font-monospace d-inline-block me-1" style="color: #AAAAAA">@parent.ChildAbfCount</div>
 
         <!-- tags -->
         @foreach (string tag in parent.Tags)
@@ -43,8 +43,10 @@
         PopulateMenu();
     }
 
-    private void PopulateMenu()
+    public void PopulateMenu()
     {
+        string originallySelectedAbfID = SelectedParent is null ? string.Empty : SelectedParent.AbfID;
+
         string cellsFilePath = Path.Combine(FolderPath, "cells.txt");
         string cellsTxt = File.Exists(cellsFilePath) ? File.ReadAllText(cellsFilePath) : string.Empty;
         var cells = new Core.CellsFile(cellsTxt);
@@ -71,6 +73,13 @@
         }
 
         Parents = parents.ToArray();
+
+        if (!string.IsNullOrEmpty(originallySelectedAbfID))
+        {
+            AbfParentInfo[] matchingParents = Parents.Where(x=>x.AbfID == originallySelectedAbfID).ToArray();
+            if (matchingParents.Any())
+                SelectParent(matchingParents.First());
+        }
     }
 
     private void SelectParent(AbfParentInfo parent)

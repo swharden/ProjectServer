@@ -13,7 +13,9 @@
             <input class="form-check-input p-0"
                style="margin: 10px 3px;"
                type="radio"
-               name="radioColor" />
+               name="radioColor"
+               value=@color
+               @onchange=ColorSelected />
         </div>
     }
 
@@ -85,6 +87,7 @@
         {
             _Parent = value;
             EditComment = value.Comment;
+            EditColor = value.Color;
             Tags.Clear();
             Tags.AddRange(value.Tags);
         }
@@ -93,18 +96,29 @@
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnInfoChanged { get; set; }
 
-    public AbfParentInfo _Parent { get; set; } = null!;
+    private AbfParentInfo _Parent { get; set; } = null!;
 
     private string EditComment { get; set; } = string.Empty;
 
     private string EditTag { get; set; } = string.Empty;
 
+    private string EditColor { get; set; } = string.Empty;
+
     private List<string> Tags { get; set; } = new();
 
     private void SaveChanges()
     {
-        // TODO: implement only after file writing works
-        //OnInfoChanged.InvokeAsync();
+        string cellsFilePath = Path.Combine(_Parent.AbfFolder, "cells.txt");
+
+        Core.CellsFile cellsFile = File.Exists(cellsFilePath)
+            ? new Core.CellsFile(File.ReadAllText(cellsFilePath))
+            : new Core.CellsFile("");
+
+        cellsFile.Update(Parent.AbfID, EditColor, EditComment, Tags.ToArray());
+
+        cellsFile.WriteFile(cellsFilePath);
+
+        OnInfoChanged.InvokeAsync();
     }
 
     private void AddTag()
@@ -128,5 +142,17 @@
             Tags.Remove(tag);
             SaveChanges();
         }
+    }
+
+    public void UpdateEditableFieldsFromParent()
+    {
+        EditComment = Parent.Comment;
+        Tags.Clear();
+        Tags.AddRange(Parent.Tags);
+    }
+
+    private void ColorSelected(ChangeEventArgs args)
+    {
+        EditColor = args.Value!.ToString() ?? string.Empty;
     }
 }
