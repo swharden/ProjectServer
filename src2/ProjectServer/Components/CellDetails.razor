@@ -1,4 +1,5 @@
-﻿
+﻿@inject Services.ClipboardService ClipboardService
+
 <div class="" style="background-color: @Parent.Color">
     <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
 </div>
@@ -49,8 +50,8 @@
     <div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
         <span class="font-monospace">@abf.AbfID</span>
 
-        <button class="button-small">copy path</button>
-        <button class="button-small">setpath</button>
+        <button class="button-small" @onclick="() => ClickedCopyPath(abf)">copy path</button>
+        <button class="button-small" @onclick="() => ClickedSetPath(abf)">setpath</button>
         <button class="button-small">ignore</button>
 
         <span class="font-monospace">@abf.Protocol</span>
@@ -154,5 +155,15 @@
     private void ColorSelected(ChangeEventArgs args)
     {
         EditColor = args.Value!.ToString() ?? string.Empty;
+    }
+
+    private void ClickedCopyPath(Core.AbfInfo abf)
+    {
+        ClipboardService.WriteTextAsync(abf.AbfFilePath);
+    }
+
+    private void ClickedSetPath(Core.AbfInfo abf)
+    {
+        ClipboardService.WriteTextAsync($"setpath \"{abf.AbfFilePath}\"");
     }
 }
