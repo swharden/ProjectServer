@@ -60,14 +60,14 @@ public class CellsFile
     /// <summary>
     /// Update information about the given ABFID
     /// </summary>
-    public void Update(string abfID, string newColor, string newComment, string[] newTags)
+    public void Update(string abfID, string color, string comment, string[] tags)
     {
         CellsFileAbf abf = new()
         {
             AbfID = abfID,
-            Color = newColor,
-            Comment = newComment,
-            Tags = newTags,
+            Color = color,
+            Comment = comment,
+            Tags = tags,
         };
 
         string newLine = CreateLine(abf);
@@ -135,5 +135,23 @@ public class CellsFile
         string commentWithTags = comment + string.Join("", abf.Tags.Select(x => $" !TAG: {x}"));
 
         return $"{abf.AbfID} {color} {commentWithTags}";
+    }
+
+    public string GetText()
+    {
+        return string.Join("\n", Lines);
+    }
+
+    public void WriteFile(string filePath, bool createBackup = false)
+    {
+        if (createBackup && File.Exists(filePath))
+        {
+            string backupFilePath = filePath + $".backup.{DateTime.Now.Ticks}.txt";
+            System.Diagnostics.Debug.WriteLine($"Creating backup: {backupFilePath}");
+            File.Copy(filePath, backupFilePath);
+        }
+
+        File.WriteAllText(filePath, GetText());
+        System.Diagnostics.Debug.WriteLine($"Saving: {filePath}");
     }
 }
