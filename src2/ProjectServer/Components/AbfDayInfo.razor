@@ -111,9 +111,12 @@
     </div>
 
     <div class="text-end my-3">
-        <button class="btn btn-secondary me-2" @onclick=LoadFromFile>Previous</button>
-        <button class="btn btn-secondary me-2" @onclick=LoadFromFile>Reload</button>
-        <button class="btn btn-primary me-2" @onclick=SaveToFile>Save</button>
+        <button class="btn btn-secondary me-2" @onclick=ClickedLoadPrevious>Load Previous</button>
+        <button class="btn btn-secondary me-2" @onclick=ClickedLoadToday>Reload</button>
+        <button class="btn btn-primary me-2" @onclick=ClickedSave>Save</button>
+    </div>
+    <div class="text-end">
+        @SaveMessage
     </div>
 </div>
 
@@ -151,16 +154,18 @@
 
     private string EditNotes { get; set; } = string.Empty;
 
+    private string SaveMessage = string.Empty;
+
     protected override void OnInitialized()
     {
-        LoadFromFile();
+        LoadFromFile(ExperimentFilePath);
     }
 
-    private void LoadFromFile()
+    private void LoadFromFile(string filePath)
     {
         if (ExperimentFileExists)
         {
-            var notes = Core.AbfExperimentFile.FromText(File.ReadAllText(ExperimentFilePath));
+            var notes = Core.AbfExperimentFile.FromText(File.ReadAllText(filePath));
             EditSpecies = notes.Species;
             EditStrain = notes.Strain;
             EditDate = notes.Date;
@@ -174,10 +179,22 @@
             EditCageCard = notes.CageCard;
             EditIntervention = notes.Intervention;
             EditNotes = notes.Notes;
+
+            DateTime modified = File.GetLastWriteTime(ExperimentFilePath);
+            SaveMessage = $"Last modified {modified}";
+        }
+        else
+        {
+            SaveMessage = $"File not found: {ExperimentFilePath}";
         }
     }
 
-    private void SaveToFile()
+    private void ClickedLoadToday()
+    {
+        LoadFromFile(ExperimentFilePath);
+    }
+
+    private void ClickedSave()
     {
         Core.AbfExperimentFile notes = new();
         notes.Species = EditSpecies;
@@ -194,16 +211,32 @@
         notes.Intervention = EditIntervention;
         notes.Notes = EditNotes;
 
-        // TODO: remove this after live testing is finished
-        string backupPath = ExperimentFilePath + $".backup.{DateTime.Now.Ticks}.txt";
-        File.Copy(ExperimentFilePath, backupPath);
-        System.Diagnostics.Debug.WriteLine($"CREATED BACKUP: {backupPath}");
-
-        File.WriteAllText(ExperimentFilePath, notes.GetText());
+        notes.WriteFile(ExperimentFilePath);
+        SaveMessage = $"✔️ Saved {DateTime.Now}";
     }
 
-    private void LoadPreviousDay()
+    private void ClickedLoadPrevious()
     {
+        string[] ExperimentFolderPaths = Directory
+            .GetDirectories(Path.GetDirectoryName(FolderPath) ?? string.Empty)
+            .ToArray();
 
+        int indexOfTodaysFolder = Array.IndexOf(ExperimentFolderPaths, FolderPath);
+        if (indexOfTodaysFolder < 1)
+        {
+            SaveMessage = $"No previous folders found";
+            return;
+        }
+
+        string previousFolderPath = ExperimentFolderPaths[indexOfTodaysFolder - 1];
+        string previousExperimentsFilePath = Path.Combine(previousFolderPath, "experiment.txt");
+        if (!File.Exists(previousExperimentsFilePath))
+        {
+            SaveMessage = $"Previous folder has no experiment notes";
+            return;
+        }
+
+        LoadFromFile(previousExperimentsFilePath);
+        SaveMessage = $"Loaded notes from {Path.GetFileName(previousFolderPath)}";
     }
 }

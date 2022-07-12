@@ -92,4 +92,17 @@ public class AbfExperimentFile
 
         return day;
     }
+
+    public void WriteFile(string filePath, bool createBackup = false)
+    {
+        if (createBackup && File.Exists(filePath))
+        {
+            string backupFilePath = filePath + $".backup.{DateTime.Now.Ticks}.txt";
+            System.Diagnostics.Debug.WriteLine($"Creating backup: {backupFilePath}");
+            File.Copy(filePath, backupFilePath);
+        }
+
+        File.WriteAllText(filePath, GetText());
+        System.Diagnostics.Debug.WriteLine($"Saving: {filePath}");
+    }
 }
