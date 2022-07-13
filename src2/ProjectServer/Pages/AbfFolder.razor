@@ -130,6 +130,8 @@
     /// </summary>
     private static string[] GetRootFolderPaths(string path)
     {
+        path = path.TrimEnd('/');
+        path = path.TrimEnd('\\');
         List<string> paths = new();
         while (!string.IsNullOrEmpty(path))
         {
