@@ -7,7 +7,13 @@ namespace ProjectServer
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var builder = WebApplication.CreateBuilder();
+
+            if (args.Length == 1)
+            {
+                Console.WriteLine($"Listening on: {args[0]}");
+                builder.WebHost.UseUrls(args[0]);
+            }
 
             // Add services to the container.
             builder.Services.AddRazorPages();
@@ -20,7 +26,6 @@ namespace ProjectServer
             {
                 app.UseExceptionHandler("/Error");
             }
-
 
             app.UseStaticFiles();
             app.UseRouting();
