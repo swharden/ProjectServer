@@ -43,11 +43,19 @@
             }
         </div>
 
-        <button class="button-small me-1" @onclick=ClickedCopyPath>copy path</button>
+        <hr class="m-1 invisible" />
+
+        <button class="button-small me-1" @onclick=ClickedCopyPath>copy</button>
 
         @if (IsAbfFolder)
         {
-            <button class="button-small" @onclick=ClickedDailyNotes>daily notes</button>
+            <button class="button-small" @onclick=ClickedDailyNotes>notes</button>
+            <div class="form-check d-inline-block" style="font-family: monospace; font-size: .8em;">
+                <input class="form-check-input" type="checkbox" @bind=IsAutoAnalyzed>
+                <label class="form-check-label">
+                    Auto-Analyze
+                </label>
+            </div>
         }
 
     </div>
@@ -85,6 +93,18 @@
     string[] SubFolderPaths = Array.Empty<string>();
     string[] FilePaths = Array.Empty<string>();
     bool IsAbfFolder;
+
+    bool _isAutoAnalyzed;
+    bool IsAutoAnalyzed
+    {
+        get => _isAutoAnalyzed;
+        set
+        {
+            _isAutoAnalyzed = value;
+            Core.AutoAnalysis.SetWatched(FolderPath, value);
+        }
+    }
+
     Domain.AbfParentInfo? SelectedParent = null;
     CellsMenu CellsMenuRef = null!;
     CellDetails CellsDetailsRef = null!;
@@ -113,6 +133,7 @@
         SubFolderPaths = Directory.GetDirectories(path);
         FilePaths = Directory.GetFiles(path);
         IsAbfFolder = FilePaths.Where(x => x.EndsWith(".abf")).Any();
+        _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
 
         // update the URL
         try
