@@ -116,7 +116,7 @@
         StringValues queryValues;
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("folder", out queryValues))
             initialPath = queryValues.First();
-        SetFolderPath(initialPath);
+        SetFolderPath(initialPath, updateUrl: false);
     }
 
     /// <summary>
@@ -125,7 +125,7 @@
     /// If not, display it as a file browser.
     /// </summary>
     /// <param name="path"></param>
-    private void SetFolderPath(string path)
+    private void SetFolderPath(string path, bool updateUrl = true)
     {
         // scan the folder
         FolderPath = path;
@@ -135,14 +135,17 @@
         IsAbfFolder = FilePaths.Where(x => x.EndsWith(".abf")).Any();
         _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
 
-        // update the URL
-        try
+        if (updateUrl)
         {
-            NavManager.NavigateTo($"/AbfFolder?folder={path}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"URL UPDATE FAILED: {ex}");
+            string newUrl = $"/AbfFolder?folder=" + System.Net.WebUtility.UrlEncode(path);
+            try
+            {
+                NavManager.NavigateTo(newUrl);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"URL UPDATE FAILED: {newUrl}\n{ex}");
+            }
         }
     }
 
