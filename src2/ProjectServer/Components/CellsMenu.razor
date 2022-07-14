@@ -22,7 +22,10 @@
         }
 
         <!-- comment -->
-        <span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
+        @if (!string.IsNullOrWhiteSpace(parent.Comment) && parent.Comment != "?")
+        {
+            <span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
+        }
     </div>
 
 }
@@ -76,7 +79,7 @@
 
         if (!string.IsNullOrEmpty(originallySelectedAbfID))
         {
-            AbfParentInfo[] matchingParents = Parents.Where(x=>x.AbfID == originallySelectedAbfID).ToArray();
+            AbfParentInfo[] matchingParents = Parents.Where(x => x.AbfID == originallySelectedAbfID).ToArray();
             if (matchingParents.Any())
                 SelectParent(matchingParents.First());
         }
