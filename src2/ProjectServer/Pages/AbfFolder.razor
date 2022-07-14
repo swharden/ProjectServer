@@ -42,22 +42,25 @@
             }
         </div>
 
-        <hr class="m-1 invisible" />
-
-        <button class="button-small me-1" onclick="CopyToClipboard('@FolderPath.Replace("\\","/")')">copy</button>
+        <div class="mt-2">
+            <button class="button-small" onclick="CopyToClipboard('@FolderPath.Replace("\\","/")')">copy path</button>
+            <button class="button-small" onclick="CopyToClipboard('@GetThisUrl()')">copy URL</button>
+            <button class="button-small @(IsAbfFolder ? "visible" : "invisible")" @onclick=ClickedDailyNotes>daily notes</button>
+        </div>
 
         @if (IsAbfFolder)
         {
-            <button class="button-small" @onclick=ClickedDailyNotes>notes</button>
-            <div class="form-check d-inline-block" style="font-family: monospace; font-size: .8em;">
+            <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
                 <input class="form-check-input" type="checkbox" @bind=IsAutoAnalyzed>
                 <label class="form-check-label">
-                    Auto-Analyze
+                    Auto-Analyze Folder
                 </label>
             </div>
         }
 
     </div>
+
+
 
     <!-- ABF list -->
     @if (IsAbfFolder)
@@ -178,10 +181,22 @@
 
     private void UpdateUrl()
     {
+        try
+        {
+            NavManager.NavigateTo(GetThisUrl());
+        }
+        catch (Microsoft.AspNetCore.Components.NavigationException ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Navigation error: {ex}");
+        }
+    }
+
+    private string GetThisUrl()
+    {
         string path = System.Net.WebUtility.UrlEncode(FolderPath);
-        string newUrl = $"/AbfFolder?folder={path}";
+        string url = NavManager.BaseUri + $"AbfFolder?folder={path}";
         if (SelectedParent is not null)
-            newUrl += $"&abfid={SelectedParent.AbfID}";
-        NavManager.NavigateTo(newUrl);
+            url += $"&abfid={SelectedParent.AbfID}";
+        return url;
     }
 }
