@@ -112,9 +112,8 @@
     {
         string initialPath = @"X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)";
         Uri uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-        StringValues queryValues;
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("folder", out queryValues))
-            initialPath = queryValues.First();
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("folder", out StringValues folderQueryValues))
+            initialPath = folderQueryValues.First();
         SetFolderPath(initialPath, updateUrl: false);
     }
 
@@ -135,17 +134,7 @@
         _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
 
         if (updateUrl)
-        {
-            string newUrl = $"/AbfFolder?folder=" + System.Net.WebUtility.UrlEncode(path);
-            try
-            {
-                NavManager.NavigateTo(newUrl);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"URL UPDATE FAILED: {newUrl}\n{ex}");
-            }
-        }
+            UpdateUrl();
     }
 
     /// <summary>
@@ -170,6 +159,7 @@
     private void OnSelectParent(AbfParentInfo parent)
     {
         SelectedParent = parent;
+        UpdateUrl();
     }
 
     /// <summary>
@@ -183,5 +173,15 @@
     private void ClickedDailyNotes()
     {
         SelectedParent = null;
+        UpdateUrl();
+    }
+
+    private void UpdateUrl()
+    {
+        string path = System.Net.WebUtility.UrlEncode(FolderPath);
+        string newUrl = $"/AbfFolder?folder={path}";
+        if (SelectedParent is not null)
+            newUrl += $"&abfid={SelectedParent.AbfID}";
+        NavManager.NavigateTo(newUrl);
     }
 }
