@@ -1,8 +1,8 @@
-﻿@foreach (string heading in Parents.Select(x => x.Header).Distinct())
+﻿@foreach (string heading in Parents.Select(x => x.Header).Distinct().OrderBy(x => x))
 {
     @if (!string.IsNullOrWhiteSpace(heading))
     {
-        <h2 class="ps-2">@heading</h2>
+        <h2 class="ps-2 mt-3">@heading</h2>
     }
 
     @foreach (AbfParentInfo parent in Parents.Where(x => x.Header == heading))
