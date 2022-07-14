@@ -4,7 +4,7 @@
     <span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
 
     <!-- headings -->
-    @if (!string.IsNullOrWhiteSpace(Parent.Header))
+    @if (ShowHeading && !string.IsNullOrWhiteSpace(Parent.Header))
     {
         <div class="tag">@Parent.Header</div>
     }
@@ -33,10 +33,13 @@
 
 @code {
     [Parameter, EditorRequired]
-    public bool IsSelected { get; set; }
+    public bool IsSelected { get; set; } = false;
 
     [Parameter, EditorRequired]
     public AbfParentInfo Parent { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public bool ShowHeading { get; set; } = false;
 
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnSelected { get; set; }

@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Components\CellsMenu.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Components\CellsMenu.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ProjectServer.Core\ProjectServer.Core.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,17 @@
-﻿@foreach (AbfParentInfo parent in Parents)
+﻿@foreach (string heading in Parents.Select(x => x.Header).Distinct())
 {
-    <CellsMenuItem Parent=parent IsSelected="parent == SelectedParent" OnSelected="() => SelectParent(parent)" />
+    @if (!string.IsNullOrWhiteSpace(heading))
+    {
+        <h2 class="ps-2">@heading</h2>
+    }
+
+    @foreach (AbfParentInfo parent in Parents.Where(x => x.Header == heading))
+    {
+        <CellsMenuItem ShowHeading=false
+               Parent=parent
+               IsSelected="parent == SelectedParent"
+               OnSelected="() => SelectParent(parent)" />
+    }
 }
 
 @code {
