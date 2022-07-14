@@ -1,0 +1,50 @@
+﻿<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+
+    <!-- selected arrow -->
+    <span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
+
+    <!-- headings -->
+    @if (!string.IsNullOrWhiteSpace(Parent.Header))
+    {
+        <div class="tag">@Parent.Header</div>
+    }
+
+    <!-- clickable AbfID -->
+    <a href="" @onclick:preventDefault @onclick=SelectThisParent
+       class="font-monospace" style="background-color: @Parent.Color; color: blue;">
+        @Parent.AbfID
+    </a>
+
+    <!-- child count -->
+    <div class="font-monospace d-inline-block me-1" style="color: #AAAAAA">@Parent.ChildAbfCount</div>
+
+    <!-- tags -->
+    @foreach (string tag in Parent.Tags)
+    {
+        <div class="tag">@tag</div>
+    }
+
+    <!-- comment -->
+    @if (!string.IsNullOrWhiteSpace(Parent.Comment) && Parent.Comment != "?")
+    {
+        <span style="font-family: 'Arial Narrow'; color: #AAAAAA">@Parent.Comment</span>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public bool IsSelected { get; set; }
+
+    [Parameter, EditorRequired]
+    public AbfParentInfo Parent { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnSelected { get; set; }
+
+    private string ArrowVisibility => IsSelected ? "visible" : "hidden";
+
+    private async Task SelectThisParent()
+    {
+        await OnSelected.InvokeAsync();
+    }
+}

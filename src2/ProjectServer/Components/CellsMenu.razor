@@ -1,33 +1,6 @@
 ﻿@foreach (AbfParentInfo parent in Parents)
 {
-    string ArrowVisibility = (parent == SelectedParent) ? "visible" : "hidden";
-
-    <div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
-
-        <!-- selected arrow -->
-        <span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
-
-        <!-- clickable AbfID -->
-        <a href="" @onclick:preventDefault @onclick="()=>SelectParent(parent)" class="font-monospace" style="background-color: @parent.Color; color: blue;">
-            @parent.AbfID
-        </a>
-
-        <!-- child count -->
-        <div class="font-monospace d-inline-block me-1" style="color: #AAAAAA">@parent.ChildAbfCount</div>
-
-        <!-- tags -->
-        @foreach (string tag in parent.Tags)
-        {
-            <div class="tag">@tag</div>
-        }
-
-        <!-- comment -->
-        @if (!string.IsNullOrWhiteSpace(parent.Comment) && parent.Comment != "?")
-        {
-            <span style="font-family: 'Arial Narrow'; color: #AAAAAA">@parent.Comment</span>
-        }
-    </div>
-
+    <CellsMenuItem Parent=parent IsSelected="parent == SelectedParent" OnSelected="() => SelectParent(parent)" />
 }
 
 @code {

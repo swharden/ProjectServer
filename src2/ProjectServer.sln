@@ -5,9 +5,9 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectServer", "ProjectServer\ProjectServer.csproj", "{221D81F1-2C0A-4C9D-97FF-524212A32201}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectServer.Tests", "ProjectServer.Tests\ProjectServer.Tests.csproj", "{DE48ACCB-BD2F-4DC8-B0D7-5552BFB136F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectServer.Tests", "ProjectServer.Tests\ProjectServer.Tests.csproj", "{DE48ACCB-BD2F-4DC8-B0D7-5552BFB136F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectServer.Core", "ProjectServer.Core\ProjectServer.Core.csproj", "{32028EE7-ADE6-4130-A36A-C5AE35A731C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectServer.Core", "ProjectServer.Core\ProjectServer.Core.csproj", "{32028EE7-ADE6-4130-A36A-C5AE35A731C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
