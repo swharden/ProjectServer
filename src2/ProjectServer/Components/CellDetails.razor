@@ -46,12 +46,13 @@
 @foreach (string abfPath in Parent.ChildAbfPaths)
 {
     Core.AbfInfo abf = Core.AbfInfo.FromAbf(abfPath);
+    string safeAbfPath = abf.AbfFilePath.Replace("\\", "/");
 
     <div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
         <span class="font-monospace">@abf.AbfID</span>
 
-        <button class="button-small" @onclick="() => ClickedCopyPath(abf)">copy path</button>
-        <button class="button-small" @onclick="() => ClickedSetPath(abf)">setpath</button>
+        <button class="button-small" onclick="CopyToClipboard('@safeAbfPath')">copy path</button>
+        <button class="button-small" onclick="CopySetpath('@safeAbfPath')">setpath</button>
         <button class="button-small" @onclick="() => ClickedIgnore(abf)">ignore</button>
 
         <span class="font-monospace">@abf.Protocol</span>
@@ -155,16 +156,6 @@
     private void ColorSelected(ChangeEventArgs args)
     {
         EditColor = args.Value!.ToString() ?? string.Empty;
-    }
-
-    private async Task ClickedCopyPath(Core.AbfInfo abf)
-    {
-        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", abf.AbfFilePath);
-    }
-
-    private async Task ClickedSetPath(Core.AbfInfo abf)
-    {
-        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", $"setpath \"{abf.AbfFilePath}\"");
     }
 
     private async Task ClickedIgnore(Core.AbfInfo abf)

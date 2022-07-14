@@ -1,6 +1,5 @@
 ﻿@page "/AbfFolder"
 @inject NavigationManager NavManager
-@inject IJSRuntime JSRuntime
 @using Microsoft.AspNetCore.WebUtilities;
 @using Microsoft.Extensions.Primitives;
 @using ProjectServer.Components;
@@ -45,7 +44,7 @@
 
         <hr class="m-1 invisible" />
 
-        <button class="button-small me-1" @onclick=ClickedCopyPath>copy</button>
+        <button class="button-small me-1" onclick="CopyToClipboard('@FolderPath.Replace("\\","/")')">copy</button>
 
         @if (IsAbfFolder)
         {
@@ -179,11 +178,6 @@
     private void OnInfoChanged()
     {
         CellsMenuRef.PopulateMenu();
-    }
-
-    private async Task ClickedCopyPath()
-    {
-        await JSRuntime.InvokeVoidAsync("navigator.clipboard.writeText", FolderPath);
     }
 
     private void ClickedDailyNotes()
