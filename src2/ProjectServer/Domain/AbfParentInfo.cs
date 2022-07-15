@@ -46,5 +46,36 @@
 
             return paths.ToArray();
         }
+
+        public static AbfParentInfo[] GetParentsInFolder(string path)
+        {
+            string cellsFilePath = Path.Combine(path, "cells.txt");
+            string cellsTxt = File.Exists(cellsFilePath) ? File.ReadAllText(cellsFilePath) : string.Empty;
+            var cells = new Core.CellsFile(cellsTxt);
+
+            List<Domain.AbfParentInfo> parents = new();
+
+            foreach (var kvp in Core.Parents.GetAbfsByParent(path))
+            {
+                string abfID = kvp.Key;
+                string[] childPaths = kvp.Value;
+
+                Domain.AbfParentInfo abfInfo;
+
+                var knownCell = cells.Lookup(abfID);
+                if (knownCell is null)
+                {
+                    abfInfo = new(childPaths.First(), string.Empty, string.Empty, string.Empty, Array.Empty<string>(), childPaths);
+                }
+                else
+                {
+                    abfInfo = new(childPaths.First(), knownCell.Heading, knownCell.Color, knownCell.Comment, knownCell.Tags, childPaths);
+                }
+
+                parents.Add(abfInfo);
+            }
+
+            return parents.ToArray();
+        }
     }
 }
