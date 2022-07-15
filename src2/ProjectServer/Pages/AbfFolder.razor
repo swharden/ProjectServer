@@ -60,14 +60,13 @@
 
     </div>
 
-
-
     <!-- ABF list -->
     @if (IsAbfFolder)
     {
         <h2 class="p-2">ABF Folder</h2>
         <CellsMenu FolderPath=@FolderPath OnSelectParent=@OnSelectParent @ref="CellsMenuRef" />
     }
+
 </nav>
 
 <main>
@@ -84,12 +83,20 @@
     }
     else
     {
-        <h2 class="p-2">Folder does not contain ABF files</h2>
+        if (PathContainsAbfFolders(FolderPath))
+        {
+            <AbfMultiFolder FolderPath="@FolderPath" />
+        }
+        else
+        {
+            <h2 class="p-2">Folder does not contain ABF files</h2>
+        }
     }
 </main>
 
 @code {
     string FolderPath = string.Empty;
+
     string[] RootFolderPaths = Array.Empty<string>();
 
     string[] SubFolderPaths = Array.Empty<string>();
@@ -198,5 +205,16 @@
         if (SelectedParent is not null)
             url += $"&abfid={SelectedParent.AbfID}";
         return url;
+    }
+
+    private static bool PathContainsAbfFolders(string path)
+    {
+        foreach (string subFolder in Directory.GetDirectories(path))
+        {
+            if (Directory.GetFiles(subFolder, "*.abf").Any())
+                return true;
+        }
+
+        return false;
     }
 }

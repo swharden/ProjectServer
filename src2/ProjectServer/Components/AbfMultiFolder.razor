@@ -1,0 +1,62 @@
+﻿@if (IsScanning)
+{
+    <Spinner />
+}
+
+@foreach (string key in ParentsByPath.Keys)
+{
+    string folderName = Path.GetFileName(key) ?? string.Empty;
+    AbfParentInfo[] parents = ParentsByPath[key];
+
+    <div class="ps-2 mb-5">
+
+        <div class="fw-bold">
+            @folderName
+        </div>
+
+        @foreach (AbfParentInfo parent in parents)
+        {
+            <CellsMenuItem Parent="parent"
+                   IsSelected=false
+                   ShowHeading=true
+                   OnSelected="() => SelectParent(parent)" />
+        }
+
+        <div>
+            TODO: experiment notes go here
+        </div>
+
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public string FolderPath { get; set; } = string.Empty;
+
+    Dictionary<string, AbfParentInfo[]> ParentsByPath = new();
+
+    bool IsScanning = true;
+
+    protected override Task OnInitializedAsync()
+    {
+        return Task.Run(() => Scan());
+    }
+
+    private void Scan()
+    {
+        string[] dirs = Directory.GetDirectories(FolderPath);
+
+        foreach (string subFolderPath in dirs)
+        {
+            AbfParentInfo[] parents = AbfParentInfo.GetParentsInFolder(subFolderPath);
+            if (parents.Any())
+                ParentsByPath[subFolderPath] = parents;
+        }
+
+        IsScanning = false;
+    }
+
+    private void SelectParent(AbfParentInfo parent)
+    {
+    }
+}
