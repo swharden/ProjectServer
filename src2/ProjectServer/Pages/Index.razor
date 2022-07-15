@@ -1,5 +1,54 @@
 ﻿@page "/"
-<ul>
-	<li><a href="/AbfFolder?folder=X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)">modern project (daily folders)</a></li>
-	<li><a href="/AbfFolder?folder=X:\Data\C57\Sigma-1R\Ephys\NAc-core-SA4503-incubation\">old project (one big folder)</a></li>
-</ul>
+@inject NavigationManager NavManager
+@using Microsoft.AspNetCore.WebUtilities;
+@using Microsoft.Extensions.Primitives;
+
+<div class="container my-5">
+
+    <h2>ABF Folder Viewer</h2>
+
+    <div class="input-group">
+        <input type="text" class="form-control" @bind=PathEdit @bind:event="oninput">
+        <a href="@PathUrl" target="_blank" class="btn btn-primary">Launch</a>
+    </div>
+    <div id="emailHelp" class="form-text">
+        Path to an ABF file or folder of ABF files
+    </div>
+
+    <div class="mt-5">
+        <div>Example Projects</div>
+        <ul>
+            <li><a href="/AbfFolder?folder=X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)">CCh (daily folders)</a></li>
+            <li><a href="/AbfFolder?folder=X:\Data\C57\Sigma-1R\Ephys\NAc-core-SA4503-incubation\">S1R (one big folder)</a></li>
+        </ul>
+    </div>
+
+</div>
+
+@code {
+
+    string PathEdit = @"X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)";
+
+    private string PathUrl
+    {
+        get
+        {
+            string basePath = PathEdit;
+            string abfID = string.Empty;
+
+            if (Path.GetFileName(PathEdit).EndsWith(".abf", StringComparison.InvariantCultureIgnoreCase))
+            {
+                basePath = Path.GetDirectoryName(PathEdit) ?? string.Empty;
+                abfID = Path.GetFileNameWithoutExtension(PathEdit);
+            }
+
+            string path = System.Net.WebUtility.UrlEncode(basePath.Replace("/", "\\"));
+
+            string url = NavManager.BaseUri + $"AbfFolder?folder={path}";
+            if (!string.IsNullOrEmpty(abfID))
+                url += $"&abfid={abfID}";
+
+            return url;
+        }
+    }
+}
