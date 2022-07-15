@@ -1,0 +1,59 @@
+﻿<div class="ps-2 mb-5">
+
+    <h3>@Group.Title</h3>
+
+    @if (ShowParents)
+    {
+        <div class="fw-bold">Parents</div>
+        @foreach (AbfParentInfo parent in Group.Parents)
+        {
+            <CellsMenuItem Parent="parent"
+                   IsSelected=false
+                   ShowHeading=true
+                   Wrap=true
+                   OnSelected="() => SelectParent(parent)" />
+        }
+    }
+
+    @if (ShowNotes && Group.NotesLines.Any())
+    {
+        <div class="fw-bold mt-3">Notes</div>
+        @foreach (string line in Group.NotesLines)
+        {
+            <div class="ms-2 lh-1">
+                <code>@line</code>
+            </div>
+        }
+    }
+
+    @if (ShowOrigin && Group.OriginLines.Any())
+    {
+        <div class="fw-bold mt-3">Origin Commands</div>
+        @foreach (string line in Group.OriginLines)
+        {
+            <div class="ms-2 lh-1">
+                <code>@line</code>
+            </div>
+        }
+    }
+
+</div>
+
+
+@code {
+    [Parameter, EditorRequired]
+    public AbfGroup Group { get; set; } = null!;
+    
+    [Parameter, EditorRequired]
+    public bool ShowParents { get; set; } = true;
+    
+    [Parameter, EditorRequired]
+    public bool ShowNotes { get; set; } = true;
+    
+    [Parameter, EditorRequired]
+    public bool ShowOrigin { get; set; } = true;
+
+    private void SelectParent(AbfParentInfo parent)
+    {
+    }
+}

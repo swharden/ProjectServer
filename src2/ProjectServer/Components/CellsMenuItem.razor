@@ -1,4 +1,4 @@
-﻿<div style="font-size: .8em; line-height: 120%; white-space: nowrap;">
+﻿<div style="font-size: .8em; line-height: 120%; white-space: @(Wrap ? "" : "nowrap");">
 
     <!-- selected arrow -->
     <span class="fw-bold font-monospace" style="visibility: @ArrowVisibility">»</span>
@@ -43,6 +43,9 @@
 
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnSelected { get; set; }
+    
+    [Parameter]
+    public bool Wrap { get; set; } = false;
 
     private string ArrowVisibility => IsSelected ? "visible" : "hidden";
 

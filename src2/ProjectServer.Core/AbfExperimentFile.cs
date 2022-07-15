@@ -43,6 +43,23 @@ public class AbfExperimentFile
         return sb.ToString().Replace("\r\n","\n").Trim();
     }
 
+    public static AbfExperimentFile FromFolder(string folder)
+    {
+        string filePath = Path.Combine(folder, "experiment.txt");
+
+        return File.Exists(filePath) 
+            ? FromFile(filePath) 
+            : new AbfExperimentFile();
+    }
+
+    public static AbfExperimentFile FromFile(string filePath)
+    {
+        if (!File.Exists(filePath))
+            throw new FileNotFoundException(filePath);
+
+        return FromText(File.ReadAllText(filePath));
+    }
+
     public static AbfExperimentFile FromText(string txt)
     {
         StringBuilder notes = new();

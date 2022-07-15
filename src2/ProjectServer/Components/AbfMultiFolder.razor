@@ -1,32 +1,51 @@
-﻿@if (IsScanning)
+﻿@using ProjectServer.Components.AbfGrouping;
+
+<div class="bg-light border rounded m-2 p-2">
+
+    <div class="fs-3 fw-bolder">Multi-Folder ABF Explorer</div>
+
+    <div class="d-flex">
+
+        <div class="form-check pe-3">
+            <input class="form-check-input" type="checkbox" @bind=ShowParents>
+            <label class="form-check-label">
+                Parents
+            </label>
+        </div>
+
+        <div class="form-check pe-3">
+            <input class="form-check-input" type="checkbox" @bind=ShowNotes>
+            <label class="form-check-label">
+                Notes
+            </label>
+        </div>
+
+        <div class="form-check pe-3">
+            <input class="form-check-input" type="checkbox" @bind=ShowOrigin>
+            <label class="form-check-label">
+                OriginLab
+            </label>
+        </div>
+
+        <select class="form-select" @bind=SelectedStrategy style="width: 200px;">
+            @foreach (string strategyName in GroupStrategies.Keys)
+            {
+                <option value="@strategyName">@strategyName</option>
+            }
+        </select>
+
+    </div>
+
+</div>
+
+@if (IsScanning)
 {
     <Spinner />
 }
 
-@foreach (string key in ParentsByPath.Keys)
+@foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents))
 {
-    string folderName = Path.GetFileName(key) ?? string.Empty;
-    AbfParentInfo[] parents = ParentsByPath[key];
-
-    <div class="ps-2 mb-5">
-
-        <div class="fw-bold">
-            @folderName
-        </div>
-
-        @foreach (AbfParentInfo parent in parents)
-        {
-            <CellsMenuItem Parent="parent"
-                   IsSelected=false
-                   ShowHeading=true
-                   OnSelected="() => SelectParent(parent)" />
-        }
-
-        <div>
-            TODO: experiment notes go here
-        </div>
-
-    </div>
+    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes ShowOrigin=ShowOrigin />
 }
 
 @code {
@@ -35,7 +54,27 @@
 
     Dictionary<string, AbfParentInfo[]> ParentsByPath = new();
 
-    bool IsScanning = true;
+    Dictionary<string, string> NotesByPath = new();
+
+    AbfParentInfo[] Parents => ParentsByPath.Values.SelectMany(x => x).ToArray();
+
+    bool IsScanning { get; set; } = true;
+
+    bool ShowParents { get; set; } = true;
+
+    bool ShowNotes { get; set; } = true;
+
+    bool ShowOrigin { get; set; } = true;
+
+    Dictionary<string, IGroupStrategy> GroupStrategies = new()
+        {
+            {"By Date" , new GroupByDay() },
+            {"By Color" , new GroupByColor() },
+            {"By Header" , new GroupByHeader() },
+            {"By Tag" , new GroupByTag() },
+        };
+
+    string SelectedStrategy { get; set; } = "By Date";
 
     protected override Task OnInitializedAsync()
     {
@@ -50,13 +89,12 @@
         {
             AbfParentInfo[] parents = AbfParentInfo.GetParentsInFolder(subFolderPath);
             if (parents.Any())
+            {
                 ParentsByPath[subFolderPath] = parents;
+                NotesByPath[subFolderPath] = Core.AbfExperimentFile.FromFolder(subFolderPath).GetText();
+            }
         }
 
         IsScanning = false;
-    }
-
-    private void SelectParent(AbfParentInfo parent)
-    {
     }
 }
