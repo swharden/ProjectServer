@@ -11,6 +11,7 @@
 
     <!-- clickable AbfID -->
     <a href="" @onclick:preventDefault @onclick=SelectThisParent
+       data-bs-toggle="modal" data-bs-target="#@ModalID"
        class="font-monospace" style="background-color: @Parent.Color; color: blue;">
         @Parent.AbfID
     </a>
@@ -29,6 +30,36 @@
     {
         <span style="font-family: 'Arial Narrow'; color: #AAAAAA">@Parent.Comment</span>
     }
+
+    @if (ClickOpensModal)
+    {
+        <div class="modal fade"
+         id="@ModalID"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false"
+         tabindex="-1"
+         aria-hidden="true">
+
+            <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header" style="background-color: @Parent.Color">
+                        <h5 class="modal-title">@Parent.AbfID</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        @if (ModalHasBeenClicked)
+                        {
+                            <CellDetails OnInfoChanged=CellDetailsChangedInModal Parent=Parent />
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Understood</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
@@ -43,14 +74,34 @@
 
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnSelected { get; set; }
-    
+
     [Parameter]
     public bool Wrap { get; set; } = false;
+
+    [Parameter]
+    public bool ClickOpensModal { get; set; } = false;
+
+    private bool ModalHasBeenClicked = false;
+
+    private string ModalID => "modal_" + GetMD5(Parent.AbfID);
 
     private string ArrowVisibility => IsSelected ? "visible" : "hidden";
 
     private async Task SelectThisParent()
     {
+        ModalHasBeenClicked = true;
         await OnSelected.InvokeAsync();
+    }
+
+    private void CellDetailsChangedInModal()
+    {
+
+    }
+
+    private string GetMD5(string str)
+    {
+        byte[] bytes = System.Text.Encoding.ASCII.GetBytes(str);
+        var md5 = System.Security.Cryptography.MD5.Create();
+        return string.Join("", md5.ComputeHash(bytes).Select(x => x.ToString("x2")));
     }
 }
