@@ -1,8 +1,11 @@
 ﻿@inject IJSRuntime JSRuntime
 
-<div class="" style="background-color: @Parent.Color">
-    <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
-</div>
+@if (ShowHeader)
+{
+    <div class="" style="background-color: @Parent.Color">
+        <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
+    </div>
+}
 
 <div class="p-2" style="background-color: #e6e6e6;">
 
@@ -19,6 +22,7 @@
                @onchange=ColorSelected />
         </div>
     }
+
 
     <!-- comments -->
     <div class="d-flex" style="width: 520px;">
@@ -40,6 +44,7 @@
             </div>
         }
     </div>
+
 </div>
 
 <!-- list of child ABFs -->
@@ -97,6 +102,9 @@
 
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnInfoChanged { get; set; }
+
+    [Parameter]
+    public bool ShowHeader { get; set; } = true;
 
     private AbfParentInfo _Parent { get; set; } = null!;
 
