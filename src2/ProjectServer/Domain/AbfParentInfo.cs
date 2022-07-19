@@ -47,6 +47,20 @@
             return paths.ToArray();
         }
 
+        public void UpdateFromDisk()
+        {
+            AbfParentInfo[] parents = GetParentsInFolder(AbfFolder);
+            AbfParentInfo newParent = parents.Single(x => x.AbfID == AbfID);
+
+            Dictionary<string, string[]> pathsByParent = Core.Parents.GetAbfsByParent(AbfFolder);
+
+            Header = newParent.Header;
+            Color = newParent.Color;
+            Comment = newParent.Comment;
+            Tags = newParent.Tags;
+            ChildAbfPaths = pathsByParent[AbfID];
+        }
+
         public static AbfParentInfo[] GetParentsInFolder(string path)
         {
             string cellsFilePath = Path.Combine(path, "cells.txt");
