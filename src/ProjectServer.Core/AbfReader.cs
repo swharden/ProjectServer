@@ -109,8 +109,9 @@ public class AbfReader
 
         reader.BaseStream.Seek(72, SeekOrigin.Begin);
         int uProtocolPathIndex = (int)reader.ReadUInt32();
-        string protocolPath = strings[uProtocolPathIndex];
-        Protocol = Path.GetFileNameWithoutExtension(protocolPath);
+        string protocolPath = strings[uProtocolPathIndex]; // WARNING: may contain backslashes
+        string safeProtocolPath = protocolPath.Replace("\\", "/");
+        Protocol = Path.GetFileNameWithoutExtension(safeProtocolPath);
 
         // read comment tags
         reader.BaseStream.Seek(protocolSection_firstByte + 14, SeekOrigin.Begin);
