@@ -31,10 +31,10 @@
 
     protected override void OnInitialized()
     {
-        PopulateMenu();
+        UpdateMenuFromDisk();
     }
 
-    public void PopulateMenu()
+    public void UpdateMenuFromDisk()
     {
         string originallySelectedAbfID = string.Empty;
 

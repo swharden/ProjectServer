@@ -53,8 +53,9 @@
             <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
                 <input class="form-check-input" type="checkbox" @bind=IsAutoAnalyzed>
                 <label class="form-check-label">
-                    Auto-Analyze Folder
+                    Auto-Analyze
                 </label>
+                <button class="button-small" @onclick=UpdateMenuFromDisk>refresh</button>
             </div>
         }
 
@@ -74,7 +75,7 @@
     {
         @if (SelectedParent is not null)
         {
-            <CellDetails Parent=@SelectedParent OnInfoChanged=@OnInfoChanged @ref="CellsDetailsRef" />
+            <CellDetails Parent=@SelectedParent OnInfoChanged=@UpdateMenuFromDisk @ref="CellsDetailsRef" />
         }
         else
         {
@@ -175,9 +176,9 @@
     /// <summary>
     /// Called when cells.txt has been modified
     /// </summary>
-    private void OnInfoChanged()
+    private void UpdateMenuFromDisk()
     {
-        CellsMenuRef.PopulateMenu();
+        CellsMenuRef.UpdateMenuFromDisk();
     }
 
     private void ClickedDailyNotes()
