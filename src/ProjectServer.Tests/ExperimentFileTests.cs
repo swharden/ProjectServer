@@ -1,6 +1,6 @@
 ﻿namespace ProjectServer.Tests;
 
-internal class AbfExperimentFileTests
+internal class ExperimentFileTests
 {
     [Test]
     public void Test_ExperimentFile_SaveAndLoad()
