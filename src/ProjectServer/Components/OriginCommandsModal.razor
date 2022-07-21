@@ -1,0 +1,52 @@
+﻿@using ProjectServer.Components.AbfGrouping;
+
+<a href="" class="btn btn-primary btn-sm" @onclick:preventDefault data-bs-toggle="modal" data-bs-target="#@ModalID">Origin Command Generator</a>
+
+<div class="modal fade" id="@ModalID" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title fw-bold">Origin Command Generator</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="d-flex align-items-end">
+                    <div class="d-inline-block me-2">Commands:</div>
+                    <input type="text" class="form-control form-control-sm d-inline-block" @bind=CommandSuffix @bind:event="oninput">
+                </div>
+
+                <div class="d-flex align-items-end">
+                    <div class="d-inline-block me-2">Commands:</div>
+                    <input type="text" class="form-control form-control-sm d-inline-block" @bind=CommandSuffix @bind:event="oninput">
+                </div>
+
+                <div class="bg-light border rounded mt-3 p-2">
+                    <div><code>ModifyNames "@Group.Title";</code></div>
+                    @foreach (AbfParentInfo abfInfo in Group.Parents)
+                    {
+                        <div><code>SetPath "@abfInfo.AbfFilePath"; @CommandSuffix</code></div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public AbfGroup Group { get; set; } = null!;
+
+    private string ModalID => "modal_group_" + GetMD5(Group.Title);
+
+    private string CommandSuffix = "memtest;";
+
+    private string GetMD5(string str)
+    {
+        byte[] bytes = System.Text.Encoding.ASCII.GetBytes(str);
+        var md5 = System.Security.Cryptography.MD5.Create();
+        return string.Join("", md5.ComputeHash(bytes).Select(x => x.ToString("x2")));
+    }
+}

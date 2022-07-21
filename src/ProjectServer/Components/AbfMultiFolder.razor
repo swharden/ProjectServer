@@ -20,13 +20,6 @@
             </label>
         </div>
 
-        <div class="form-check pe-3">
-            <input class="form-check-input" type="checkbox" @bind=ShowOrigin>
-            <label class="form-check-label">
-                Origin Commands
-            </label>
-        </div>
-
         <select class="form-select" @bind=SelectedStrategy style="width: 200px;">
             @foreach (string strategyName in GroupStrategies.Keys)
             {
@@ -45,7 +38,7 @@
 
 @foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents))
 {
-    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes ShowOrigin=ShowOrigin />
+    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes />
 }
 
 @code {
@@ -63,8 +56,6 @@
     bool ShowParents { get; set; } = true;
 
     bool ShowNotes { get; set; } = true;
-
-    bool ShowOrigin { get; set; } = true;
 
     Dictionary<string, IGroupStrategy> GroupStrategies = new()
         {
