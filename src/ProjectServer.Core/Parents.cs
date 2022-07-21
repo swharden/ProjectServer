@@ -13,15 +13,9 @@ public static class Parents
     {
         Dictionary<string, string[]> abfsByParent = new();
 
-        string[] nonAbfFilenames = filenames.Where(x => !x.EndsWith(".abf") && !x.EndsWith(".ignored")).ToArray();
+        string[] nonAbfFilenames = filenames.Where(x => !x.EndsWith(".abf") && !x.EndsWith(".ignored") && !x.EndsWith(".rsv")).ToArray();
 
-        string[] incompleteAbfFilenames = filenames.Where(x => x.EndsWith(".rsv"))
-            .Select(x => Path.GetFileNameWithoutExtension(x) + ".abf")
-            .ToArray();
-
-        string[] abfFilenames = filenames.Where(x => x.EndsWith(".abf"))
-            .Where(x => !incompleteAbfFilenames.Contains(x))
-            .ToArray();
+        string[] abfFilenames = filenames.Where(x => x.EndsWith(".abf")).ToArray();
 
         string parentID = "orphan";
         List<string> children = new();

@@ -21,15 +21,29 @@ public class AbfInfo
         if (!File.Exists(abfFilePath))
             throw new FileNotFoundException(abfFilePath);
 
-        AbfReader abf = new(abfFilePath);
-
-        return new AbfInfo()
+        try
         {
-            AbfFilePath = abfFilePath,
-            Protocol = abf.Protocol,
-            SweepCount = abf.SweepCount,
-            SweepLengthSec = abf.SweepLengthSec,
-            Comments = abf.Comments,
-        };
+            AbfReader abf = new(abfFilePath);
+
+            return new AbfInfo()
+            {
+                AbfFilePath = abfFilePath,
+                Protocol = abf.Protocol,
+                SweepCount = abf.SweepCount,
+                SweepLengthSec = abf.SweepLengthSec,
+                Comments = abf.Comments,
+            };
+        }
+        catch (Exception ex)
+        {
+            return new AbfInfo()
+            {
+                AbfFilePath = abfFilePath,
+                Protocol = string.Empty,
+                SweepCount = -1,
+                SweepLengthSec = -1,
+                Comments = ex.Message,
+            };
+        }
     }
 }
