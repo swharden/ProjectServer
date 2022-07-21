@@ -27,15 +27,17 @@
         }
     }
 
-    @if (ShowOrigin && Group.OriginLines.Any())
+    @if (ShowOrigin)
     {
         <div class="fw-bold mt-3">Origin Commands</div>
-        @foreach (string line in Group.OriginLines)
-        {
-            <div class="ms-2 lh-1">
-                <code>@line</code>
-            </div>
-        }
+
+        <div>
+            <button class="btn btn-primary">paths</button>
+            <button class="btn btn-primary">memtest</button>
+            <button class="btn btn-primary">cjfmini</button>
+            <button class="btn btn-primary">getevoked</button>
+            <button class="btn btn-primary">getstats</button>
+        </div>
     }
 
 </div>
@@ -44,13 +46,13 @@
 @code {
     [Parameter, EditorRequired]
     public AbfGroup Group { get; set; } = null!;
-    
+
     [Parameter, EditorRequired]
     public bool ShowParents { get; set; } = true;
-    
+
     [Parameter, EditorRequired]
     public bool ShowNotes { get; set; } = true;
-    
+
     [Parameter, EditorRequired]
     public bool ShowOrigin { get; set; } = true;
 
