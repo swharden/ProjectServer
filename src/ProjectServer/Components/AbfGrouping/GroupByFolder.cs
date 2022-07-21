@@ -2,7 +2,7 @@
 
 namespace ProjectServer.Components.AbfGrouping
 {
-    public class GroupByDay : IGroupStrategy
+    public class GroupByFolder : IGroupStrategy
     {
         public AbfGroup[] GetGroupedAbfs(AbfParentInfo[] allParents)
         {

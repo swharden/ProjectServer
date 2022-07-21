@@ -59,13 +59,13 @@
 
     Dictionary<string, IGroupStrategy> GroupStrategies = new()
         {
-            {"By Date" , new GroupByDay() },
+            {"By Folder" , new GroupByFolder() },
             {"By Color" , new GroupByColor() },
             {"By Header" , new GroupByHeader() },
             {"By Tag" , new GroupByTag() },
         };
 
-    string SelectedStrategy { get; set; } = "By Date";
+    string SelectedStrategy { get; set; } = "By Folder";
 
     protected override Task OnInitializedAsync()
     {

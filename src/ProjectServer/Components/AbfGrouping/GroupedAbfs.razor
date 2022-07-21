@@ -1,37 +1,37 @@
-﻿<div class="ps-2 mb-5">
-
-    <div>
-        <div class="fs-3 d-inline-block">@Group.Title</div>
+﻿<div class="card m-5 shadow">
+    <div class="card-header d-flex justify-content-between">
+        <div class="fs-4 fw-bold">@(string.IsNullOrWhiteSpace(Group.Title) ? "None" : Group.Title)</div>
         <OriginCommandsModal Group=@Group />
     </div>
+    <div class="card-body">
 
-    @if (ShowParents)
-    {
-        <div class="fw-bold">Parents</div>
-        @foreach (AbfParentInfo parent in Group.Parents)
+        @if (ShowParents)
         {
-            <CellsMenuItem Parent="parent"
-                   IsSelected=false
-                   ShowHeading=true
-                   Wrap=true
-                   ClickOpensModal=true
-                   OnSelected="() => SelectParent(parent)" />
+            <h5 class="card-title mt-2">Parents</h5>
+            @foreach (AbfParentInfo parent in Group.Parents)
+            {
+                <CellsMenuItem Parent="parent"
+                       IsSelected=false
+                       ShowHeading=true
+                       Wrap=true
+                       ClickOpensModal=true
+                       OnSelected="() => SelectParent(parent)" />
+            }
         }
-    }
 
-    @if (ShowNotes && Group.NotesLines.Any())
-    {
-        <div class="fw-bold mt-3">Notes</div>
-        @foreach (string line in Group.NotesLines)
+        @if (ShowNotes && Group.NotesLines.Any())
         {
-            <div class="ms-2 lh-1">
-                <code>@line</code>
-            </div>
+            <h5 class="card-title mt-2">Notes</h5>
+            @foreach (string line in Group.NotesLines)
+            {
+                <div class="ms-2 lh-1">
+                    <code>@line</code>
+                </div>
+            }
         }
-    }
 
+    </div>
 </div>
-
 
 @code {
     [Parameter, EditorRequired]

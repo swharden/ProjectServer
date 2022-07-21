@@ -17,11 +17,6 @@
                     <input type="text" class="form-control form-control-sm d-inline-block" @bind=CommandSuffix @bind:event="oninput">
                 </div>
 
-                <div class="d-flex align-items-end">
-                    <div class="d-inline-block me-2">Commands:</div>
-                    <input type="text" class="form-control form-control-sm d-inline-block" @bind=CommandSuffix @bind:event="oninput">
-                </div>
-
                 <div class="bg-light border rounded mt-3 p-2">
                     <div><code>ModifyNames "@Group.Title";</code></div>
                     @foreach (AbfParentInfo abfInfo in Group.Parents)
