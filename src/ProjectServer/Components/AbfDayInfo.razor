@@ -3,7 +3,7 @@
     <div class="mb-3">
         <div class="fs-3 fw-bolder">ABF Day Notes</div>
         <div style="font-size: .8em; opacity: .5;">@ExperimentFilePath</div>
-        @if (!ExperimentFileExists)
+        @if (!File.Exists(ExperimentFilePath))
         {
             <div class="my-3"><mark>WARNING: file does not exist!</mark></div>
         }
@@ -126,7 +126,6 @@
     public string FolderPath { get; set; } = string.Empty;
 
     private string ExperimentFilePath => Path.Combine(FolderPath, "experiment.txt");
-    private bool ExperimentFileExists => File.Exists(ExperimentFilePath);
 
     private string EditSpecies { get; set; } = string.Empty;
 
@@ -163,7 +162,7 @@
 
     private void LoadFromFile(string filePath)
     {
-        if (ExperimentFileExists)
+        if (File.Exists(filePath))
         {
             var notes = Core.AbfExperimentFile.FromText(File.ReadAllText(filePath));
             EditSpecies = notes.Species;

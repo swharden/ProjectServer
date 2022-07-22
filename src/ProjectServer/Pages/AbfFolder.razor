@@ -71,7 +71,11 @@
 </nav>
 
 <main>
-    @if (IsAbfFolder)
+    @if (IsEmptyFolder)
+    {
+        <AbfDayInfo FolderPath=@FolderPath />
+    }
+    else if (IsAbfFolder)
     {
         @if (SelectedParent is not null)
         {
@@ -103,6 +107,7 @@
     string[] SubFolderPaths = Array.Empty<string>();
     string[] FilePaths = Array.Empty<string>();
     bool IsAbfFolder;
+    bool IsEmptyFolder;
 
     bool _isAutoAnalyzed;
     bool IsAutoAnalyzed
@@ -142,6 +147,7 @@
         SubFolderPaths = Directory.GetDirectories(path);
         FilePaths = Directory.GetFiles(path);
         IsAbfFolder = FilePaths.Where(x => x.EndsWith(".abf")).Any();
+        IsEmptyFolder = (FilePaths.Count() < 2) && (SubFolderPaths.Count() == 0);
         _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
 
         if (updateUrl)
