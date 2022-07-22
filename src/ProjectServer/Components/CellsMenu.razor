@@ -29,12 +29,12 @@
 
     private Domain.AbfParentInfo? SelectedParent = null;
 
-    protected override void OnInitialized()
+    protected override Task OnInitializedAsync()
     {
-        UpdateMenuFromDisk();
+        return UpdateMenuFromDisk();
     }
 
-    public void UpdateMenuFromDisk()
+    public async Task UpdateMenuFromDisk()
     {
         string originallySelectedAbfID = string.Empty;
 
@@ -56,13 +56,13 @@
         {
             AbfParentInfo[] matchingParents = Parents.Where(x => x.AbfID == originallySelectedAbfID).ToArray();
             if (matchingParents.Any())
-                SelectParent(matchingParents.First());
+                await SelectParent(matchingParents.First());
         }
     }
 
-    private void SelectParent(AbfParentInfo parent)
+    private async Task SelectParent(AbfParentInfo parent)
     {
         SelectedParent = parent;
-        OnSelectParent.InvokeAsync(parent);
+        await OnSelectParent.InvokeAsync(parent);
     }
 }

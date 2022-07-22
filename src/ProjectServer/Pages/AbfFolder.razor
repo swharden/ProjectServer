@@ -55,7 +55,13 @@
                 <label class="form-check-label">
                     Auto-Analyze
                 </label>
-                <button class="button-small" @onclick=UpdateMenuFromDisk>refresh</button>
+            </div>
+
+            <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
+                <input class="form-check-input" type="checkbox" @bind=AutoRefresh>
+                <label class="form-check-label">
+                    Auto-Refresh
+                </label>
             </div>
         }
 
@@ -120,6 +126,9 @@
         }
     }
 
+    private System.Threading.Timer? RefreshTimer;
+    private bool AutoRefresh = false;
+
     Domain.AbfParentInfo? SelectedParent = null;
     CellsMenu CellsMenuRef = null!;
     CellDetails CellsDetailsRef = null!;
@@ -131,6 +140,12 @@
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("folder", out StringValues folderQueryValues))
             initialPath = folderQueryValues.First();
         SetFolderPath(initialPath, updateUrl: false);
+
+        RefreshTimer = new System.Threading.Timer(
+            callback: async _ => { if (AutoRefresh) { await InvokeAsync(UpdateMenuFromDisk); } },
+            state: null,
+            dueTime: 0,
+            period: 5_000);
     }
 
     /// <summary>
@@ -182,9 +197,10 @@
     /// <summary>
     /// Called when cells.txt has been modified
     /// </summary>
-    private void UpdateMenuFromDisk()
+    private async Task UpdateMenuFromDisk()
     {
-        CellsMenuRef.UpdateMenuFromDisk();
+        await CellsMenuRef.UpdateMenuFromDisk();
+        StateHasChanged();
     }
 
     private void ClickedDailyNotes()
