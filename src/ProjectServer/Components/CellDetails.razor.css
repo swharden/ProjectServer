@@ -39,6 +39,8 @@ img {
 
 .info-comment {
     font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: black;
 }
 
 .tag {

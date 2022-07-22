@@ -10,6 +10,9 @@ public class AbfInfo
     public string Comments { get; set; } = string.Empty;
     public bool HasComments => !string.IsNullOrWhiteSpace(Comments);
 
+    public bool IsValid => SweepCount > 0;
+    public bool IsLocked => Comments.StartsWith("The process cannot access the file");
+
     public override string ToString()
     {
         return $"{AbfID} ({Protocol}) with {SweepCount} sweeps ({SweepLengthSec} sec each) comments={Comments}";

@@ -56,24 +56,30 @@
     <div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
         <span class="font-monospace">@abf.AbfID</span>
 
-        <button class="button-small" onclick="CopyToClipboard('@safeAbfPath')">copy path</button>
-        <button class="button-small" onclick="CopySetpath('@safeAbfPath')">setpath</button>
-        <button class="button-small" @onclick="() => ClickedIgnore(abf)">ignore</button>
+        <div class="d-inline-block me-1">
+            <button class="button-small" onclick="CopyToClipboard('@safeAbfPath')">copy path</button>
+            <button class="button-small" onclick="CopySetpath('@safeAbfPath')">setpath</button>
+            <button class="button-small" @onclick="() => ClickedIgnore(abf)">ignore</button>
+        </div>
 
-        <span class="font-monospace">@abf.Protocol</span>
-
-        <span class="info-light">
-            | sweeps: @abf.SweepCount
-            | sweep length: @abf.SweepLengthSec sec
-        </span>
-        @if (abf.HasComments)
+        @if (abf.IsValid)
         {
-            <span class="info-light">
-                | Comments:
-            </span>
-            <span class="info-comment">
-                <strong>@abf.Comments</strong>
-            </span>
+            <div class="info-light d-inline-block">
+                <span class="font-monospace">@abf.Protocol</span>
+                <span>(@abf.SweepCount sweeps)</span>
+                @if (abf.HasComments)
+                {
+                    <span class="info-comment ms-1">@abf.Comments</span>
+                }
+            </div>
+        }
+        else if (abf.IsLocked)
+        {
+            <span class="badge rounded-pill bg-secondary">Recording...</span>
+        }
+        else
+        {
+            <span class="badge rounded-pill bg-danger">Invalid</span>
         }
     </div>
 }
