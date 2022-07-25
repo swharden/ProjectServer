@@ -42,7 +42,7 @@
     <Spinner />
 }
 
-@foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents))
+@foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents).Where(x => x.Parents.Any()))
 {
     <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes />
 }
