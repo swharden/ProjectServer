@@ -44,7 +44,8 @@
 
 @foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents).Where(x => x.Parents.Any()))
 {
-    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes />
+    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes 
+        Tags=@Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray() />
 }
 
 @code {

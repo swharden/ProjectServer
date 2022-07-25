@@ -11,7 +11,7 @@
             @foreach (AbfParentInfo parent in Group.Parents)
             {
                 <CellsMenuItem Parent="parent"
-                       Tags=@Group.Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray()
+                       Tags=Tags
                        IsSelected=false
                        ShowHeading=true
                        Wrap=true
@@ -43,6 +43,9 @@
 
     [Parameter, EditorRequired]
     public bool ShowNotes { get; set; } = true;
+
+    [Parameter, EditorRequired]
+    public string[] Tags { get; set; } = Array.Empty<string>();
 
     private void SelectParent(AbfParentInfo parent)
     {
