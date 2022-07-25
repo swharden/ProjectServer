@@ -13,6 +13,7 @@
     {
         <CellsMenuItem ShowHeading=false
                Parent=parent
+               Tags=@Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray()
                IsSelected="parent == SelectedParent"
                OnSelected="() => SelectParent(parent)" />
     }

@@ -22,7 +22,7 @@
     <!-- tags -->
     @foreach (string tag in Parent.Tags)
     {
-        <div class="tag">@tag</div>
+        <div class="tag" style="background-color: @GetTagColor(tag); color: #FFFFFFDD;">@tag</div>
     }
 
     <!-- comment -->
@@ -66,6 +66,9 @@
     public AbfParentInfo Parent { get; set; } = null!;
 
     [Parameter, EditorRequired]
+    public string[] Tags { get; set; } = Array.Empty<string>();
+
+    [Parameter, EditorRequired]
     public bool ShowHeading { get; set; } = false;
 
     [Parameter, EditorRequired]
@@ -99,5 +102,19 @@
         byte[] bytes = System.Text.Encoding.ASCII.GetBytes(str);
         var md5 = System.Security.Cryptography.MD5.Create();
         return string.Join("", md5.ComputeHash(bytes).Select(x => x.ToString("x2")));
+    }
+
+    private string GetTagColor(string tag)
+    {
+        int i = Array.IndexOf(Tags, tag);
+
+        string[] colors =
+        {
+            // https://github.com/ScottPlot/ScottPlot/blob/main/src/ScottPlot4/ScottPlot/Palettes/Category10.cs
+            "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+            "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf",
+    };
+
+        return (i < 0) ? "#CCCCCC" : colors[i % colors.Length];
     }
 }
