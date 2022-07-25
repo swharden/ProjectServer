@@ -1,0 +1,48 @@
+﻿<div class="p-3">
+    <h3>Create Folder</h3>
+
+    <div>
+        <input type="email" class="form-control w-50" @bind=FolderName @bind:event="oninput">
+    </div>
+
+    <div>
+        <code>@NewFolderPath</code>
+    </div>
+
+    <div class="my-3">
+        <button class="btn btn-secondary me-2" @onclick=Reset>Reset</button>
+        <button class="btn btn-primary" @onclick=Create>Create</button>
+    </div>
+</div>
+
+@code {
+
+    [Parameter, EditorRequired]
+    public string FolderPath { get; set; } = string.Empty;
+
+    [Parameter, EditorRequired]
+    public EventCallback<string> OnFolderCreated { get; set; }
+
+    string FolderName { get; set; } = GetDefaultFolderName();
+
+    string NewFolderPath => Path.Combine(FolderPath, FolderName);
+
+    private static string GetDefaultFolderName()
+    {
+        return $"{DateTime.Now.Year:D4}-{DateTime.Now.Month:D2}-{DateTime.Now.Day:D2}";
+    }
+
+    private void Reset()
+    {
+        FolderName = GetDefaultFolderName();
+    }
+
+    private void Create()
+    {
+        if (!Directory.Exists(NewFolderPath))
+        {
+            Directory.CreateDirectory(NewFolderPath);
+            OnFolderCreated.InvokeAsync(NewFolderPath);
+        }
+    }
+}

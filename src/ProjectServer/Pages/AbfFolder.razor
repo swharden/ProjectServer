@@ -42,10 +42,17 @@
             }
         </div>
 
-        <div class="mt-2">
+        <div class="mt-2 d-flex gap-1">
             <button class="button-small" onclick="CopyToClipboard('@FolderPath.Replace("\\","/")')">copy path</button>
             <button class="button-small" onclick="CopyToClipboard('@GetThisUrl()')">copy URL</button>
-            <button class="button-small @(IsAbfFolder ? "visible" : "invisible")" @onclick=ClickedDailyNotes>daily notes</button>
+            @if (IsAbfFolder)
+            {
+                <button class="button-small" @onclick=ClickedDailyNotes>daily notes</button>
+            }
+            else
+            {
+                <button class="button-small" @onclick=ClickedCreateSubfolder>new folder</button>
+            }
         </div>
 
         @if (IsAbfFolder)
@@ -57,12 +64,15 @@
                 </label>
             </div>
 
-            <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
-                <input class="form-check-input" type="checkbox" @bind=AutoRefresh>
-                <label class="form-check-label">
-                    Auto-Refresh
-                </label>
-            </div>
+            @if (IsAutoAnalyzed)
+            {
+                <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
+                    <input class="form-check-input" type="checkbox" @bind=AutoRefresh>
+                    <label class="form-check-label">
+                        Auto-Refresh
+                    </label>
+                </div>
+            }
         }
 
     </div>
@@ -77,7 +87,11 @@
 </nav>
 
 <main>
-    @if (IsEmptyFolder)
+    @if (CreateSubfolder)
+    {
+        <NewFolder FolderPath=@FolderPath OnFolderCreated=@NewFolderCreated />
+    }
+    else if (IsEmptyFolder)
     {
         <AbfDayInfo FolderPath=@FolderPath />
     }
@@ -126,6 +140,8 @@
         }
     }
 
+    private bool CreateSubfolder { get; set; } = false;
+
     private System.Threading.Timer? RefreshTimer;
     private bool AutoRefresh = false;
 
@@ -164,6 +180,8 @@
         IsAbfFolder = FilePaths.Where(x => x.EndsWith(".abf")).Any();
         IsEmptyFolder = (FilePaths.Count() < 2) && (SubFolderPaths.Count() == 0);
         _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
+        CreateSubfolder = false;
+        AutoRefresh = false;
 
         if (updateUrl)
             UpdateUrl();
@@ -203,10 +221,21 @@
         StateHasChanged();
     }
 
+    private void NewFolderCreated(string path)
+    {
+        SetFolderPath(path);
+    }
+
     private void ClickedDailyNotes()
     {
+        CreateSubfolder = false;
         SelectedParent = null;
         UpdateUrl();
+    }
+
+    private void ClickedCreateSubfolder()
+    {
+        CreateSubfolder = true;
     }
 
     private void UpdateUrl()
