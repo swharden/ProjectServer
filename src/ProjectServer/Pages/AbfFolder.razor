@@ -7,7 +7,12 @@
 <nav>
     <!-- navigation area -->
     <div class="p-2" style="background-color: #f1f1f1;">
-        <h2>ABF Browser</h2>
+
+        <div class="d-flex justify-content-between lh-1">
+            <div class="title">ABF Browser</div>
+            <div><a href="/" style="font-size: .8em;">Home</a></div>
+        </div>
+
         <div class="lh-1" style="font-family: Consolas; font-size: .8em; white-space: nowrap;">
 
             <!-- show a link to every level of the current folder -->
@@ -80,7 +85,7 @@
     <!-- ABF list -->
     @if (IsAbfFolder)
     {
-        <h2 class="p-2">ABF Folder</h2>
+        <div class="p-2 title">ABF Folder</div>
         <CellsMenu FolderPath=@FolderPath OnSelectParent=@OnSelectParent @ref="CellsMenuRef" />
     }
 
@@ -114,7 +119,7 @@
         }
         else
         {
-            <h2 class="p-2">Folder does not contain ABF files</h2>
+            <div class="p-2 title">Folder does not contain ABF files</div>
         }
     }
 </main>
