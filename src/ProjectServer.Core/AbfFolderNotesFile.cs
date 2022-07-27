@@ -2,6 +2,10 @@
 
 namespace ProjectServer.Core;
 
+/// <summary>
+/// ABF Folders contain a daily notes file, "experiment.txt".
+/// This class contains methods which interact with this file.
+/// </summary>
 public class AbfFolderNotesFile
 {
     public string Species { get; set; } = string.Empty;

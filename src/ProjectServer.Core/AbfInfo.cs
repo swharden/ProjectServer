@@ -1,5 +1,8 @@
 ﻿namespace ProjectServer.Core;
 
+/// <summary>
+/// This class is a POCO used to pass around basic information about ABF files.
+/// </summary>
 public class AbfInfo
 {
     public string AbfFilePath { get; set; } = string.Empty;

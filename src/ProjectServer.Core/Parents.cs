@@ -1,5 +1,11 @@
 ﻿namespace ProjectServer.Core;
 
+/// <summary>
+/// This class contains logic for categorizing ABF files into parent/child relationships.
+/// An ABF parent is the first ABF recorded for a cell.
+/// An AbfID is the filename of an ABF file (minus the .abf extension).
+/// Parent ABF files are those which have another file in the same folder starting with the AbfID.
+/// </summary>
 public static class Parents
 {
     public static Dictionary<string, string[]> GetAbfsByParent(string folderPath)

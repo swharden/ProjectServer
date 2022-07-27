@@ -1,5 +1,8 @@
 ﻿namespace ProjectServer.Core;
 
+/// <summary>
+/// This class contains methods which read the binary content of ABF files to retrieve basic information about them.
+/// </summary>
 public class AbfReader
 {
     public string AbfFilePath { get; private set; } = string.Empty;

@@ -1,7 +1,7 @@
 ﻿namespace ProjectServer.Core;
 
 /// <summary>
-/// The cells file is a plain text database with notes about ABF parents in the same folder.
+/// The cells file is a plain text database with notes about ABF parents in the same folder (cells.txt).
 /// This class contains logic for reading/writing cells files and querying their database contents.
 /// </summary>
 public class CellsFile

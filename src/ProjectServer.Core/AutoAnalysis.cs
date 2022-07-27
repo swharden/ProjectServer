@@ -1,5 +1,11 @@
 ﻿namespace ProjectServer.Core;
 
+/// <summary>
+/// This class has methods to interact with the watched folder list.
+/// 
+/// The auto-analysis folder list is just a text file on the X drive 
+/// that is watched by Python to auto-analyze new ABFs inside when they appear.
+/// </summary>
 public static class AutoAnalysis
 {
     private static string AutoAnalysisFilePath = "X:/Lab Documents/network/autoAnalysisFolders.txt";
