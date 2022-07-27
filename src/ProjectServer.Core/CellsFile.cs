@@ -19,6 +19,7 @@ public class CellsFile
     {
         return new Dictionary<string, string>()
         {
+            {"", "#FFFFFF"},
             {"?", "#EEEEEE"},
             {"g", "#00FF00"},
             {"g1", "#00CC00"},
