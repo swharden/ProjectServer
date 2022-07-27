@@ -1,6 +1,6 @@
 ﻿<div class="card m-5 shadow-sm">
     <div class="card-header d-flex justify-content-between">
-        <div class="fs-4 fw-bold">@(string.IsNullOrWhiteSpace(Group.Title) ? "None" : Group.Title)</div>
+        <div class="fs-4 fw-bold">@(string.IsNullOrWhiteSpace(Group.Title) ? "None" : Group.Title) (@Group.Parents.Count())</div>
         <OriginCommandsModal Group=@Group />
     </div>
     <div class="card-body">
