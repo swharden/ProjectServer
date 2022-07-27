@@ -99,7 +99,7 @@
         set
         {
             _Parent = value;
-            EditComment = value.Comment;
+            EditComment = value.Comment == "?" ? string.Empty : value.Comment;
             EditColor = value.Color;
             Tags.Clear();
             Tags.AddRange(value.Tags);
