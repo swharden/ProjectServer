@@ -92,7 +92,7 @@
             if (parents.Any())
             {
                 ParentsByPath[subFolderPath] = parents;
-                NotesByPath[subFolderPath] = Core.AbfExperimentFile.FromFolder(subFolderPath).GetText();
+                NotesByPath[subFolderPath] = Core.AbfFolderNotesFile.FromFolder(subFolderPath).GetText();
             }
         }
 

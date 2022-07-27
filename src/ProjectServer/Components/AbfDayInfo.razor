@@ -164,7 +164,7 @@
     {
         if (File.Exists(filePath))
         {
-            var notes = Core.AbfExperimentFile.FromText(File.ReadAllText(filePath));
+            var notes = Core.AbfFolderNotesFile.FromText(File.ReadAllText(filePath));
             EditSpecies = notes.Species;
             EditStrain = notes.Strain;
             EditDate = notes.Date;
@@ -195,7 +195,7 @@
 
     private void ClickedSave()
     {
-        Core.AbfExperimentFile notes = new();
+        Core.AbfFolderNotesFile notes = new();
         notes.Species = EditSpecies;
         notes.Strain = EditStrain;
         notes.Date = EditDate;

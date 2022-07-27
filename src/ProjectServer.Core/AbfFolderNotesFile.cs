@@ -2,7 +2,7 @@
 
 namespace ProjectServer.Core;
 
-public class AbfExperimentFile
+public class AbfFolderNotesFile
 {
     public string Species { get; set; } = string.Empty;
     public string Strain { get; set; } = string.Empty;
@@ -43,16 +43,16 @@ public class AbfExperimentFile
         return sb.ToString().Replace("\r\n","\n").Trim();
     }
 
-    public static AbfExperimentFile FromFolder(string folder)
+    public static AbfFolderNotesFile FromFolder(string folder)
     {
         string filePath = Path.Combine(folder, "experiment.txt");
 
         return File.Exists(filePath) 
             ? FromFile(filePath) 
-            : new AbfExperimentFile();
+            : new AbfFolderNotesFile();
     }
 
-    public static AbfExperimentFile FromFile(string filePath)
+    public static AbfFolderNotesFile FromFile(string filePath)
     {
         if (!File.Exists(filePath))
             throw new FileNotFoundException(filePath);
@@ -60,11 +60,11 @@ public class AbfExperimentFile
         return FromText(File.ReadAllText(filePath));
     }
 
-    public static AbfExperimentFile FromText(string txt)
+    public static AbfFolderNotesFile FromText(string txt)
     {
         StringBuilder notes = new();
 
-        AbfExperimentFile day = new();
+        AbfFolderNotesFile day = new();
         foreach (string line in txt.Split("\n"))
         {
             if (!line.Contains(":"))

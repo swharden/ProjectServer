@@ -16,7 +16,7 @@ public class AbfGroup
         // only load notes if all parents are in the same folder
         if (parents.Select(x => x.AbfFolder).Distinct().Count() == 1)
         {
-            NotesLines = Core.AbfExperimentFile.FromFolder(parents.First().AbfFolder).GetText().Split("\n");
+            NotesLines = Core.AbfFolderNotesFile.FromFolder(parents.First().AbfFolder).GetText().Split("\n");
         }
     }
 }

@@ -5,7 +5,7 @@ internal class ExperimentFileTests
     [Test]
     public void Test_ExperimentFile_SaveAndLoad()
     {
-        AbfExperimentFile day1 = new()
+        AbfFolderNotesFile day1 = new()
         {
             Species = "asdf",
             Strain = "qwer",
@@ -25,7 +25,7 @@ internal class ExperimentFileTests
         string text1 = day1.GetText();
         Console.WriteLine(text1);
 
-        AbfExperimentFile day2 = AbfExperimentFile.FromText(text1);
+        AbfFolderNotesFile day2 = AbfFolderNotesFile.FromText(text1);
 
         Assert.That(day1.GetText(), Is.EqualTo(day2.GetText()));
     }
@@ -34,7 +34,7 @@ internal class ExperimentFileTests
     public void Test_ExperimentFile_LoadExample()
     {
         string text = File.ReadAllText(Path.Combine(SampleData.Folder, "daily-experiment.txt"));
-        AbfExperimentFile day = AbfExperimentFile.FromText(text);
+        AbfFolderNotesFile day = AbfFolderNotesFile.FromText(text);
         Console.WriteLine(day.GetText());
         Assert.Pass();
     }
@@ -42,7 +42,7 @@ internal class ExperimentFileTests
     [Test]
     public void Test_ExperimentFile_Empty()
     {
-        AbfExperimentFile day = AbfExperimentFile.FromText("minimal experiment file");
+        AbfFolderNotesFile day = AbfFolderNotesFile.FromText("minimal experiment file");
         Console.WriteLine(day.GetText());
         Assert.Pass();
     }
