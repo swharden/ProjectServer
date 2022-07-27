@@ -7,6 +7,17 @@
 
         <div class="d-flex align-items-center">
 
+            <div class="me-1">
+                Group by:
+            </div>
+
+            <select class="form-select me-3" @bind=SelectedStrategy style="width: 130px;">
+                @foreach (string strategyName in GroupStrategies.Keys)
+                {
+                    <option value="@strategyName">@strategyName</option>
+                }
+            </select>
+
             <div class="form-check pe-3">
                 <input class="form-check-input" type="checkbox" @bind=ShowParents>
                 <label class="form-check-label">
@@ -14,23 +25,15 @@
                 </label>
             </div>
 
-            <div class="form-check pe-3">
-                <input class="form-check-input" type="checkbox" @bind=ShowNotes>
-                <label class="form-check-label">
-                    Notes
-                </label>
-            </div>
-
-            <div class="me-1">
-                Group by:
-            </div>
-
-            <select class="form-select" @bind=SelectedStrategy style="width: 130px;">
-                @foreach (string strategyName in GroupStrategies.Keys)
-                {
-                    <option value="@strategyName">@strategyName</option>
-                }
-            </select>
+            @if (SelectedStrategy == "Folder")
+            {
+                <div class="form-check pe-3">
+                    <input class="form-check-input" type="checkbox" @bind=ShowNotes>
+                    <label class="form-check-label">
+                        Notes
+                    </label>
+                </div>
+            }
 
         </div>
 
@@ -44,8 +47,8 @@
 
 @foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents).Where(x => x.Parents.Any()))
 {
-    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=ShowNotes 
-        Tags=@Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray() />
+    <GroupedAbfs Group=group ShowParents=ShowParents ShowNotes=@(ShowNotes && SelectedStrategy=="Folder")
+             Tags=@Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray() />
 }
 
 @code {
