@@ -34,6 +34,13 @@
                     </label>
                 </div>
             }
+            
+            <div class="form-check pe-3">
+                <input class="form-check-input" type="checkbox" @bind=ShowMeta>
+                <label class="form-check-label">
+                    Meta
+                </label>
+            </div>
 
         </div>
 
@@ -43,6 +50,12 @@
 @if (IsScanning)
 {
     <Spinner />
+}
+
+@if (ShowMeta)
+{
+    <ExperimentNotesTxt FolderPath="@FolderPath" />
+    <ExperimentNotesJson FolderPath="@FolderPath" />
 }
 
 @foreach (AbfGroup group in GroupStrategies[SelectedStrategy].GetGroupedAbfs(Parents).Where(x => x.Parents.Any()))
@@ -67,6 +80,12 @@
 
     bool ShowNotes { get; set; } = true;
 
+    bool ShowMeta { get; set; } = true;
+
+    string ExperimentTxt = string.Empty;
+
+    string ExperimentJson = string.Empty;
+
     Dictionary<string, IGroupStrategy> GroupStrategies = new()
         {
             {"Folder" , new GroupByFolder() },
@@ -84,6 +103,12 @@
 
     private void Scan()
     {
+        string txtFilePath = Path.Combine(FolderPath, "experiment.txt");
+        ExperimentTxt = File.Exists(txtFilePath) ? File.ReadAllText(txtFilePath) : string.Empty;
+
+        string jsonFilePath = Path.Combine(FolderPath, "experiment.json");
+        ExperimentJson = File.Exists(jsonFilePath) ? File.ReadAllText(jsonFilePath) : string.Empty;
+
         string[] dirs = Directory.GetDirectories(FolderPath);
 
         foreach (string subFolderPath in dirs)

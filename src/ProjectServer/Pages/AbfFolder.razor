@@ -33,9 +33,9 @@
                 </div>
             }
 
-            <!-- show sub folders if this is not an ABF folder-->
             @if (!IsAbfFolder)
             {
+                <!-- sub folders -->
                 @foreach (string path in SubFolderPaths)
                 {
                     <div>
@@ -44,6 +44,30 @@
                             <span>&nbsp;</span>
                         }
                         <a href='' @onclick="(()=>SetFolderPath(path))">@Path.GetFileName(path)</a>
+                    </div>
+                }
+
+                <!-- experiment txt -->
+                if (File.Exists(Path.Combine(FolderPath, "experiment.txt")))
+                {
+                    <div>
+                        @foreach (var _ in Enumerable.Range(0, RootFolderPaths.Length))
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        <span style="opacity: .5;">experiment.txt</span>
+                    </div>
+                }
+
+                <!-- experiment json -->
+                if (File.Exists(Path.Combine(FolderPath, "experiment.json")))
+                {
+                    <div>
+                        @foreach (var _ in Enumerable.Range(0, RootFolderPaths.Length))
+                        {
+                            <span>&nbsp;</span>
+                        }
+                        <span style="opacity: .5;">experiment.json</span>
                     </div>
                 }
             }
@@ -122,6 +146,8 @@
         else
         {
             <div class="p-2 title">Folder does not contain ABF files</div>
+            <ExperimentNotesTxt FolderPath="@FolderPath" />
+            <ExperimentNotesJson FolderPath="@FolderPath" />
         }
     }
 </main>

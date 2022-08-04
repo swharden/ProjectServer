@@ -1,0 +1,21 @@
+﻿@if (!string.IsNullOrWhiteSpace(Text))
+{
+    <div class="px-5 pt-4">
+        <div class="fs-4 mx-2">Experiment.json</div>
+        <pre class="rounded">@Text</pre>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public string FolderPath { get; set; } = string.Empty;
+
+    private string Text = string.Empty;
+
+    protected override void OnInitialized()
+    {
+        string ExperimentTxtFilePath = Path.Combine(FolderPath, "experiment.json");
+        Text = File.Exists(ExperimentTxtFilePath) ? File.ReadAllText(ExperimentTxtFilePath) : string.Empty;
+        base.OnInitialized();
+    }
+}
