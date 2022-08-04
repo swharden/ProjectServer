@@ -52,13 +52,14 @@
 {
     Core.AbfInfo abf = Core.AbfInfo.FromAbf(abfPath);
     string safeAbfPath = abf.AbfFilePath.Replace("\\", "/");
+    string uniqueId = MD5(safeAbfPath);
 
     <div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
         <span class="font-monospace">@abf.AbfID</span>
 
-        <div class="d-inline-block me-1">
-            <button class="button-small" onclick="CopyToClipboard('@safeAbfPath')">copy path</button>
-            <button class="button-small" onclick="CopySetpath('@safeAbfPath')">setpath</button>
+        <div class="d-inline-block me-1" id=@uniqueId>
+            <button class="button-small" onclick="CopyToClipboard('@safeAbfPath', '@uniqueId')">copy path</button>
+            <button class="button-small" onclick="CopySetpath('@safeAbfPath', '@uniqueId')">setpath</button>
             <button class="button-small" @onclick="() => ClickedIgnore(abf)">ignore</button>
         </div>
 
@@ -181,5 +182,12 @@
             File.Move(abf.AbfFilePath, abf.AbfFilePath + ".ignored");
             await OnInfoChanged.InvokeAsync();
         }
+    }
+
+    private static string MD5(string s)
+    {
+        byte[] bytes = System.Text.ASCIIEncoding.ASCII.GetBytes(s);
+        var md5 = System.Security.Cryptography.MD5.Create();
+        return string.Join("", md5.ComputeHash(bytes).Select(x => x.ToString("x2")).ToArray());
     }
 }
