@@ -13,13 +13,19 @@
         border: 1px solid #999;
     }
 
-.cell-row:nth-child(even) {
-    background-color: #e6e6e6
+.cell-row {
+    padding: .25em 1em;
+    font-size: .8em !important;
+    line-height: 200% !important;
 }
 
-.cell-row:nth-child(odd) {
-    background-color: #f1f1f1
-}
+    .cell-row:nth-child(even) {
+        background-color: #e6e6e6
+    }
+
+    .cell-row:nth-child(odd) {
+        background-color: #f1f1f1
+    }
 
 .cell-row-with-comments {
     background-color: #fff8d7 !important;

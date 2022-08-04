@@ -54,7 +54,7 @@
     string safeAbfPath = abf.AbfFilePath.Replace("\\", "/");
     string uniqueId = MD5(safeAbfPath);
 
-    <div class="cell-row px-2 @(abf.HasComments ? "cell-row-with-comments" : "")" style="font-size: .8em; line-height: 200%;">
+    <div class="cell-row @(abf.HasComments ? "cell-row-with-comments" : "")">
         <span class="font-monospace">@abf.AbfID</span>
 
         <div class="d-inline-block me-1" id=@uniqueId>
