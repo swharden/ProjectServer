@@ -26,9 +26,10 @@
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnSelectParent { get; set; }
 
-    private Domain.AbfParentInfo[] Parents = Array.Empty<Domain.AbfParentInfo>();
+    [Parameter, EditorRequired]
+    public Domain.AbfParentInfo? SelectedParent { get; set; } = null;
 
-    private Domain.AbfParentInfo? SelectedParent = null;
+    private Domain.AbfParentInfo[] Parents = Array.Empty<Domain.AbfParentInfo>();
 
     protected override Task OnInitializedAsync()
     {

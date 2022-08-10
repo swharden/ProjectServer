@@ -112,7 +112,7 @@
     @if (IsAbfFolder)
     {
         <div class="p-2 title">ABF Folder</div>
-        <CellsMenu FolderPath=@FolderPath OnSelectParent=@OnSelectParent @ref="CellsMenuRef" />
+        <CellsMenu FolderPath=@FolderPath SelectedParent=@SelectedParent OnSelectParent=@OnSelectParent @ref="CellsMenuRef" />
     }
 
 </nav>
@@ -184,17 +184,43 @@
 
     protected override void OnInitialized()
     {
-        string initialPath = @"X:\Data\zProjects\Aging and Cholinergics\experiments\10 uM CCh (bath app)";
-        Uri uri = NavManager.ToAbsoluteUri(NavManager.Uri);
-        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("folder", out StringValues folderQueryValues))
-            initialPath = folderQueryValues.First();
+        // read query parameters
+        string initialPath = GetQueryString("folder", @"X:\Data");
+        string initiaAbfID = GetQueryString("abfid", string.Empty);
+
+        // load this folder
         SetFolderPath(initialPath, updateUrl: false);
+
+        // pre-select the parent of the ABFID given in the query parameter
+        if (IsAbfFolder && !string.IsNullOrWhiteSpace(initiaAbfID))
+        {
+            string childAbfFilePath = Path.Combine(initialPath, initiaAbfID + ".abf");
+            foreach (AbfParentInfo parent in AbfParentInfo.GetParentsInFolder(FolderPath))
+            {
+                if (parent.ChildAbfPaths.Contains(childAbfFilePath))
+                {
+                    SelectedParent = parent;
+                    break;
+                }
+            }
+        }
 
         RefreshTimer = new System.Threading.Timer(
             callback: async _ => { if (AutoRefresh) { await InvokeAsync(UpdateMenuFromDisk); } },
             state: null,
             dueTime: 0,
             period: 5_000);
+    }
+
+    private string GetQueryString(string varName, string defaultValue)
+    {
+        string value = defaultValue;
+        Uri uri = NavManager.ToAbsoluteUri(NavManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue(varName, out StringValues folderQueryValues))
+        {
+            value = folderQueryValues.First();
+        }
+        return value;
     }
 
     /// <summary>
