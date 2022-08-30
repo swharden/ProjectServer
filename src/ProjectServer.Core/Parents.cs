@@ -21,9 +21,14 @@ public static class Parents
 
         string[] nonAbfFilenames = filenames.Where(x => !x.EndsWith(".abf") && !x.EndsWith(".ignored") && !x.EndsWith(".rsv")).ToArray();
 
-        string[] abfFilenames = filenames.Where(x => x.EndsWith(".abf")).ToArray();
+        string[] abfFilenames = filenames.Where(x => x.EndsWith(".abf")).OrderBy(x => x).ToArray();
 
-        string parentID = "orphan";
+        // ABFs that come before the first TIF are "orphan" ABF files.
+        // Their parent will default to the first ABF file in the folder.
+        string parentID = abfFilenames.Any()
+            ? Path.GetFileNameWithoutExtension(abfFilenames.First())
+            : string.Empty;
+
         List<string> children = new();
 
         foreach (string abfFilename in abfFilenames)
