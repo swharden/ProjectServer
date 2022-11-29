@@ -11,6 +11,9 @@
 
     @foreach (AbfParentInfo parent in Parents.Where(x => x.Header == heading))
     {
+        if (parent.Color == "#FF9999" && ShowRedCells == false)
+            continue;
+
         <CellsMenuItem ShowHeading=false
                Parent=parent
                Tags=@Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray()
@@ -25,6 +28,8 @@
 
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnSelectParent { get; set; }
+
+    public bool ShowRedCells { get; set; } = true;
 
     [Parameter, EditorRequired]
     public Domain.AbfParentInfo? SelectedParent { get; set; } = null;
