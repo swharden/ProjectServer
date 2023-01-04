@@ -18,7 +18,9 @@
                Parent=parent
                Tags=@Parents.SelectMany(x => x.Tags).Distinct().OrderBy(x => x).ToArray()
                IsSelected="parent == SelectedParent"
-               OnSelected="() => SelectParent(parent)" />
+               OnSelected="() => SelectParent(parent)"
+               OnSelectNext=SelectNext
+               OnSelectPrevious=SelectPrevious />
     }
 }
 
@@ -67,9 +69,49 @@
         }
     }
 
-    private async Task SelectParent(AbfParentInfo parent)
+    public async Task SelectParent(AbfParentInfo parent)
     {
         SelectedParent = parent;
         await OnSelectParent.InvokeAsync(parent);
+    }
+
+    public async void SelectPrevious()
+    {
+        System.Diagnostics.Debug.WriteLine("Cells Menu: selecting previous cell...");
+
+        if (!Parents.Any())
+            return;
+
+        if (SelectedParent == Parents.First())
+            return;
+
+        for (int i = 0; i < Parents.Length; i++)
+        {
+            if (SelectedParent == Parents[i])
+            {
+                await SelectParent(Parents[i - 1]);
+                return;
+            }
+        }
+    }
+
+    public async void SelectNext()
+    {
+        System.Diagnostics.Debug.WriteLine("Cells Menu: selecting next cell...");
+
+        if (!Parents.Any())
+            return;
+
+        if (SelectedParent == Parents.Last())
+            return;
+
+        for (int i = 0; i < Parents.Length; i++)
+        {
+            if (SelectedParent == Parents[i])
+            {
+                await SelectParent(Parents[i + 1]);
+                return;
+            }
+        }
     }
 }

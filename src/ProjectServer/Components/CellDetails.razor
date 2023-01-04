@@ -2,8 +2,18 @@
 
 @if (ShowHeader)
 {
-    <div class="" style="background-color: @Parent.Color">
+    <div class="d-flex justify-content-between align-items-center" style="background-color: @Parent.Color">
         <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
+        <div class="pe-3 text-muted">
+            <button @onclick="()=>OnSelectPreviousCell.InvokeAsync()"
+                class="btn btn-sm btn-outline-secondary">
+                « previous
+            </button>
+            <button @onclick="()=>OnSelectNextCell.InvokeAsync()"
+                class="btn btn-sm btn-outline-secondary">
+                next »
+            </button>
+        </div>
     </div>
 }
 
@@ -109,6 +119,12 @@
 
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnInfoChanged { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnSelectPreviousCell { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnSelectNextCell { get; set; }
 
     [Parameter]
     public bool ShowHeader { get; set; } = true;

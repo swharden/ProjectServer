@@ -49,7 +49,9 @@
                         @if (ModalHasBeenClicked)
                         {
                             <CellDetails Parent=Parent ShowHeader=false
-                                 OnInfoChanged=CellDetailsChangedInModal />
+                                 OnInfoChanged=CellDetailsChangedInModal
+                                 OnSelectPreviousCell=SelectPreviousCell
+                                 OnSelectNextCell=SelectNextCell />
                         }
                     </div>
                 </div>
@@ -74,6 +76,12 @@
     [Parameter, EditorRequired]
     public EventCallback<AbfParentInfo> OnSelected { get; set; }
 
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnSelectNext { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<AbfParentInfo> OnSelectPrevious { get; set; }
+
     [Parameter]
     public bool Wrap { get; set; } = false;
 
@@ -95,6 +103,16 @@
     private void CellDetailsChangedInModal()
     {
         Parent.UpdateFromDisk();
+    }
+
+    private void SelectPreviousCell()
+    {
+        OnSelectPrevious.InvokeAsync();
+    }
+
+    private void SelectNextCell()
+    {
+        OnSelectNext.InvokeAsync();
     }
 
     private string GetMD5(string str)

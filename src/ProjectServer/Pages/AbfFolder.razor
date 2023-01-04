@@ -119,7 +119,10 @@
     @if (IsAbfFolder)
     {
         <div class="p-2 title">ABF Folder</div>
-        <CellsMenu FolderPath=@FolderPath SelectedParent=@SelectedParent OnSelectParent=@OnSelectParent @ref="CellsMenuRef" />
+        <CellsMenu @ref="CellsMenuRef"
+               FolderPath=@FolderPath
+               SelectedParent=@SelectedParent
+               OnSelectParent=@OnSelectParent />
     }
 
 </nav>
@@ -137,7 +140,11 @@
     {
         @if (SelectedParent is not null)
         {
-            <CellDetails Parent=@SelectedParent OnInfoChanged=@UpdateMenuFromDisk @ref="CellsDetailsRef" />
+            <CellDetails @ref="CellsDetailsRef"
+                 Parent=@SelectedParent
+                 OnInfoChanged=@UpdateMenuFromDisk
+                 OnSelectPreviousCell=SelectPreviousCell
+                 OnSelectNextCell=SelectNextCell />
         }
         else
         {
@@ -194,10 +201,9 @@
 
     private System.Threading.Timer? RefreshTimer;
     private bool AutoRefresh = false;
-
     Domain.AbfParentInfo? SelectedParent = null;
-    CellsMenu CellsMenuRef = null!;
-    CellDetails CellsDetailsRef = null!;
+    CellsMenu? CellsMenuRef = null!;
+    CellDetails? CellsDetailsRef = null!;
 
     protected override void OnInitialized()
     {
@@ -294,8 +300,23 @@
     /// </summary>
     private async Task UpdateMenuFromDisk()
     {
+        if (CellsMenuRef is null)
+            return;
+
         await CellsMenuRef.UpdateMenuFromDisk();
         StateHasChanged();
+    }
+
+    private void SelectPreviousCell()
+    {
+        System.Diagnostics.Debug.WriteLine("ABF Folder: selecting previous cell...");
+        CellsMenuRef?.SelectPrevious();
+    }
+
+    private void SelectNextCell()
+    {
+        System.Diagnostics.Debug.WriteLine("ABF Folder: selecting next cell...");
+        CellsMenuRef?.SelectNext();
     }
 
     private void NewFolderCreated(string path)

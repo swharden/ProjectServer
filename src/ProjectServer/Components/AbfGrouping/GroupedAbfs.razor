@@ -16,7 +16,9 @@
                        ShowHeading=true
                        Wrap=true
                        ClickOpensModal=true
-                       OnSelected="() => SelectParent(parent)" />
+                       OnSelected="() => SelectParent(parent)"
+                       OnSelectNext=SelectNextCell
+                       OnSelectPrevious=SelectPreviousCell />
             }
         }
 
@@ -50,4 +52,15 @@
     private void SelectParent(AbfParentInfo parent)
     {
     }
+
+    private void SelectPreviousCell()
+    {
+        System.Diagnostics.Debug.WriteLine("Grouped ABFs: selecting previous cell...");
+    }
+
+    private void SelectNextCell()
+    {
+        System.Diagnostics.Debug.WriteLine("Grouped ABFs: selecting next cell...");
+    }
+
 }
