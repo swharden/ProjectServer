@@ -26,7 +26,7 @@ namespace ProjectServer.Tests
             // TODO: support ABF1
             string abfPath = Path.Combine(SampleData.Folder, "abf1-with-tags.abf");
             AbfReader abf = new(abfPath);
-            Assert.That(abf.Comments, Is.EqualTo("ABF1 files not yet supported"));
+            Assert.That(abf.Comments, Is.EqualTo("details are unavailable for ABF1 files"));
         }
     }
 }
