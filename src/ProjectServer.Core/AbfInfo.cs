@@ -9,6 +9,7 @@ public class AbfInfo
     public string AbfID => Path.GetFileNameWithoutExtension(AbfFilePath);
     public string Protocol { get; set; } = string.Empty;
     public int SweepCount { get; set; } = 0;
+    public double LengthMinutes => Math.Round(SweepCount * SweepLengthSec / 60, 2);
     public double SweepLengthSec { get; set; } = 0;
     public string Comments { get; set; } = string.Empty;
     public bool HasComments => !string.IsNullOrWhiteSpace(Comments);
