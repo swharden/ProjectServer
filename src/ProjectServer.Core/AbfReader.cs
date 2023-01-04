@@ -40,7 +40,7 @@ public class AbfReader
 
     public void ReadABF1(BinaryReader reader)
     {
-        Comments = "ABF1 files not yet supported"; // TODO: support ABF1
+        Comments = "details are unavailable for ABF1 files";
     }
 
     public void ReadABF2(BinaryReader reader)
