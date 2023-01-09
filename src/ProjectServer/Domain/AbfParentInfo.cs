@@ -27,10 +27,10 @@
             ChildAbfPaths = children;
         }
 
-        public string[] GetAnalysisImagePaths()
+        public AnalysisImagePath[] GetAnalysisImagePaths()
         {
             if (!Directory.Exists(AnalysisFolder))
-                return Array.Empty<string>();
+                return Array.Empty<AnalysisImagePath>();
 
             string[] analysisImagePaths = Directory.GetFiles(AnalysisFolder)
                 .Where(x => x.EndsWith(".jpg", StringComparison.InvariantCultureIgnoreCase) || x.EndsWith(".png", StringComparison.InvariantCultureIgnoreCase))
@@ -44,7 +44,16 @@
 
             }
 
-            return paths.ToArray();
+            AnalysisImagePath[] images = new AnalysisImagePath[paths.Count];
+            for (int i = 0; i < images.Length; i++)
+            {
+                string prevPath = i > 0 ? paths[i - 1] : string.Empty;
+                string thisPath = paths[i];
+                string nextPath = i < images.Length - 1 ? paths[i + 1] : string.Empty;
+                images[i] = new AnalysisImagePath(prevPath, thisPath, nextPath);
+            }
+
+            return images;
         }
 
         public void UpdateFromDisk()

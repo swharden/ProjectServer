@@ -96,17 +96,15 @@
 }
 
 <!-- analysis images for all child ABFs -->
-@foreach (string imagePath in Parent.GetAnalysisImagePaths())
+@foreach (AnalysisImagePath img in Parent.GetAnalysisImagePaths())
 {
-    string filename = Path.GetFileName(imagePath);
-    string modalId = $"modal-{Guid.NewGuid()}";
-    string url = $"/image?path={imagePath}";
+    string url = $"/image?path={img.ThisPath}";
 
-    <a href=@url target="_blank" data-bs-toggle="modal" data-bs-target="#@modalId">
+    <a href=@url target="_blank" data-bs-toggle="modal" data-bs-target="#@MD5(img.ThisPath)">
         <img src=@url class="thumbnail" />
     </a>
 
-    <div class="modal fade" id="@modalId" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="@MD5(img.ThisPath)" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content text-center border-0" style="background-color: transparent;">
                 <div class="modal-body mx-3">
