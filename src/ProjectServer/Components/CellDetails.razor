@@ -100,10 +100,11 @@
 {
     string url = $"/image?path={img.ThisPath}";
 
-    <a href=@url target="_blank" data-bs-toggle="modal" data-bs-target="#@MD5(img.ThisPath)">
+    <a href=@url target="_blank">
         <img src=@url class="thumbnail" />
     </a>
 
+    <!--
     <div class="modal fade" id="@MD5(img.ThisPath)" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content text-center border-0" style="background-color: transparent;">
@@ -113,6 +114,7 @@
             </div>
         </div>
     </div>
+    -->
 }
 
 @code {
