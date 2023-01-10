@@ -96,26 +96,7 @@
 }
 
 <!-- analysis images for all child ABFs -->
-@foreach (AnalysisImagePath img in Parent.GetAnalysisImagePaths())
-{
-    string url = $"/image?path={img.ThisPath}";
-
-    <a href=@url target="_blank">
-        <img src=@url class="thumbnail" />
-    </a>
-
-    <!--
-    <div class="modal fade" id="@MD5(img.ThisPath)" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content text-center border-0" style="background-color: transparent;">
-                <div class="modal-body mx-3">
-                    <img src=@url class="img-fluid w-100 border border-dark shadow" data-bs-dismiss="modal" />
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
-}
+<ImageViewerModal ImageURLs=GetImageUrls(Parent.GetAnalysisImagePaths()) />
 
 @code {
     [Parameter, EditorRequired]
@@ -153,6 +134,8 @@
     private string EditColor { get; set; } = string.Empty;
 
     private List<string> Tags { get; set; } = new();
+
+    private static string[] GetImageUrls(AnalysisImagePath[] paths) => paths.Select(x => "/image?path=" + x.ThisPath).ToArray();
 
     private void SaveChanges()
     {

@@ -1,0 +1,27 @@
+﻿.thumbnail {
+    border: 1px solid black;
+    box-shadow: 5px 5px 10px rgb(0 0 0 / 20%);
+    margin: 10px;
+    height: 200px;
+    cursor: pointer;
+}
+
+.nav-button-disabled {
+    opacity: 0;
+}
+
+.nav-button {
+    border: none;
+    color: rgb(255, 255, 255, .3);
+    background-color: transparent;
+}
+
+    .nav-button:hover {
+        color: rgba(255, 255, 255, .6);
+        background-color: rgba(255, 255, 255, .2);
+    }
+
+    .nav-button:active {
+        color: rgba(255, 255, 255, 1);
+        background-color: rgba(255, 255, 255, .4);
+    }
