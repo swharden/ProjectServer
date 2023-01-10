@@ -2,7 +2,10 @@
 {
     <div style="position: absolute; top: 0px; left: 0px; right: 0px; bottom: 0px; background-color: rgba(0,0,0,.7);" @onclick=Hide>
         <div class="d-flex mt-5 mx-auto" style="max-width: 1000px;">
-            <button class="@(IsFirstImage ? "nav-button-disabled" : "nav-button") p-3" @onclick=SelectPrevious @onclick:stopPropagation=true>
+            <button class="@(IsFirstImage ? "nav-button-disabled" : "nav-button") p-3"
+                @onclick=SelectPrevious
+                @onclick:stopPropagation=true
+                @onkeydown=KeyboardEventHandler>
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
                  class="bi bi-caret-left-fill" viewBox="0 0 16 16">
                     <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
@@ -10,13 +13,20 @@
             </button>
             <div class="flex-grow-1 border border-5 border-dark bg-dark">
                 <div>
-                    <img src=@SelectedImage class="img-fluid flex-grow-1 w-100" />
+                    <img src=@SelectedImage
+                     class="img-fluid flex-grow-1 w-100"
+                     @ref="TextInput"
+                     tabindex="0"
+                     @onkeydown=KeyboardEventHandler />
                 </div>
                 <div class="text-light font-monospace d-inline-block mx-auto">
                     @(SelectedImageIndex + 1)/@(ImageURLs.Length): @Path.GetFileName(SelectedImage)
                 </div>
             </div>
-            <button class="@(IsLastImage ? "nav-button-disabled" : "nav-button") p-3" @onclick=SelectNext @onclick:stopPropagation=true>
+            <button class="@(IsLastImage ? "nav-button-disabled" : "nav-button") p-3"
+                @onclick=SelectNext
+                @onclick:stopPropagation=true
+                @onkeydown=KeyboardEventHandler>
                 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
                  class="bi bi-caret-right-fill" viewBox="0 0 16 16">
                     <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
@@ -46,6 +56,8 @@
     private bool IsFirstImage => SelectedImageIndex == 0;
     private bool IsLastImage => SelectedImageIndex == ImageURLs.Length - 1;
 
+    ElementReference TextInput;
+
     private void SelectImage(string url)
     {
         SelectedImage = url;
@@ -69,5 +81,15 @@
         if (SelectedImageIndex == ImageURLs.Length - 1)
             return;
         SelectImage(ImageURLs[SelectedImageIndex + 1]);
+    }
+
+    private void KeyboardEventHandler(KeyboardEventArgs args)
+    {
+        if (args.Code == "ArrowLeft")
+            SelectPrevious();
+        else if (args.Code == "ArrowRight")
+            SelectNext();
+        else
+            System.Diagnostics.Debug.WriteLine($"CAUGHT {args.Code}");
     }
 }
