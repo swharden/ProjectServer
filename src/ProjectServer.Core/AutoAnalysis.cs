@@ -8,7 +8,7 @@
 /// </summary>
 public static class AutoAnalysis
 {
-    private static string AutoAnalysisFilePath = "X:/Lab Documents/network/autoAnalysisFolders.txt";
+    public static readonly string AutoAnalysisFilePath = "X:/Lab Documents/network/autoAnalysisFolders.txt";
 
     public static void AddFolder(string path)
     {
@@ -49,5 +49,16 @@ public static class AutoAnalysis
         {
             RemoveFolder(path);
         }
+    }
+
+    public static string[] GetWatchedFolders()
+    {
+        if (!File.Exists(AutoAnalysisFilePath))
+            return Array.Empty<string>();
+
+        return File.ReadAllLines(AutoAnalysisFilePath)
+            .Select(x => x.Trim())
+            .Where(x => !string.IsNullOrEmpty(x))
+            .ToArray();
     }
 }

@@ -26,6 +26,18 @@
         </ul>
     </div>
 
+    <div class="mt-5">
+        <div>Auto-Analysis Folders</div>
+        <ul>
+            @foreach(string folder in Core.AutoAnalysis.GetWatchedFolders())
+            {
+                <li>
+                    <a href="/AbfFolder?folder=@folder">@folder</a>
+                </li>
+            }
+        </ul>
+    </div>
+
 </div>
 
 @code {
