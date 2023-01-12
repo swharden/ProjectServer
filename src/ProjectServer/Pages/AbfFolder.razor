@@ -143,6 +143,11 @@
     {
         <NewFolder FolderPath=@FolderPath OnFolderCreated=@NewFolderCreated />
     }
+    else if (!Directory.Exists(FolderPath))
+    {
+        <div class="px-2 pt-2 title">Fodler does not exist</div>
+        <div class="px-2"><code>@FolderPath</code></div>
+    }
     else if (IsEmptyFolder)
     {
         <AbfDayInfo FolderPath=@FolderPath />
@@ -265,8 +270,10 @@
     /// <param name="path"></param>
     private void SetFolderPath(string path, bool updateUrl = true)
     {
-        // scan the folder
         FolderPath = path;
+        if (!Directory.Exists(path))
+            return;
+
         RootFolderPaths = GetRootFolderPaths(path);
         SubFolderPaths = Directory.GetDirectories(path);
         FilePaths = Directory.GetFiles(path);
@@ -371,6 +378,9 @@
 
     private static bool PathContainsAbfFolders(string path)
     {
+        if (!Directory.Exists(path))
+            return false;
+
         foreach (string subFolder in Directory.GetDirectories(path))
         {
             if (Directory.GetFiles(subFolder, "*.abf").Any())
