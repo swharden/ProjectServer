@@ -1,11 +1,14 @@
 ﻿<div class="px-4 py-3 m-0">
 
     <div class="mb-3">
-        <div class="fs-3 fw-bolder">ABF Day Notes</div>
-        <div style="font-size: .8em; opacity: .5;">@ExperimentFilePath</div>
+        <div class="fs-3 fw-semibold">ABF Day Notes</div>
         @if (!File.Exists(ExperimentFilePath))
         {
-            <div class="my-3"><mark>WARNING: file does not exist!</mark></div>
+            <div class="my-3 blink-bg">
+                <strong>WARNING</strong><br>
+                This folder requires daily notes.<br>
+                Fill-out the form and click Save.
+            </div>
         }
     </div>
 
@@ -181,10 +184,6 @@
 
             DateTime modified = File.GetLastWriteTime(ExperimentFilePath);
             SaveMessage = $"Last modified {modified}";
-        }
-        else
-        {
-            SaveMessage = $"File not found: {ExperimentFilePath}";
         }
     }
 
