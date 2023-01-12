@@ -43,7 +43,18 @@
                         {
                             <span>&nbsp;</span>
                         }
-                        <a href='' @onclick="(()=>SetFolderPath(path))">@Path.GetFileName(path)</a>
+
+                        @if (FolderNameContainsIllegalCharacters(@Path.GetFileName(path)))
+                        {
+                            <span class="bg-danger text-light">@Path.GetFileName(path)</span>
+                            <div class="bg-warning p-2 border m-2 rounded">
+                                <b>ERROR:</b><br>Folder name contains<br> illegal characters!
+                            </div>
+                        }
+                        else
+                        {
+                            <a href='' @onclick="(()=>SetFolderPath(path))">@Path.GetFileName(path)</a>
+                        }
                     </div>
                 }
 
@@ -363,6 +374,19 @@
         foreach (string subFolder in Directory.GetDirectories(path))
         {
             if (Directory.GetFiles(subFolder, "*.abf").Any())
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool FolderNameContainsIllegalCharacters(string folderName)
+    {
+        string[] illegalCharacters = { "&", "+", "%" };
+
+        foreach (string illegalChar in illegalCharacters)
+        {
+            if (folderName.Contains(illegalChar))
                 return true;
         }
 
