@@ -284,7 +284,7 @@
         IsEmptyFolder = (FilePaths.Count() < 2) && (SubFolderPaths.Count() == 0);
         _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
         CreateSubfolder = false;
-        AutoRefresh = _isAutoAnalyzed;
+        AutoRefresh = IsAbfFolder && _isAutoAnalyzed;
         SelectedParent = null;
 
         if (updateUrl)
