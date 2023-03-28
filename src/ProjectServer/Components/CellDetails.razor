@@ -6,11 +6,11 @@
         <div class="mx-2 fw-bold fs-3">@Parent.AbfID</div>
         <div class="pe-3 text-muted">
             <button @onclick="()=>OnSelectPreviousCell.InvokeAsync()"
-                class="btn btn-sm btn-outline-secondary">
+                    class="btn btn-sm btn-outline-secondary">
                 « previous
             </button>
             <button @onclick="()=>OnSelectNextCell.InvokeAsync()"
-                class="btn btn-sm btn-outline-secondary">
+                    class="btn btn-sm btn-outline-secondary">
                 next »
             </button>
         </div>
@@ -24,11 +24,11 @@
     {
         <div class="px-2 me-1 mt-1 mb-2 d-inline-block" style="background-color: @color; border: 1px solid #bebebe;">
             <input class="form-check-input p-0"
-               style="margin: 10px 3px;"
-               type="radio"
-               name="radioColor"
-               value=@color
-               checked=@(color == Parent.Color)
+                   style="margin: 10px 3px;"
+                   type="radio"
+                   name="radioColor"
+                   value=@color
+                   checked=@(color == Parent.Color)
                @onchange=ColorSelected />
         </div>
     }
@@ -135,9 +135,14 @@
 
     private List<string> Tags { get; set; } = new();
 
-    private int RefreshCount = 0;
+    private int LastUpdateFileCount { get; set; } = 0;
 
     private static string[] GetImageUrls(AnalysisImagePath[] paths) => paths.Select(x => "/image?path=" + x.ThisPath).ToArray();
+
+    protected override void OnInitialized()
+    {
+        LastUpdateFileCount = GetFileCount();
+    }
 
     private void SaveChanges()
     {
@@ -207,9 +212,30 @@
         return string.Join("", md5.ComputeHash(bytes).Select(x => x.ToString("x2")).ToArray());
     }
 
-    public void AutoRefreshAction()
+    /// <summary>
+    /// Return the number of files in the ABF and AutoAnalysis folders.
+    /// When this number changes, an auto-refresh is warranted.
+    /// </summary>
+    /// <returns></returns>
+    private int GetFileCount()
     {
-        RefreshCount += 1;
-        System.Diagnostics.Debug.WriteLine($"Refresh count: {RefreshCount}");
+        int parentFolderFileCount = Directory.GetFiles(Parent.AbfFolder, "*.abf").Length;
+
+        int analysisFolderFileCount = Directory.Exists(Parent.AnalysisFolder)
+            ? Directory.GetFiles(Parent.AnalysisFolder).Length
+            : 0;
+
+        return parentFolderFileCount + analysisFolderFileCount;
+    }
+
+    public async Task AutoRefreshAction()
+    {
+        int newFileCount = GetFileCount();
+        if (newFileCount != LastUpdateFileCount)
+        {
+            System.Diagnostics.Debug.WriteLine($"File count changed, auto-refreshing");
+            LastUpdateFileCount = newFileCount;
+            await OnInfoChanged.InvokeAsync();
+        }
     }
 }
