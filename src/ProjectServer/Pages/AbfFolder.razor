@@ -226,7 +226,7 @@
             period: 1_000);
     }
 
-    public void AutoRefreshAction(object? stateInfo)
+    public async void AutoRefreshAction(object? stateInfo)
     {
         if (IsAbfFolder == false)
             return;
@@ -237,7 +237,7 @@
         if (CellsDetailsRef is null)
             return;
 
-        CellsDetailsRef.AutoRefreshAction();
+        await CellsDetailsRef.AutoRefreshAction();
     }
 
     private string GetQueryString(string varName, string defaultValue)
