@@ -135,6 +135,8 @@
 
     private List<string> Tags { get; set; } = new();
 
+    private int RefreshCount = 0;
+
     private static string[] GetImageUrls(AnalysisImagePath[] paths) => paths.Select(x => "/image?path=" + x.ThisPath).ToArray();
 
     private void SaveChanges()
@@ -203,5 +205,11 @@
         byte[] bytes = System.Text.ASCIIEncoding.ASCII.GetBytes(s);
         var md5 = System.Security.Cryptography.MD5.Create();
         return string.Join("", md5.ComputeHash(bytes).Select(x => x.ToString("x2")).ToArray());
+    }
+
+    public void AutoRefreshAction()
+    {
+        RefreshCount += 1;
+        System.Diagnostics.Debug.WriteLine($"Refresh count: {RefreshCount}");
     }
 }

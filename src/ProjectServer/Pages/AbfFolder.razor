@@ -175,7 +175,6 @@
     bool IsAbfFolder;
     bool IsEmptyFolder;
 
-    private int RefreshCount = 0;
     private static System.Threading.Timer? RefreshTimer;
 
     bool ShowRedCells
@@ -224,13 +223,21 @@
             callback: AutoRefreshAction,
             state: null,
             dueTime: 0,
-            period: 5_000);
+            period: 1_000);
     }
 
     public void AutoRefreshAction(object? stateInfo)
     {
-        RefreshCount += 1;
-        System.Diagnostics.Debug.WriteLine($"AutoRefresh: {RefreshCount}");
+        if (IsAbfFolder == false)
+            return;
+
+        if (SelectedParent is null)
+            return;
+
+        if (CellsDetailsRef is null)
+            return;
+
+        CellsDetailsRef.AutoRefreshAction();
     }
 
     private string GetQueryString(string varName, string defaultValue)
