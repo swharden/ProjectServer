@@ -39,6 +39,7 @@ public static class AutoAnalysis
             .Any();
     }
 
+    [Obsolete("watched folders are automatic now", true)]
     public static void SetWatched(string path, bool isWatched)
     {
         if (isWatched)

@@ -105,26 +105,6 @@
                     Show Red Cells
                 </label>
             </div>
-
-            <!--
-            <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
-                <input class="form-check-input" type="checkbox" @bind=IsAutoAnalyzed>
-                <label class="form-check-label">
-                    Auto-Analyze
-                </label>
-            </div>
-            -->
-            @if (IsAutoAnalyzed)
-            {
-                <!--
-                <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
-                    <input class="form-check-input" type="checkbox" @bind=AutoRefresh>
-                    <label class="form-check-label">
-                        Auto-Refresh
-                    </label>
-                </div>
-                -->
-            }
         }
 
     </div>
@@ -195,17 +175,6 @@
     bool IsAbfFolder;
     bool IsEmptyFolder;
 
-    bool _isAutoAnalyzed;
-    bool IsAutoAnalyzed
-    {
-        get => _isAutoAnalyzed;
-        set
-        {
-            _isAutoAnalyzed = value;
-            Core.AutoAnalysis.SetWatched(FolderPath, value);
-        }
-    }
-
     bool ShowRedCells
     {
         get => CellsMenuRef is null ? true : CellsMenuRef.ShowRedCells;
@@ -218,8 +187,6 @@
 
     private bool CreateSubfolder { get; set; } = false;
 
-    private System.Threading.Timer? RefreshTimer;
-    private bool AutoRefresh = true;
     Domain.AbfParentInfo? SelectedParent = null;
     CellsMenu? CellsMenuRef = null!;
     CellDetails? CellsDetailsRef = null!;
@@ -246,12 +213,6 @@
                 }
             }
         }
-
-        RefreshTimer = new System.Threading.Timer(
-            callback: async _ => { if (AutoRefresh) { await InvokeAsync(UpdateMenuFromDisk); } },
-            state: null,
-            dueTime: 0,
-            period: 5_000);
     }
 
     private string GetQueryString(string varName, string defaultValue)
@@ -282,9 +243,7 @@
         FilePaths = Directory.GetFiles(path);
         IsAbfFolder = FilePaths.Where(x => x.EndsWith(".abf")).Any();
         IsEmptyFolder = (FilePaths.Count() < 2) && (SubFolderPaths.Count() == 0);
-        _isAutoAnalyzed = Core.AutoAnalysis.IsWatched(path);
         CreateSubfolder = false;
-        AutoRefresh = IsAbfFolder && _isAutoAnalyzed;
         SelectedParent = null;
 
         if (updateUrl)
@@ -347,7 +306,6 @@
 
     private void ClickedDailyNotes()
     {
-        AutoRefresh = false;
         CreateSubfolder = false;
         SelectedParent = null;
         UpdateUrl();
