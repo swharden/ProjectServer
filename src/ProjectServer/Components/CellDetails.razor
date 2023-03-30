@@ -227,15 +227,4 @@
 
         return parentFolderFileCount + analysisFolderFileCount;
     }
-
-    public async Task AutoRefreshAction()
-    {
-        int newFileCount = GetFileCount();
-        if (newFileCount != LastUpdateFileCount)
-        {
-            System.Diagnostics.Debug.WriteLine($"File count changed, auto-refreshing");
-            LastUpdateFileCount = newFileCount;
-            await OnInfoChanged.InvokeAsync();
-        }
-    }
 }

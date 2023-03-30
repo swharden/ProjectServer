@@ -109,7 +109,7 @@
             <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
                 <input class="form-check-input" type="checkbox" @bind=EnableAutoRefresh>
                 <label class="form-check-label">
-                    Auto-Refresh
+                    Auto-Refresh <span style='opacity: .2'>@(AutoRefreshSymbol)</span>
                 </label>
             </div>
         }
@@ -195,6 +195,17 @@
     }
 
     bool EnableAutoRefresh = false;
+    int AutoRefreshCount { get; set; } = 0;
+    string AutoRefreshSymbol
+    {
+        get
+        {
+            if (!EnableAutoRefresh)
+                return string.Empty;
+            string[] spinners = { "⠁", "⠂", "⠄", "⡀", "⢀", "⠠", "⠐", "⠈" };
+            return spinners[AutoRefreshCount % spinners.Length];
+        }
+    }
 
     private bool CreateSubfolder { get; set; } = false;
 
@@ -228,14 +239,10 @@
         if (RefreshTimer is not null)
             RefreshTimer.Dispose();
 
-        RefreshTimer = new System.Threading.Timer(
-            callback: AutoRefreshAction,
-            state: null,
-            dueTime: 0,
-            period: 3_000);
+        RefreshTimer = new System.Threading.Timer((_) => InvokeAsync(AutoRefreshAction), null, 0, 3_000);
     }
 
-    public void AutoRefreshAction(object? stateInfo)
+    public async Task AutoRefreshAction()
     {
         if (EnableAutoRefresh == false)
             return;
@@ -244,20 +251,8 @@
             return;
 
         System.Diagnostics.Debug.WriteLine("Auto-Refreshing...");
-
-        if (SelectedParent is null)
-        {
-            SetFolderPath(FolderPath);
-        }
-        else
-        {
-            OnSelectParent(SelectedParent);
-        }
-
-        // TODO: remove this method
-        //if (CellsDetailsRef is null)
-            //return;
-        //await CellsDetailsRef.AutoRefreshAction();
+        AutoRefreshCount += 1;
+        await UpdateMenuFromDisk();
     }
 
     private string GetQueryString(string varName, string defaultValue)
