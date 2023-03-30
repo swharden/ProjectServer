@@ -105,6 +105,13 @@
                     Show Red Cells
                 </label>
             </div>
+
+            <div class="form-check mt-2 ms-1" style="font-family: monospace; font-size: .8em;">
+                <input class="form-check-input" type="checkbox" @bind=EnableAutoRefresh>
+                <label class="form-check-label">
+                    Auto-Refresh
+                </label>
+            </div>
         }
 
     </div>
@@ -187,6 +194,8 @@
         }
     }
 
+    bool EnableAutoRefresh = false;
+
     private bool CreateSubfolder { get; set; } = false;
 
     Domain.AbfParentInfo? SelectedParent = null;
@@ -223,21 +232,32 @@
             callback: AutoRefreshAction,
             state: null,
             dueTime: 0,
-            period: 1_000);
+            period: 3_000);
     }
 
-    public async void AutoRefreshAction(object? stateInfo)
+    public void AutoRefreshAction(object? stateInfo)
     {
+        if (EnableAutoRefresh == false)
+            return;
+
         if (IsAbfFolder == false)
             return;
 
+        System.Diagnostics.Debug.WriteLine("Auto-Refreshing...");
+
         if (SelectedParent is null)
-            return;
+        {
+            SetFolderPath(FolderPath);
+        }
+        else
+        {
+            OnSelectParent(SelectedParent);
+        }
 
-        if (CellsDetailsRef is null)
-            return;
-
-        await CellsDetailsRef.AutoRefreshAction();
+        // TODO: remove this method
+        //if (CellsDetailsRef is null)
+            //return;
+        //await CellsDetailsRef.AutoRefreshAction();
     }
 
     private string GetQueryString(string varName, string defaultValue)
