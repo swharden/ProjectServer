@@ -235,7 +235,7 @@
             period: 3_000);
     }
 
-    public async void AutoRefreshAction(object? stateInfo)
+    public void AutoRefreshAction(object? stateInfo)
     {
         if (EnableAutoRefresh == false)
             return;
@@ -245,11 +245,18 @@
 
         System.Diagnostics.Debug.WriteLine("Auto-Refreshing...");
 
-        await UpdateMenuFromDisk();
+        if (SelectedParent is null)
+        {
+            SetFolderPath(FolderPath);
+        }
+        else
+        {
+            OnSelectParent(SelectedParent);
+        }
 
         // TODO: remove this method
         //if (CellsDetailsRef is null)
-        //return;
+            //return;
         //await CellsDetailsRef.AutoRefreshAction();
     }
 
